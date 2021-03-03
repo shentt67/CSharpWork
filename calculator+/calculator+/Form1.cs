@@ -17,9 +17,9 @@ namespace calculator_
             InitializeComponent();
         }
 
-        public char ope;
-        public double num1;
-        public double num2;
+        private char ope;
+        private double num1;
+        private double num2;
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
