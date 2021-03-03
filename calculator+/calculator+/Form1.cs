@@ -55,23 +55,22 @@ namespace calculator_
             switch (ope)
             {
                 case '+':
-                    
                     textBox3.Text = Convert.ToString(num1 + num2);
                     break;
-                case '-':
-                    
+
+                case '-':                    
                     textBox3.Text = Convert.ToString(num1 - num2);
                     break;
-                case '*':
-                    
+
+                case '*':                    
                     textBox3.Text = Convert.ToString(num1 * num2);
                     break;
-                case '/':
-                    
+
+                case '/':                   
                     textBox3.Text = Convert.ToString(num1 / num2);
                     break;
-                default:
-                    
+
+                default:                    
                     textBox3.Text = "Error";
                     break;
             }
