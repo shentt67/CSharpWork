@@ -8,3 +8,13 @@ D:\C#\calculator+\calculator+\obj\Debug\calculator+.csproj.GenerateResource.cach
 D:\C#\calculator+\calculator+\obj\Debug\calculator+.csproj.CoreCompileInputs.cache
 D:\C#\calculator+\calculator+\obj\Debug\calculator+.exe
 D:\C#\calculator+\calculator+\obj\Debug\calculator+.pdb
+D:\CSharpWork\calculator+\calculator+\bin\Debug\calculator+.exe.config
+D:\CSharpWork\calculator+\calculator+\bin\Debug\calculator+.exe
+D:\CSharpWork\calculator+\calculator+\bin\Debug\calculator+.pdb
+D:\CSharpWork\calculator+\calculator+\obj\Debug\calculator+.csprojAssemblyReference.cache
+D:\CSharpWork\calculator+\calculator+\obj\Debug\calculator_.Form1.resources
+D:\CSharpWork\calculator+\calculator+\obj\Debug\calculator_.Properties.Resources.resources
+D:\CSharpWork\calculator+\calculator+\obj\Debug\calculator+.csproj.GenerateResource.cache
+D:\CSharpWork\calculator+\calculator+\obj\Debug\calculator+.csproj.CoreCompileInputs.cache
+D:\CSharpWork\calculator+\calculator+\obj\Debug\calculator+.exe
+D:\CSharpWork\calculator+\calculator+\obj\Debug\calculator+.pdb
