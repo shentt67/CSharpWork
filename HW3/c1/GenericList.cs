@@ -1,7 +1,10 @@
 ﻿using System;
 
+namespace c1
+{
     public class Node<T>
     {
+        
         public Node<T> Next { get; set; }
         public T Data { get; set; }
 
@@ -14,6 +17,7 @@
 
     public class GenericList<T>
     {
+        
         private Node<T> head;
         private Node<T> tail;
         public GenericList()
@@ -45,4 +49,8 @@
             for (; N != null; N = N.Next)
                 action(N);
         }
+
+
     }
+}
+
