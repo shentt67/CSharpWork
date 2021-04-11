@@ -1,0 +1,13 @@
+D:\CSharpWork\HW4\bin\Debug\netcoreapp3.1\HW4.exe
+D:\CSharpWork\HW4\bin\Debug\netcoreapp3.1\HW4.deps.json
+D:\CSharpWork\HW4\bin\Debug\netcoreapp3.1\HW4.runtimeconfig.json
+D:\CSharpWork\HW4\bin\Debug\netcoreapp3.1\HW4.runtimeconfig.dev.json
+D:\CSharpWork\HW4\bin\Debug\netcoreapp3.1\HW4.dll
+D:\CSharpWork\HW4\bin\Debug\netcoreapp3.1\HW4.pdb
+D:\CSharpWork\HW4\obj\Debug\netcoreapp3.1\HW4.csprojAssemblyReference.cache
+D:\CSharpWork\HW4\obj\Debug\netcoreapp3.1\HW4.AssemblyInfoInputs.cache
+D:\CSharpWork\HW4\obj\Debug\netcoreapp3.1\HW4.AssemblyInfo.cs
+D:\CSharpWork\HW4\obj\Debug\netcoreapp3.1\HW4.csproj.CoreCompileInputs.cache
+D:\CSharpWork\HW4\obj\Debug\netcoreapp3.1\HW4.dll
+D:\CSharpWork\HW4\obj\Debug\netcoreapp3.1\HW4.pdb
+D:\CSharpWork\HW4\obj\Debug\netcoreapp3.1\HW4.genruntimeconfig.cache
