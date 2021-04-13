@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31105.61
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HW5", "HW5.csproj", "{D57B8065-9C1E-4623-B32A-730B59179AA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HW5Tests", "..\HW5Tests\HW5Tests.csproj", "{911900DC-6D7D-4A78-9E0D-21D458EC9D67}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D57B8065-9C1E-4623-B32A-730B59179AA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D57B8065-9C1E-4623-B32A-730B59179AA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D57B8065-9C1E-4623-B32A-730B59179AA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D57B8065-9C1E-4623-B32A-730B59179AA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{911900DC-6D7D-4A78-9E0D-21D458EC9D67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{911900DC-6D7D-4A78-9E0D-21D458EC9D67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{911900DC-6D7D-4A78-9E0D-21D458EC9D67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{911900DC-6D7D-4A78-9E0D-21D458EC9D67}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FF4622F6-BCDF-45BA-90AB-79A805E3C7AE}
+	EndGlobalSection
+EndGlobal
