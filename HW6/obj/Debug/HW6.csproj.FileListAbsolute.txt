@@ -1,0 +1,9 @@
+D:\CSharpWork\HW6\bin\Debug\HW6.exe.config
+D:\CSharpWork\HW6\bin\Debug\HW6.exe
+D:\CSharpWork\HW6\bin\Debug\HW6.pdb
+D:\CSharpWork\HW6\obj\Debug\HW6.csprojAssemblyReference.cache
+D:\CSharpWork\HW6\obj\Debug\HW6.Properties.Resources.resources
+D:\CSharpWork\HW6\obj\Debug\HW6.csproj.GenerateResource.cache
+D:\CSharpWork\HW6\obj\Debug\HW6.csproj.CoreCompileInputs.cache
+D:\CSharpWork\HW6\obj\Debug\HW6.exe
+D:\CSharpWork\HW6\obj\Debug\HW6.pdb
