@@ -1,0 +1,824 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin-when-crossorigin" />
+    <meta name="description" content="关于axios的使用，以及get，post两种方式前后端参数的传递接收" />
+    <meta property="og:description" content="关于axios的使用，以及get，post两种方式前后端参数的传递接收" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>axios的使用 - xppp11 - 博客园</title>
+    <link id="favicon" rel="shortcut icon" href="//common.cnblogs.com/favicon.svg" type="image/svg+xml" />
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=zS6-e1bxywlu3kpHvpr1J6MySwya3ztFtEnS7RYQ0Fk" />
+    
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/xp-thebest/custom.css?v=bJGGoOBdDKvsG425y&#x2B;s2arEH0e0=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/custom/bundle-custom-mobile.min.css?v=OayYBbtUbH4FYkn_bTL4VVf4DsEOiTHSWhbl11KyY6Y" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/xp-thebest/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/xp-thebest/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/xp-thebest/wlwmanifest.xml" />
+    <script>
+        var currentBlogId = 521991;
+        var currentBlogApp = 'xp-thebest';
+        var cb_enable_mathjax = true;
+        var isLogined = false;
+        var isBlogOwner = false;
+        var skinName = 'Custom';
+        var visitorUserId = '';
+    </script>
+        <script>
+            var currentPostDateAdded = '2021-05-08 07:15';
+        </script>
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=2Mic1VLeHXarpdzASbXqFMIMVLEBiWXNO5yiTHUcmhw"></script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']], processClass: 'math', processEscapes: true },
+        TeX: {
+        equationNumbers: { autoNumber: ['AMS'], useLabelIds: true },
+        extensions: ['extpfeil.js', 'mediawiki-texvc.js'],
+        Macros: {bm: "\\boldsymbol"}
+        },
+        'HTML-CSS': { linebreaks: { automatic: true } },
+        SVG: { linebreaks: { automatic: true } }
+        });
+    </script>
+    <script src="https://mathjax.cnblogs.com/2_7_5/MathJax.js?config=TeX-AMS-MML_HTMLorMML&amp;v=20200504"></script>
+    
+</head>
+<body class="no-navbar">
+    <a name="top"></a>
+        <div id="bannerbar" class="bannerbar-mobile formobile">
+            <a href="https://www.aliyun.com/activity/daily/bestoffer?userCode=swh7dvlt" target="_blank" onclick="ga('send', 'event', 'Link', 'click', 'aliyun-cps-blog-bannerbar-mobile')">
+                <img src="https://img2020.cnblogs.com/blog/35695/202104/35695-20210428213541700-642740375.jpg" alt="" />
+            </a>
+        </div>
+    <div id="top_nav" class="navbar forpc navbar-custom">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding"><a href="https://www.cnblogs.com/" title="开发者的网上家园"><img src="/images/logo.svg?v=R9M0WmLAIPVydmdzE2keuvnjl-bPR7_35oHqtiBzGsM" alt="博客园Logo" /></a></li>
+                <li><a href="/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-sitehome')">首页</a></li>
+                <li><a href="https://news.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-news')">新闻</a></li>
+                <li><a href="https://q.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-q')">博问</a></li>
+                <li><a id="nav_brandzone" href="https://brands.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-brands')">专区</a></li>
+                <li><a href="https://ing.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-ing')">闪存</a></li>
+                <li><a href="https://edu.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-edu')">班级</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search" action="https://zzk.cnblogs.com/s" method="get">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="text" tabindex="3" />
+                        <button type="submit" id="zzk_search_button">
+                            <img src="/images/aggsite/search.svg" alt="搜索" />
+                        </button>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔">
+                        <img id="new_post_icon" class="navbar-icon" src="/images/aggsite/newpost.svg" alt="写随笔" />
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx" alt="我的博客" title="我的博客">
+                        <img id="myblog_icon" class="navbar-icon" src="/images/aggsite/myblog.svg" alt="我的博客" />
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息">
+                        <img id="msg_icon" class="navbar-icon" src="/images/aggsite/message.svg?v=J0WS2P2iPgaIVgXxcAhliw4AFZIpaTWxtdoNAv9eiCA" alt="短消息" />
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/">
+                            <img id="user_icon" class="navbar-avatar" src="/images/aggsite/avatar-default.svg" alt="用户头像" />
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <img id="navbar_lite_mode_on" src="/images/lite-mode-check.svg" class="hide" /><span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup/">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div id="page_begin_html">
+        <script>loadPageBeginHtml();</script>
+    </div>
+    <!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/xp-thebest/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/xp-thebest/">noor9</a>
+</h1>
+<h2>夯实基础，提高阅读能力</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/xp-thebest/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/xppp11">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/xp-thebest/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			<div id="blog_stats_place_holder"><script>loadBlogStats();</script></div>
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/xp-thebest/p/14746224.html">
+    <span>axios的使用</span>
+    
+
+
+
+</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                    <div id="cnblogs_post_description" style="display: none">
+        关于axios的使用，以及get，post两种方式前后端参数的传递接收
+    </div>
+<div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+<h1 id="参考链接">参考链接</h1>
+<p><a href="https://segmentfault.com/a/1190000018774494" target="_blank">https://segmentfault.com/a/1190000018774494</a></p>
+<p><a href="http://blog.itblood.com/447.html" target="_blank">http://blog.itblood.com/447.html</a></p>
+<p><a href="https://blog.csdn.net/linglingzi001/article/details/108349261" target="_blank">https://blog.csdn.net/linglingzi001/article/details/108349261</a></p>
+<p><a href="https://www.cnblogs.com/dw039/p/11104628.html" target="_blank">https://www.cnblogs.com/dw039/p/11104628.html</a></p>
+<p><a href="https://www.cnblogs.com/somliy/p/13189485.html" target="_blank">https://www.cnblogs.com/somliy/p/13189485.html</a></p>
+<p><a href="https://blog.csdn.net/u012443286/article/details/88560240" target="_blank">https://blog.csdn.net/u012443286/article/details/88560240</a></p>
+<p><a href="http://www.axios-js.com/zh-cn/docs/" target="_blank">http://www.axios-js.com/zh-cn/docs/</a></p>
+<h1 id="axios使用">axios使用</h1>
+<h2 id="官网案例">官网案例</h2>
+<p>​	先来看看官方给出的例子，挺简单的...</p>
+<pre><code class="language-js">axios.get('/user?ID=12345')
+  .then(function (response) {
+    console.log(response);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+
+axios.get('/user', {
+    params: {
+      ID: 12345
+    }
+  })
+  .then(function (response) {
+    console.log(response);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+
+axios.post('/user', {
+    firstName: 'Fred',
+    lastName: 'Flintstone'
+  })
+  .then(function (response) {
+    console.log(response);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+</code></pre>
+<h2 id="带配置的axios">带配置的axios</h2>
+<ul>
+<li>axios.request(config)</li>
+<li>axios.get(url[, config])</li>
+<li>axios.delete(url[, config])</li>
+<li>axios.head(url[, config])</li>
+<li>axios.post(url[, data[, config]])</li>
+<li>axios.put(url[, data[, config]])</li>
+<li>axios.patch(url[, data[, config]])</li>
+</ul>
+<p>这些是创建请求时可以用的配置选项。只有 <code>url</code> 是必需的。如果没有指定 <code>method</code>，请求将默认使用 <code>get</code> 方法。</p>
+<pre><code class="language-js">//以get为例
+axios.get('/test', {
+    params: {
+        id: 123
+    },
+   timeout: 1000,
+  	...//其他相关配置
+})
+
+//以post为例
+axios.post('/test', {
+    id: 123
+},{
+   timeout: 1000,
+    ...//其他相关配置
+})
+</code></pre>
+<p><strong>配置项很多，可以去<a href="http://www.axios-js.com/zh-cn/docs/#axios-get-url-config" target="_blank">官方文档详细配置 </a>查看</strong>，但是注意：配置中url是必须的，其余可以没有。</p>
+<h2 id="写在前面：">写在前面：</h2>
+<ol>
+<li>
+<p>日常常用的参数传递，下面的自用基于这两种形式</p>
+<ul>
+<li>
+<p><code>Request Payload</code> 传递对象</p>
+<p>{"key":"value","key":"value"...}</p>
+</li>
+<li>
+<p><code>Form Data</code> 形式</p>
+<p>key=value&amp;key=value&amp;key=value...</p>
+</li>
+</ul>
+</li>
+<li>
+<p><code>axios</code>的两种请求方式<code>GET</code>，<code>POST</code>，默认是<code>GET</code>，其实这点上面已经提到了</p>
+</li>
+<li>
+<p>再往下就得提到 <code>axios</code> 两种传参形式 <code>params</code> 与<code>data</code></p>
+<ul>
+<li><code>params</code>是添加到url的请求字符串中的，一般用于<code>get</code>请求。</li>
+<li><code>data</code>是添加到请求体<code>body</code>中的， 一般用于<code>post</code>请求。</li>
+</ul>
+</li>
+</ol>
+<p>注意：post请求也可以使用params方式传值，但是get不能使用data方式传参</p>
+<h2 id="例子">例子</h2>
+<h3 id="get">GET</h3>
+<pre><code class="language-js">this.$axios.get("test", {params:{name:"carlget1", password:"password"}})
+  .then(function(res){
+    console.log( res );
+  })
+  .catch(function(err){
+    console.log( err );
+  });
+
+// 后台 用具体参数接收
+@GetMapping("/test")
+public String test(String name, String password) {
+    return "ok";
+}
+
+// 后台也可以用 对象形式接收
+@Data
+public class User {
+    String name;
+    String password;
+}
+@GetMapping("/test")
+public String test(User user) {
+    return "ok";
+}
+</code></pre>
+<p>注意：get请求不允许传递List，需要使用qs插件或者配置axios，具体参考<a href="https://www.jianshu.com/p/a3179dbf5b43" target="_blank">链接</a></p>
+<h3 id="post">POST</h3>
+<p>​	传参形式默认data，默认参数格式为json，所以后端默认接收方式默认是对象形式</p>
+<pre><code class="language-js">this.$axios
+  .post('/login', {
+    username: this.loginForm.username,
+    password: this.loginForm.password
+  })
+
+@PostMapping(value = "/login")
+@ResponseBody
+public String login(@RequestBody User user){
+    User user1 = Service.Find(user);
+    JSONObject object = new JSONObject();
+    return object;
+}
+</code></pre>
+<p>​	后端想要接受Form Data数据？</p>
+<p>​	方法1：直接拼接成字符串传递</p>
+<pre><code class="language-js">var data = 'name=123&amp;val=456';
+axios.post('/', data)
+</code></pre>
+<p>​	方法2：是用parms的方式传参（配置的时候修改即可），同GET</p>
+<pre><code class="language-js">this.$axios
+  .post('/login', { parms:{
+    username: this.loginForm.username,
+    password: this.loginForm.password
+  }})
+</code></pre>
+<p>​	方法3：不想用parms方式传参，请看下面两种方法，本质都是通过序列化的方式进行对象的 k=v 格式化</p>
+<ul>
+<li>
+<p>qs</p>
+<pre><code class="language-js">//qs是axios自带的 使用之前记得引入一下 impost qs from 'qs'
+this.$axios
+    .post('/login', qs.stringify(data));
+</code></pre>
+</li>
+<li>
+<p>URLSearchParams</p>
+<pre><code class="language-js">var param = new URLSearchParams();
+param.append('username', 'admin'),
+param.append('password', 'admin'),
+this.$axios
+    .post('/login', param);
+</code></pre>
+<p>如要传递Form Data格式的数据推荐使用<code>parms</code>或者<code>qs</code>的方式，<code>URLSearchParams</code>这种会显得冗长，而且有的浏览器可能出问题，可以使用官网推荐的<code>transformRequest</code>，详细看官网文档</p>
+</li>
+</ul>
+<h2 id="写在最后">写在最后</h2>
+<ol>
+<li>后端注解<code>@RequsetParam</code> 获取 k=v 格式的参数，get/post都可以。</li>
+<li><code>@RequestBody </code>获取payload中的数据，即一个对象。</li>
+<li>不写注解时，默认<code>@RequsetParam</code>机制，并且要求前端传递的参数名称与后端定义的参数名称一致，否则无法获取到数据。</li>
+<li>若使用 data 传递参数，必须使用一个实体类接收参数，而且需要添加注解<code>@RequestBody</code>进行修饰。</li>
+<li>若使用 Map 接收参数，必须使用<code>@RequestParam</code>修饰。</li>
+</ol>
+
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2021-05-08 19:15</span>&nbsp;
+<a href="https://www.cnblogs.com/xp-thebest/">xppp11</a>&nbsp;
+阅读(<span id="post_view_count">86</span>)&nbsp;
+评论(<span id="post_comment_count">0</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14746224" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(14746224);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/10.3.1/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 521991, cb_blogApp = 'xp-thebest', cb_blogUserGuid = 'b4d5db79-1107-4c96-620e-08d6420f113f';
+    var cb_entryId = 14746224, cb_entryCreatedDate = '2021-05-08 19:15', cb_postType = 1;
+    updatePostStats(
+        [cb_entryId],
+        function(id, count) { $("#post_view_count").text(count) },
+        function(id, count) { $("#post_comment_count").text(count) })
+    zoomManager.apply("#cnblogs_post_body img:not(.code_img_closed):not(.code_img_opened)");
+</script>
+<a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <div id="cnblogs_c1" class="under-post-card">
+        <div id='div-gpt-ad-1592365906576-0' style='width: 300px; height: 250px;'></div>
+    </div>
+    <div id="under_post_card1"></div>
+    <div id="cnblogs_c2" class="under-post-card">
+        <div id='div-gpt-ad-1592366332455-0' style='width: 468px; height: 60px;'></div>
+    </div>
+    <div id="under_post_card2"></div>
+    <div id="HistoryToday" class="under-post-card"></div>
+    <script type="text/javascript">
+       var commentManager = new blogCommentManager();
+       commentManager.renderComments(0);
+       fixPostBody();
+       deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);       deliverT2();
+       deliverC1C2();
+       loadNewsAndKb();
+       loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);       LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+       GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+       loadOptUnderPost();
+       GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+	<div id="sideBar">
+		<div id="sideBarMain">
+			<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+<div id="sidebar_c3"></div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2021 xppp11
+<br /><span id="poweredby">Powered by .NET 5.0 on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    <div id="page_end_html">
+        <script src="https://cdn.bootcss.com/fancybox/3.5.7/jquery.fancybox.js"></script>
+<script src="https://cdn.bootcss.com/clipboard.js/2.0.4/clipboard.min.js"></script>
+<script src="https://blog-static.cnblogs.com/files/gshang/gshang.owo.2020.01.05.1.js"></script>
+<script src="https://blog-static.cnblogs.com/files/ctgu/perfect-scrollbar.min.js"></script>
+<script src="//cdnjs.loli.net/ajax/libs/mdui/0.4.3/js/mdui.min.js"></script>
+<script src="https://blog-static.cnblogs.com/files/gshang/sidebarContent.js"></script>
+<script src="https://blog-static.cnblogs.com/files/gshang/notiflix-2.0.0.min.js"></script>
+<script src="https://blog-static.cnblogs.com/files/gshang/highlight.pack.js"></script>
+<script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
+<script type="text/javascript" src="https://files.cnblogs.com/files/gshang/51La.min.js"></script>
+
+<script>
+	// 运行脚本
+	$('code.language-runCode').each(function() {
+		window.eval($(this).text());
+		$(this).parent('pre').remove();
+	});
+
+	function toHeader() {
+		$("html,body").finish().animate({
+			"scrollTop": "0px"
+		}, 500);
+	}
+
+	function toggleSidebar() {
+		$('#sideBarMain').toggleClass('sidebar-show');
+		//$('.float-btn li:not(.btn-sidebar)').toggle();
+		//$('#sideBarMain>div:not(#sidebar_scroller)').show();
+		//$('#sidebar_scroller').hide();
+		$('.btn-sidebar').toggleClass('btn-sidebar-open');
+	}
+
+	function toggleMain() {
+		$('#main').toggleClass('main-hide');
+		$('.btn-main').toggleClass('btn-main-open');
+		if ($('.btn-content').length > 0) {
+			$('.btn-content').toggle();
+		}
+	}
+
+
+	function toggleContent() {
+		$('#sidebar_scroller').toggle();
+		//$('#sideBarMain').toggleClass('sidebar-show');
+		$('#sideBarMain>*:not(#sidebar_scroller)').toggle();
+		$('.btn-content').toggleClass('btn-content-open');
+	}
+
+	$('#sideBarMain').toggleClass('sidebar-hide');
+
+	/*
+	var w = document.body.clientWidth;
+	if (w >= 1200) {
+		//  侧边
+		$(document).ajaxComplete(function(event, xhr, option) {
+			if (option.url.indexOf("TopLists") > -1) {
+				toggleContent()
+			}
+		})
+	}
+	*/
+	$(function() {
+		if (isLogined) {
+			$('#navigator').append('<div class="islogin"><a href="javascript:logout()">退出</a></div>')
+		} else {
+			$('#navigator').append('<div class="islogin"><a href="https://account.cnblogs.com/signin">登录</a></div>')
+		}
+		//侧边固定
+		$(document).scroll(function() {
+			var $top = parseInt($(window).scrollTop()) + $(window).height();
+			var sideBarHeight = $('#sideBarMain').outerHeight();
+			var mainContentHeight = $('#mainContent').outerHeight();
+			if (mainContentHeight > sideBarHeight) {
+				if ($top >= sideBarHeight && $top < mainContentHeight) {
+					$("#sideBarMain").addClass('sidebar-fixed')
+				} else {
+					$("#sideBarMain").removeClass('sidebar-fixed')
+				}
+			}
+
+			if ($(window).scrollTop() < $('#header').outerHeight()) {
+				$("#sideBarMain").removeClass('sidebar-fixed');
+				$('.btn-top').fadeOut();
+			} else {
+				$('.btn-top').fadeIn();
+			}
+		});
+
+		// 设置网页favicon图标
+
+		$('head').append($('<link rel="shortcut icon" type="image/x-icon"/>').attr('href',
+			'https://pic.cnblogs.com/avatar/1529113/20210113224609.png'));
+		$('#blogLogo').attr('src', 'https://pic.cnblogs.com/avatar/1529113/20210113224609.png')
+
+
+		// 设置评论区头像
+		$(document).ajaxComplete(function(event, xhr, option) {
+			//评论头像
+			if (option.url.indexOf("GetComments") > -1) {
+				setTimeout(function() {
+
+					owoEmoji();
+					$.each($(".feedbackItem"), function(index, ele) {
+						var self = $(ele);
+						var obj = self.find(".blog_comment_body");
+						var id = obj.attr("id").split("_")[2];
+						var blog = self.find('a[id^="a_comment_author"]');
+						var blogUrl = blog.attr("href");
+						var imgSrc = $("#comment_" + id + "_avatar").html() || "http://pic.cnblogs.com/avatar/simple_avatar.gif";
+						self.prepend('<a href="' + blogUrl + '"><img src="' + imgSrc +
+							'" style="float:left;" class="comment_avatar"></a');
+						$(".feedbackListSubtitle").addClass("feedbackListSubtitle_right");
+						$(".feedbackCon").addClass("feedbackCon_right");
+					});
+
+					//myscroll();
+
+				}, 300)
+			}
+		})
+
+		// 引入owo插件
+		owoEmoji = function() {
+			$(".commentbox_footer").before(
+				'<div class="OwO" onclick="load_face(this)"><div class="OwO-logo"><i class="fa fa-smile-o" aria-hidden="true"></i></div></div>'
+			);
+		}
+
+		// 表情按钮按下
+		load_face = function(b) {
+			var c = new OwO({
+				logo: '<i class="fa fa-smile-o" aria-hidden="true"></i>',
+				container: document.getElementsByClassName("OwO")[0],
+				target: document.getElementById("tbCommentBody"),
+				api: "https://cdn.jsdelivr.net/gh/gshang2018/home/gshang.owo.json",
+				position: "up",
+				width: "100%",
+				maxHeight: "250px"
+			});
+			b.classList.add("OwO-open");
+			b.onclick = null
+		}
+		// 侧边悬浮按钮
+		$('#home').append(
+			'<div class="float-btn"><ul>' +
+			'<li class="btn-top"><a href="javascript:toHeader()"></a></li>' +
+			'<li class="btn-main"><a href="javascript:toggleMain()"></a></li>' +
+			'<li class="btn-sidebar"><a href="javascript:toggleSidebar()"></a></li>' +
+			'</ul></div>'
+		)
+		// 博文
+		if ($("#topics").length > 0) {
+			$('.btn-top').after('<li class="btn-comment"><a href="#commentform_title"></a></li>');
+			$('#main').toggleClass('main-hide');
+			$('.btn-main').addClass('btn-main-open');
+
+			//高亮
+			$('pre code').each(function(i, block) {
+				hljs.highlightBlock(block);
+			});
+
+			// 表格滚动
+			$("table").each(function() {
+				$(this).css('cssText', 'width:100%!important;display:table;');
+				$(this).wrapAll('<div class="tablebox"></div>');
+				$(".tablebox").css('overflow', 'auto');
+			});
+
+
+			// 新窗口打开
+			$('#cnblogs_post_body a[href^="http"]').each(function() {
+				$(this).attr('target', '_blank');
+			});
+
+			// fancybox
+			$(".cnblogs-markdown img").each(function() {
+				var element = document.createElement("a");
+				$(element).attr("data-fancybox", "gallery");
+				$(element).attr("href", $(this).attr("src"));
+				$(element).attr('data-caption', $(this).attr("alt"));
+				$(this).wrap(element);
+				if ($(this).attr("alt") != "") {
+					$(this).parent().after('<div class="img-caption">' + $(this).attr("alt") + '</div>');
+				}
+			})
+
+			// 代码复制
+			for (i = 0; i <= $('pre').length; i++) {
+				$('pre').eq(i).wrapAll('<div class="copyItem"></div>');
+				$(".copyItem").css('position', 'relative');
+				$('pre').eq(i).before('<div class="clipboard-button" id="copy_btn_' + i +
+					' " data-clipboard-target="#copy_target_' +
+					i + '"title="复制"></div>');
+				$('pre').eq(i).attr('id', 'copy_target_' + i);
+			}
+
+			$('pre code').each(function() {
+				var lines = $(this).text().split('\n').length - 1;
+				var $numbering = $('<ul/>').addClass('pre-numbering');
+				$(this)
+					.addClass('has-numbering')
+					.parent()
+					.append($numbering);
+				for (i = 1; i <= lines; i++) {
+					$numbering.append($('<li/>').attr('data-number', i));
+				}
+			});
+
+			var clipboard = new ClipboardJS('.clipboard-button');
+			clipboard.on('success', function(e) {
+				e.trigger.innerHTML = '成功';
+				setTimeout(function() {
+					e.trigger.innerHTML = '';
+				}, 2 * 1000);
+				e.clearSelection();
+			});
+			clipboard.on('error', function(e) {
+				e.trigger.innerHTML = '失败';
+				setTimeout(function() {
+					e.trigger.innerHTML = '';
+				}, 2 * 1000);
+				e.clearSelection();
+			});
+		}
+
+
+
+		// 侧边目录
+		if ($("#topics").length > 0) {
+			//先获取第一个h标签, 之后循环时作为上一个h标签
+			var $ph = $('#cnblogs_post_body :header:eq(0)');
+			if ($ph.length > 0) {
+				$('.btn-comment').after('<li class="btn-content"><a href="javascript:toggleContent()"></a></li>');
+				$('.btn-content').hide();
+				//     $('#sideBarMain').remove();
+				//设置层级为1
+				$ph.attr('offset', '1');
+				//添加导航目录的内容
+				$('#sideBarMain').prepend(
+					'<div id="sidebar_scroller" class="sidebar-block"><h3 class="catListTitle">导航目录</h3><ul class="nav"></ul></div>'
+				);
+				//取当前边栏的宽度
+				//$('#sidebar_scroller').css('width', ($('#sideBarMain').width()) + 'px');
+				//让导航目录停留在页面顶端
+				//  $('#sidebar_scroller').stickUp();
+				//遍历文章里每个h标签
+				$('#cnblogs_post_body :header').each(function(i) {
+					var $h = $(this);
+					//设置h标签的id, 编号从0开始
+					$h.attr('id', 'scroller-' + i);
+					//比上一个h标签层级小, 级数加1
+					if ($h[0].tagName > $ph[0].tagName) {
+						$h.attr('offset', parseInt($ph.attr('offset')) + 1);
+					} //比上一个h标签层级大, 级数减1
+					else if ($h[0].tagName < $ph[0].tagName) {
+
+						var h = parseInt($h[0].tagName.substring(1));
+						var ph = parseInt($ph[0].tagName.substring(1));
+
+						var offset = parseInt($ph.attr('offset')) - (ph - h);
+						if (offset < 1) {
+							offset = 1
+						};
+						$h.attr('offset', offset);
+					} //和上一个h标签层级相等时, 级数不变
+					else {
+						$h.attr('offset', $ph.attr('offset'));
+					}
+					//添加h标签的目录内容
+					$('#sidebar_scroller ul').append('<li class="scroller-offset' + $h.attr('offset') + '"><a href="#scroller-' +
+						i +
+						'">' + $h.text() + '</a></li>');
+					//最后设置自己为上一个h标签
+					$ph = $h;
+				});
+
+				//开启滚动监听, 监听所有在.nav类下的li
+				$('body').scrollspy();
+
+				//  侧边
+				$(document).ajaxComplete(function(event, xhr, option) {
+					if (option.url.indexOf("TopLists") > -1) {
+						setTimeout(function() {
+							$('#sidebar_scroller').toggle();
+							toggleContent();
+							toggleMain();
+						}, 300)
+					}
+				})
+
+
+
+				Notiflix.Notify.Success('已生成博文目录，点击右下角图标查看')
+				/*当前目录激活监听*/
+				$(window).scroll(function() {
+					var now = $('#sidebar_scroller').find('.active');
+					var prevNum = now.prevAll().length + 1;
+					var basicHeight = now.outerHeight();
+					$('.nav').scrollTop(prevNum * basicHeight - 14)
+				});
+
+			}
+		}
+
+
+		/*评论模块的滚动隐藏效果*/
+		var windowTop = 0;
+		$(window).scroll(function() {
+			var scrolls = $(this).scrollTop();
+			if (scrolls >= windowTop) { //当scrolls>windowTop时，表示页面在向下滑动
+				//$('#header').addClass('header-hide');
+				$('.float-btn').addClass('float-btn-hide');
+				windowTop = scrolls;
+			} else {
+				//$('#header').removeClass('header-hide');
+				$('.float-btn').removeClass('float-btn-hide');
+				windowTop = scrolls;
+			}
+		});
+
+		// 平滑滚动控制
+		myscroll = function() {
+			$('a[href*=\\#],area[href*=\\#]').click(function() {
+				if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+					var $target = $(this.hash);
+					$target = $target.length && $target || $('[name=' + this.hash.slice(1) + ']');
+					if ($target.length) {
+						var targetOffset = $target.offset().top;
+						$('html,body').animate({
+								scrollTop: targetOffset
+							},
+							500);
+						return false;
+					}
+				}
+			})
+		}
+
+		$('.float-btn li,#blog_nav_newpost,.diggit,#btn_comment_submit').addClass('mdui-ripple');
+
+		$('.nav a').click(function() {
+			var w = document.body.clientWidth;
+			if (w <= 1200) {
+				$('#sideBarMain').toggleClass('sidebar-show');
+                toggleMain();
+                $('.btn-sidebar').toggleClass('btn-sidebar-open');
+			}
+		})
+		myscroll()
+	})
+</script>
+
+    </div>
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8L-rpLgFVEJMgssCVvNUAjtkKk_c8--PBVEFt0aMEzHzoVsoQqGB-C375nIP2OlnOsdOq9FErgsFhIv1q2FY-afaOby2prDnr5avEjPyBFRV1dBFKitJEpnblXQxaDpGpF9sYNjjsgtnncAbvtD-RMA" />
+</body>
+</html>

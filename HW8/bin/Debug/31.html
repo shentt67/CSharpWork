@@ -1,0 +1,427 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin-when-crossorigin" />
+    <meta name="description" content="利用泛型的优点对代码进行精简，同时在不增加代码的情况下增加代码的复用性" />
+    <meta property="og:description" content="利用泛型的优点对代码进行精简，同时在不增加代码的情况下增加代码的复用性" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>spring泛型注入 - 诸葛小亮 - 博客园</title>
+    <link id="favicon" rel="shortcut icon" href="//common.cnblogs.com/favicon.svg" type="image/svg+xml" />
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=zS6-e1bxywlu3kpHvpr1J6MySwya3ztFtEnS7RYQ0Fk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/codinglife/bundle-codinglife.min.css?v=2uJkpdACLVfstRQ7zeCFK19brTwKuDEaNBLgKz9nm3A" />
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/codinglife/bundle-codinglife-mobile.min.css?v=DwDRKMd1bmjnJZ4iQqrTCO9QLlYb6OZaUAzHoHIIihg" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/zhaord/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/zhaord/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/zhaord/wlwmanifest.xml" />
+    <script>
+        var currentBlogId = 168745;
+        var currentBlogApp = 'zhaord';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var isBlogOwner = false;
+        var skinName = 'CodingLife';
+        var visitorUserId = '';
+    </script>
+        <script>
+            var currentPostDateAdded = '2021-05-09 11:03';
+        </script>
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=2Mic1VLeHXarpdzASbXqFMIMVLEBiWXNO5yiTHUcmhw"></script>
+    
+    
+    
+</head>
+<body class="has-navbar has-bannerbar">
+    <a name="top"></a>
+        <a target="_blank" href="https://www.aliyun.com/activity/daily/bestoffer?userCode=swh7dvlt" onclick="ga('send', 'event', 'Link', 'click', 'aliyun-cps-blog-bannerbar-pc')">
+            <div class="bannerbar aliyun forpc" style="background-size: contain;background-image: url(https://img2020.cnblogs.com/blog/35695/202104/35695-20210428221933214-737067094.jpg)">
+            </div>
+        </a>
+        <div id="bannerbar" class="bannerbar-mobile formobile">
+            <a href="https://www.aliyun.com/activity/daily/bestoffer?userCode=swh7dvlt" target="_blank" onclick="ga('send', 'event', 'Link', 'click', 'aliyun-cps-blog-bannerbar-mobile')">
+                <img src="https://img2020.cnblogs.com/blog/35695/202104/35695-20210428213541700-642740375.jpg" alt="" />
+            </a>
+        </div>
+    <div id="top_nav" class="navbar forpc">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding"><a href="https://www.cnblogs.com/" title="开发者的网上家园"><img src="/images/logo.svg?v=R9M0WmLAIPVydmdzE2keuvnjl-bPR7_35oHqtiBzGsM" alt="博客园Logo" /></a></li>
+                <li><a href="/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-sitehome')">首页</a></li>
+                <li><a href="https://news.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-news')">新闻</a></li>
+                <li><a href="https://q.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-q')">博问</a></li>
+                <li><a id="nav_brandzone" href="https://brands.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-brands')">专区</a></li>
+                <li><a href="https://ing.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-ing')">闪存</a></li>
+                <li><a href="https://edu.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-edu')">班级</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search" action="https://zzk.cnblogs.com/s" method="get">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="text" tabindex="3" />
+                        <button type="submit" id="zzk_search_button">
+                            <img src="/images/aggsite/search.svg" alt="搜索" />
+                        </button>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔">
+                        <img id="new_post_icon" class="navbar-icon" src="/images/aggsite/newpost.svg" alt="写随笔" />
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx" alt="我的博客" title="我的博客">
+                        <img id="myblog_icon" class="navbar-icon" src="/images/aggsite/myblog.svg" alt="我的博客" />
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息">
+                        <img id="msg_icon" class="navbar-icon" src="/images/aggsite/message.svg?v=J0WS2P2iPgaIVgXxcAhliw4AFZIpaTWxtdoNAv9eiCA" alt="短消息" />
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/">
+                            <img id="user_icon" class="navbar-avatar" src="/images/aggsite/avatar-default.svg" alt="用户头像" />
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <img id="navbar_lite_mode_on" src="/images/lite-mode-check.svg" class="hide" /><span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup/">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    
+    <!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/zhaord/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/zhaord/">诸葛小亮</a>
+</h1>
+<h2>代码搬运工</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/zhaord/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/%E8%AF%B8%E8%91%9B%E5%B0%8F%E4%BA%AE">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/zhaord/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			<div id="blog_stats_place_holder"><script>loadBlogStats();</script></div>
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/zhaord/p/14747406.html">
+    <span>spring泛型注入</span>
+    
+
+
+
+</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                    <div id="cnblogs_post_description" style="display: none">
+        利用泛型的优点对代码进行精简，同时在不增加代码的情况下增加代码的复用性
+    </div>
+<div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+<h2 id="泛型依赖注入">泛型依赖注入</h2>
+<p>Spring 4.0版本中更新了很多新功能，其中比较重要的一个就是对带泛型的Bean进行依赖注入的支持。<br>
+泛型依赖注入允许我们在使用spring进行依赖注入的同时，利用泛型的优点对代码进行精简，同时在不增加代码的情况下增加代码的复用性。<br>
+Spring默认按照字段的类进行依赖注入，而Spring4的新特性就是把泛型的具体类型也作为类的一种分类方法（Qualifier）。</p>
+<h2 id="背景">背景</h2>
+<p>假设有两个实体类<code>Student</code>和<code>Teacher</code></p>
+<pre><code>@Data
+public class Student implements IEntity{
+    private long id;
+}
+
+@Data
+public class Teacher implements IEntity{
+    private long id;
+}
+</code></pre>
+<p>实体的存储，是通过<code>仓储</code>操作的，一般所有的实体仓储方法都是一致的，只有具体的实体类型不一样，定义仓储接口</p>
+<pre><code>public interface IRepository&lt;TEntity extends IEntity&gt;{
+    void add(TEntity entity);
+    List&lt;TEntity&gt; findAll();
+   ...
+}
+</code></pre>
+<p>定义仓储实现的基类，在本例中，使用List存储</p>
+<pre><code>public abstract class BaseRepository &lt;TEntity extends IEntity&gt; implements IRepository&lt;TEntity&gt;{
+    List&lt;TEntity&gt; datasource = new ArrayList&lt;&gt;();
+    @Override
+    public void add(TEntity entity){
+        this.datasource.add(entity);
+    }
+
+    @Override
+    public List&lt;TEntity&gt; findAll(){
+        return datasource;
+    }
+
+}
+</code></pre>
+<h2 id="泛型依赖注入的bean">泛型依赖注入的Bean</h2>
+<p><code>BaseRepository</code> 是一个抽象类，不适宜注入到spring中，定义一个可以注入的bean</p>
+<pre><code>@Repository()
+@Scope("prototype")
+public class DefaultRepository&lt;TEntity extends IEntity&gt; extends BaseRepository&lt;TEntity&gt;{
+}
+</code></pre>
+<p>注意<code>@Scope("prototype")</code>注解，表示<code>DefaultRepository</code>的bean的作用是瞬态的，每次获取bean时都会创建一个新的bean，如果不添加作用域，默认spring的bean是单例的，这样注入的仓储实例会是同一个实例。<br>
+在<code>test</code>中依赖注入<code>@Autowired    IRepository&lt;Student&gt; studentRepository;</code> 和<code>    @Autowired    IRepository&lt;Teacher&gt; teacherRepository;</code>,<br>
+验证这两个仓储的类型都是<code>DefaultRepository</code>类型，同时验证操作<code>student</code>不会影响到<code>teacher</code>。</p>
+<pre><code>
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(
+        classes = {DemoTests.DemoTestsConfiguration.class})
+public class DemoTests {
+
+    @Autowired
+    IRepository&lt;Student&gt; studentRepository;
+
+    @Autowired
+    IRepository&lt;Teacher&gt; teacherRepository;
+
+    @Test
+    public void test(){
+
+        assertThat(studentIRepository.getClass())
+                .isEqualTo(DefaultRepository.class);
+        assertThat(teacherIRepository.getClass())
+                .isEqualTo(DefaultRepository.class);
+
+        studentIRepository.add(new Student());
+
+        assertThat(studentIRepository.findAll())
+                .hasSize(1);
+
+        assertThat(teacherIRepository.findAll())
+                .hasSize(0);
+    }
+
+
+
+    @ComponentScan({
+            "org.example"
+    })
+    @Configuration
+    public static class DemoTestsConfiguration {
+    }
+
+}
+
+</code></pre>
+<h2 id="仓储扩展">仓储扩展</h2>
+<p>在上一部分，所有的仓储操作，都定义在了<code>BaseRepository</code>中，如果遇到了仓储中未提供的方法，则需要对单个实体的仓储进行扩展。<br>
+自定义仓储接口，继承自<code>IRepository&lt;Student&gt;</code></p>
+<pre><code>public interface IStudentRepository extends IRepository&lt;Student&gt;{
+    Student findById(long id);
+}
+</code></pre>
+<p>实现自定义仓储接口</p>
+<pre><code>@Repository
+public class StudentRepository extends BaseRepository&lt;Student&gt; implements IStudentRepository {
+    @Override
+    public Student findById(long id) {
+        return null;
+    }
+}
+</code></pre>
+<p>使用例子如下</p>
+<pre><code>
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(
+        classes = {DemoTests.DemoTestsConfiguration.class})
+public class DemoTests {
+
+    @Autowired
+    IRepository&lt;Teacher&gt; teacherRepository;
+
+    @Autowired
+    IStudentRepository studentRepository;
+
+    @Test
+    public void repositoryType(){
+
+        assertThat(studentRepository.getClass())
+                .isEqualTo(StudentRepository.class);
+        assertThat(teacherRepository.getClass())
+                .isEqualTo(DefaultRepository.class);
+    }
+
+
+
+    @ComponentScan({
+            "org.example"
+    })
+    @Configuration
+    public static class DemoTestsConfiguration {
+    }
+
+}
+
+</code></pre>
+<h2 id="总结">总结</h2>
+<ol>
+<li>使用泛型依赖注入，可以减少重复代码和类的数目，在本例中，无需对<code>Student</code>和<code>Teacher</code>两个实体定义仓储接口和实现，使用统一的仓储接口和默认实现即可完成大部分的操作。</li>
+<li>在项目中，我们使用<code>mybatis-plus</code>做为仓储层操作数据库，对实体的操作，都需要定义一个<code>Mapper</code>接口和一个<code>Service</code>接口，如果使用泛型注入，是否可以减少<code>Service</code>的代码量呢?</li>
+<li>本文中使用的<code>@Repository() @Scope("prototype")</code> 两个注解注册仓储实例的Bean，<code>@Scope("prototype")</code>注解会导致每个实体的仓储都是瞬态的，如何保持每个实体对应的仓储Bean是同一个实例呢?  下一篇会介绍另外一种注册Bean的方式: spring bean的动态注入</li>
+</ol>
+<h2 id="关注我的公众号，一起探索新技术的海洋">关注我的公众号，一起探索新技术的海洋</h2>
+<p><img src="https://img2020.cnblogs.com/blog/463601/202105/463601-20210509110140210-890964670.jpg" alt="" loading="lazy"></p>
+
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2021-05-09 11:03</span>&nbsp;
+<a href="https://www.cnblogs.com/zhaord/">诸葛小亮</a>&nbsp;
+阅读(<span id="post_view_count">5</span>)&nbsp;
+评论(<span id="post_comment_count">0</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14747406" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(14747406);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/10.3.1/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 168745, cb_blogApp = 'zhaord', cb_blogUserGuid = '9f0a145f-9424-e211-aa8f-842b2b196315';
+    var cb_entryId = 14747406, cb_entryCreatedDate = '2021-05-09 11:03', cb_postType = 1;
+    updatePostStats(
+        [cb_entryId],
+        function(id, count) { $("#post_view_count").text(count) },
+        function(id, count) { $("#post_comment_count").text(count) })
+    zoomManager.apply("#cnblogs_post_body img:not(.code_img_closed):not(.code_img_opened)");
+</script>
+<a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <div id="cnblogs_c1" class="under-post-card">
+        <div id='div-gpt-ad-1592365906576-0' style='width: 300px; height: 250px;'></div>
+    </div>
+    <div id="under_post_card1"></div>
+    <div id="cnblogs_c2" class="under-post-card">
+        <div id='div-gpt-ad-1592366332455-0' style='width: 468px; height: 60px;'></div>
+    </div>
+    <div id="under_post_card2"></div>
+    <div id="HistoryToday" class="under-post-card"></div>
+    <script type="text/javascript">
+       var commentManager = new blogCommentManager();
+       commentManager.renderComments(0);
+       fixPostBody();
+       deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);       deliverT2();
+       deliverC1C2();
+       loadNewsAndKb();
+       loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);       LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+       GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+       loadOptUnderPost();
+       GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+	<div id="sideBar">
+		<div id="sideBarMain">
+			<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+<div id="sidebar_c3"></div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2021 诸葛小亮
+<br /><span id="poweredby">Powered by .NET 5.0 on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8L-rpLgFVEJMgssCVvNUAjvc9XNtdwv7tZikJ3qneKQr05KgVzmHSCL48h5P2BMwlOPsPSpoZCWdQshFVVbrm6TN-U8danTHnovzClbrDiXFoM86oXd3a8eUAYyJd7X7Q2UmneR2BdHzeMa6ISwcyjU" />
+</body>
+</html>

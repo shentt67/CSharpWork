@@ -1,0 +1,788 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin-when-crossorigin" />
+    
+    
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>statics - 博客园</title>
+    <link id="favicon" rel="shortcut icon" href="//common.cnblogs.com/favicon.svg" type="image/svg+xml" />
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=zS6-e1bxywlu3kpHvpr1J6MySwya3ztFtEnS7RYQ0Fk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/autumn/bundle-autumn.min.css?v=8aS7ai3_cLRSbwu26g27U0lfWU1fdnLCufx65Z9XoKE" />
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/autumn/bundle-autumn-mobile.min.css?v=iPf_XHQsJ-ofZZ2RiaeMCHG0JEaMNLa9yhkUGK3xTSQ" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/niCong/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/niCong/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/niCong/wlwmanifest.xml" />
+    <script>
+        var currentBlogId = 624958;
+        var currentBlogApp = 'niCong';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var isBlogOwner = false;
+        var skinName = 'Autumn';
+        var visitorUserId = '';
+    </script>
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=2Mic1VLeHXarpdzASbXqFMIMVLEBiWXNO5yiTHUcmhw"></script>
+    
+    
+    
+</head>
+<body class="has-navbar has-bannerbar">
+    <a name="top"></a>
+        <a target="_blank" href="https://www.aliyun.com/activity/daily/bestoffer?userCode=swh7dvlt" onclick="ga('send', 'event', 'Link', 'click', 'aliyun-cps-blog-bannerbar-pc')">
+            <div class="bannerbar aliyun forpc" style="background-size: contain;background-image: url(https://img2020.cnblogs.com/blog/35695/202104/35695-20210428221933214-737067094.jpg)">
+            </div>
+        </a>
+        <div id="bannerbar" class="bannerbar-mobile formobile">
+            <a href="https://www.aliyun.com/activity/daily/bestoffer?userCode=swh7dvlt" target="_blank" onclick="ga('send', 'event', 'Link', 'click', 'aliyun-cps-blog-bannerbar-mobile')">
+                <img src="https://img2020.cnblogs.com/blog/35695/202104/35695-20210428213541700-642740375.jpg" alt="" />
+            </a>
+        </div>
+    <div id="top_nav" class="navbar forpc">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding"><a href="https://www.cnblogs.com/" title="开发者的网上家园"><img src="/images/logo.svg?v=R9M0WmLAIPVydmdzE2keuvnjl-bPR7_35oHqtiBzGsM" alt="博客园Logo" /></a></li>
+                <li><a href="/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-sitehome')">首页</a></li>
+                <li><a href="https://news.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-news')">新闻</a></li>
+                <li><a href="https://q.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-q')">博问</a></li>
+                <li><a id="nav_brandzone" href="https://brands.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-brands')">专区</a></li>
+                <li><a href="https://ing.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-ing')">闪存</a></li>
+                <li><a href="https://edu.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-edu')">班级</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search" action="https://zzk.cnblogs.com/s" method="get">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="text" tabindex="3" />
+                        <button type="submit" id="zzk_search_button">
+                            <img src="/images/aggsite/search.svg" alt="搜索" />
+                        </button>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔">
+                        <img id="new_post_icon" class="navbar-icon" src="/images/aggsite/newpost.svg" alt="写随笔" />
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx" alt="我的博客" title="我的博客">
+                        <img id="myblog_icon" class="navbar-icon" src="/images/aggsite/myblog.svg" alt="我的博客" />
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息">
+                        <img id="msg_icon" class="navbar-icon" src="/images/aggsite/message.svg?v=J0WS2P2iPgaIVgXxcAhliw4AFZIpaTWxtdoNAv9eiCA" alt="短消息" />
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/">
+                            <img id="user_icon" class="navbar-avatar" src="/images/aggsite/avatar-default.svg" alt="用户头像" />
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <img id="navbar_lite_mode_on" src="/images/lite-mode-check.svg" class="hide" /><span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup/">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    
+    <table id="blog_header" cellspacing="0" cellpadding="0" border="0" class="banner">
+    <tr>
+        <td width="61">
+            &nbsp;
+        </td>
+        <td width="236" align="center">
+            
+<br><br><br><br><br><br><br>
+<div id="header">
+	<span>
+		<a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/niCong/">statics</a>
+<br/><br/>
+		
+	</span>
+</div>
+
+
+        </td>
+        <td style="padding-bottom: 30px" align="center" valign="bottom">
+            &nbsp;
+        </td>
+    </tr>
+</table>
+<table align="center" width="100%" cellspacing="0" cellpadding="0" border="0">
+    <tr>
+        <td width="60">
+            &nbsp;
+        </td>
+        <td id="sidebar" valign="top" s>
+            <table align="center" width="100%" height="1400" cellspacing="0" cellpadding="5" border="0" bgcolor="white">
+                <tr>
+                    <td class="banner" valign="top" style="padding-top: 0px">
+
+                        <div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+<div id="sidebar_c3"></div>
+                        <div id="blog-sidecolumn"></div>
+                        <script>loadBlogSideColumn();</script>
+
+                        <br />
+                        <center>
+                            Powered by <a href="http://www.cnblogs.com">博客园</a>
+                        </center>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td valign="top" style="padding: 0">
+            <table align="center" width="100%" height="1400" cellspacing="0" cellpadding="5" border="0" bgcolor="white" class="index">
+                <tr>
+                    <td class="banner" valign="top">
+                        <center>
+                            
+<a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+ <span id="sitehome_link_split">|</span> 
+
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/niCong/">
+首页</a>
+ <span id="bloghome_link_split">|</span> 
+
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+ <span id="newpost_link_split">|</span> 
+<!--<asp:HyperLink  Runat="server" CssClass="menu" NavigateUrl="/EnterMyBlog.aspx?NewArticle=1" Text="发新文章" ID="NewArticleLink" /> | -->
+
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/statics">
+联系</a> <span id="contact_link_split">|</span>  
+
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/niCong/rss/">
+订阅</a>
+<a id="blog_nav_rss_image" href="https://www.cnblogs.com/niCong/rss/">
+    <img src="/skins/autumn/images/xml.gif" alt="订阅" />
+</a> <span id="rss_link_split">|</span> 
+
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+
+
+
+                        </center>
+                        
+
+
+
+
+
+		
+
+
+<h1 class="block_title">
+    <a href="https://www.cnblogs.com/niCong/archive/2020/12/07.html">
+        <img src="/skins/autumn/images/link.gif" style="height: 15px; width: 12px; border-width: 0" alt="" />
+        2020年12月7日
+    </a>
+</h1>
+
+
+<div class="block">
+
+        <div class="post">
+            <div class="posttitle">
+                
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/niCong/p/14100174.html">
+    <span>
+            <span>[置顶]</span>
+        java的jdk8新特性optional怎么样使用
+    </span>
+    
+
+
+
+</a>
+
+            </div>
+            <div class="postcontent">
+                
+
+    <div class="c_b_p_desc">
+摘要：从 Java 8 引入的一个很有趣的特性是&#160;Optional 类。Optional 类主要解决的问题是臭名昭著的空指针异常（NullPointerException） —— 每个 Java 程序员都非常了解的异常 我们从一个简单的用例开始。在 Java 8 之前，任何访问对象方法或属性的调用都可能导        <a href="https://www.cnblogs.com/niCong/p/14100174.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+
+            </div>
+            <div class="itemdesc">
+                posted @ 2020-12-07 22:38
+statics
+<span data-post-id="14100174" class="post-view-count">阅读(76)</span> 
+<span data-post-id="14100174" class="post-comment-count">评论(0)</span> 
+<span data-post-id="14100174" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14100174" rel="nofollow">
+    编辑
+</a>
+
+            </div>
+        </div>
+
+    <div class="block_footer">&nbsp;</div>
+</div>
+		
+
+
+<h1 class="block_title">
+    <a href="https://www.cnblogs.com/niCong/archive/2020/10/02.html">
+        <img src="/skins/autumn/images/link.gif" style="height: 15px; width: 12px; border-width: 0" alt="" />
+        2020年10月2日
+    </a>
+</h1>
+
+
+<div class="block">
+
+        <div class="post">
+            <div class="posttitle">
+                
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/niCong/p/13762265.html">
+    <span>
+            <span>[置顶]</span>
+        SpringBoot整合SpringDataJPA,今天没啥事情就看了一下springboot整合springdataJPA,实在是香啊,SQL语句都不用写了
+    </span>
+    
+
+
+
+</a>
+
+            </div>
+            <div class="postcontent">
+                
+
+    <div class="c_b_p_desc">
+摘要：SpringBoot整合SpringDataJPA 1、JPA概念 JPA是Java Persistence API的简称，中文名Java持久层API，是JDK 5.0注解或XML描述对象－关系表的映射关系，并将运行期的实体对象持久化到数据库中. JPA的总体思想和现有Hibernate、TopLi        <a href="https://www.cnblogs.com/niCong/p/13762265.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+
+            </div>
+            <div class="itemdesc">
+                posted @ 2020-10-02 17:34
+statics
+<span data-post-id="13762265" class="post-view-count">阅读(296)</span> 
+<span data-post-id="13762265" class="post-comment-count">评论(1)</span> 
+<span data-post-id="13762265" class="post-digg-count">推荐(1)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=13762265" rel="nofollow">
+    编辑
+</a>
+
+            </div>
+        </div>
+
+    <div class="block_footer">&nbsp;</div>
+</div>
+		
+
+
+<h1 class="block_title">
+    <a href="https://www.cnblogs.com/niCong/archive/2020/09/27.html">
+        <img src="/skins/autumn/images/link.gif" style="height: 15px; width: 12px; border-width: 0" alt="" />
+        2020年9月27日
+    </a>
+</h1>
+
+
+<div class="block">
+
+        <div class="post">
+            <div class="posttitle">
+                
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/niCong/p/13741299.html">
+    <span>
+            <span>[置顶]</span>
+        SpringMVC+Spring+Mybatis整合
+    </span>
+    
+
+
+
+</a>
+
+            </div>
+            <div class="postcontent">
+                
+
+    <div class="c_b_p_desc">
+摘要：SpringMVC+Spring+Mybatis整合 maven工程结构: pom文件的依赖: &lt;dependencies&gt; &lt;!--mybatis环境--&gt; &lt;dependency&gt; &lt;groupId&gt;org.mybatis&lt;/groupId&gt; &lt;artifactId&gt;mybatis&lt;/artif        <a href="https://www.cnblogs.com/niCong/p/13741299.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+
+            </div>
+            <div class="itemdesc">
+                posted @ 2020-09-27 19:07
+statics
+<span data-post-id="13741299" class="post-view-count">阅读(108)</span> 
+<span data-post-id="13741299" class="post-comment-count">评论(1)</span> 
+<span data-post-id="13741299" class="post-digg-count">推荐(1)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=13741299" rel="nofollow">
+    编辑
+</a>
+
+            </div>
+        </div>
+
+    <div class="block_footer">&nbsp;</div>
+</div>
+		
+
+
+<h1 class="block_title">
+    <a href="https://www.cnblogs.com/niCong/archive/2021/05/08.html">
+        <img src="/skins/autumn/images/link.gif" style="height: 15px; width: 12px; border-width: 0" alt="" />
+        2021年5月8日
+    </a>
+</h1>
+
+
+<div class="block">
+
+        <div class="post">
+            <div class="posttitle">
+                
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/niCong/p/14746565.html">
+    <span>
+        一起来看看java并发中volatile关键字的神奇之处
+    </span>
+    
+
+
+
+</a>
+
+            </div>
+            <div class="postcontent">
+                
+
+    <div class="c_b_p_desc">
+摘要：关于volatile的知识点        <a href="https://www.cnblogs.com/niCong/p/14746565.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+
+            </div>
+            <div class="itemdesc">
+                posted @ 2021-05-08 21:35
+statics
+<span data-post-id="14746565" class="post-view-count">阅读(82)</span> 
+<span data-post-id="14746565" class="post-comment-count">评论(0)</span> 
+<span data-post-id="14746565" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14746565" rel="nofollow">
+    编辑
+</a>
+
+            </div>
+        </div>
+
+    <div class="block_footer">&nbsp;</div>
+</div>
+		
+
+
+<h1 class="block_title">
+    <a href="https://www.cnblogs.com/niCong/archive/2020/12/10.html">
+        <img src="/skins/autumn/images/link.gif" style="height: 15px; width: 12px; border-width: 0" alt="" />
+        2020年12月10日
+    </a>
+</h1>
+
+
+<div class="block">
+
+        <div class="post">
+            <div class="posttitle">
+                
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/niCong/p/14117527.html">
+    <span>
+        Springboot — 用更优雅的方式发HTTP请求:RestTemplate
+    </span>
+    
+
+
+
+</a>
+
+            </div>
+            <div class="postcontent">
+                
+
+    <div class="c_b_p_desc">
+摘要：RestTemplate是Spring提供的用于访问Rest服务的客户端，RestTemplate提供了多种便捷访问远程Http服务的方法,能够大大提高客户端的编写效率。 我之前的HTTP开发是用apache的HttpClient开发，代码复杂，还得操心资源回收等。代码很复杂，冗余代码多，稍微截个图        <a href="https://www.cnblogs.com/niCong/p/14117527.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+
+            </div>
+            <div class="itemdesc">
+                posted @ 2020-12-10 21:36
+statics
+<span data-post-id="14117527" class="post-view-count">阅读(121)</span> 
+<span data-post-id="14117527" class="post-comment-count">评论(0)</span> 
+<span data-post-id="14117527" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14117527" rel="nofollow">
+    编辑
+</a>
+
+            </div>
+        </div>
+
+    <div class="block_footer">&nbsp;</div>
+</div>
+		
+
+
+<h1 class="block_title">
+    <a href="https://www.cnblogs.com/niCong/archive/2020/12/07.html">
+        <img src="/skins/autumn/images/link.gif" style="height: 15px; width: 12px; border-width: 0" alt="" />
+        2020年12月7日
+    </a>
+</h1>
+
+
+<div class="block">
+
+        <div class="post">
+            <div class="posttitle">
+                
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/niCong/p/14100174.html">
+    <span>
+        java的jdk8新特性optional怎么样使用
+    </span>
+    
+
+
+
+</a>
+
+            </div>
+            <div class="postcontent">
+                
+
+    <div class="c_b_p_desc">
+摘要：从 Java 8 引入的一个很有趣的特性是&#160;Optional 类。Optional 类主要解决的问题是臭名昭著的空指针异常（NullPointerException） —— 每个 Java 程序员都非常了解的异常 我们从一个简单的用例开始。在 Java 8 之前，任何访问对象方法或属性的调用都可能导        <a href="https://www.cnblogs.com/niCong/p/14100174.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+
+            </div>
+            <div class="itemdesc">
+                posted @ 2020-12-07 22:38
+statics
+<span data-post-id="14100174" class="post-view-count">阅读(76)</span> 
+<span data-post-id="14100174" class="post-comment-count">评论(0)</span> 
+<span data-post-id="14100174" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14100174" rel="nofollow">
+    编辑
+</a>
+
+            </div>
+        </div>
+
+    <div class="block_footer">&nbsp;</div>
+</div>
+		
+
+
+<h1 class="block_title">
+    <a href="https://www.cnblogs.com/niCong/archive/2020/10/06.html">
+        <img src="/skins/autumn/images/link.gif" style="height: 15px; width: 12px; border-width: 0" alt="" />
+        2020年10月6日
+    </a>
+</h1>
+
+
+<div class="block">
+
+        <div class="post">
+            <div class="posttitle">
+                
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/niCong/p/13772865.html">
+    <span>
+        基于springboot工程浅谈整合rabbitmq怎么样防止消息发送mq不丢失和消费mq的消息防止丢失
+    </span>
+    
+
+
+
+</a>
+
+            </div>
+            <div class="postcontent">
+                
+
+    <div class="c_b_p_desc">
+摘要：本文只针对springboot整合rabbitmq的消息防丢失,话不多说,上干货.... 设置发送mq消息不丢失实现思路 执行的方案： 第一步，要对队列，消息以及交换机进行持久化操作(保存到物理磁盘中) 因为mq消息默认是保存在内存中 交换机我们在声明的时候可以进行持久化 @Bean(EX_BUYI        <a href="https://www.cnblogs.com/niCong/p/13772865.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+
+            </div>
+            <div class="itemdesc">
+                posted @ 2020-10-06 10:41
+statics
+<span data-post-id="13772865" class="post-view-count">阅读(416)</span> 
+<span data-post-id="13772865" class="post-comment-count">评论(1)</span> 
+<span data-post-id="13772865" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=13772865" rel="nofollow">
+    编辑
+</a>
+
+            </div>
+        </div>
+
+    <div class="block_footer">&nbsp;</div>
+</div>
+		
+
+
+<h1 class="block_title">
+    <a href="https://www.cnblogs.com/niCong/archive/2020/10/04.html">
+        <img src="/skins/autumn/images/link.gif" style="height: 15px; width: 12px; border-width: 0" alt="" />
+        2020年10月4日
+    </a>
+</h1>
+
+
+<div class="block">
+
+        <div class="post">
+            <div class="posttitle">
+                
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/niCong/p/13768650.html">
+    <span>
+        实用!!!!springBoot加入微信扫码支付功能,有一说一还是挺有意思的
+    </span>
+    
+
+
+
+</a>
+
+            </div>
+            <div class="postcontent">
+                
+
+    <div class="c_b_p_desc">
+摘要：基于springboot微服务加入微信支付的功能 在线微信支付开发文档： https://pay.weixin.qq.com/wiki/doc/api/index.html native扫码支付方式: 统一下单api 1.新建工程&#160;导入pom依赖&#160;注意:这个包是从微信开发网站下载的 &lt;depende        <a href="https://www.cnblogs.com/niCong/p/13768650.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+
+            </div>
+            <div class="itemdesc">
+                posted @ 2020-10-04 22:25
+statics
+<span data-post-id="13768650" class="post-view-count">阅读(385)</span> 
+<span data-post-id="13768650" class="post-comment-count">评论(0)</span> 
+<span data-post-id="13768650" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=13768650" rel="nofollow">
+    编辑
+</a>
+
+            </div>
+        </div>
+
+    <div class="block_footer">&nbsp;</div>
+</div>
+		
+
+
+<h1 class="block_title">
+    <a href="https://www.cnblogs.com/niCong/archive/2020/10/02.html">
+        <img src="/skins/autumn/images/link.gif" style="height: 15px; width: 12px; border-width: 0" alt="" />
+        2020年10月2日
+    </a>
+</h1>
+
+
+<div class="block">
+
+        <div class="post">
+            <div class="posttitle">
+                
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/niCong/p/13762265.html">
+    <span>
+        SpringBoot整合SpringDataJPA,今天没啥事情就看了一下springboot整合springdataJPA,实在是香啊,SQL语句都不用写了
+    </span>
+    
+
+
+
+</a>
+
+            </div>
+            <div class="postcontent">
+                
+
+    <div class="c_b_p_desc">
+摘要：SpringBoot整合SpringDataJPA 1、JPA概念 JPA是Java Persistence API的简称，中文名Java持久层API，是JDK 5.0注解或XML描述对象－关系表的映射关系，并将运行期的实体对象持久化到数据库中. JPA的总体思想和现有Hibernate、TopLi        <a href="https://www.cnblogs.com/niCong/p/13762265.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+
+            </div>
+            <div class="itemdesc">
+                posted @ 2020-10-02 17:34
+statics
+<span data-post-id="13762265" class="post-view-count">阅读(296)</span> 
+<span data-post-id="13762265" class="post-comment-count">评论(1)</span> 
+<span data-post-id="13762265" class="post-digg-count">推荐(1)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=13762265" rel="nofollow">
+    编辑
+</a>
+
+            </div>
+        </div>
+
+    <div class="block_footer">&nbsp;</div>
+</div>
+		
+
+
+<h1 class="block_title">
+    <a href="https://www.cnblogs.com/niCong/archive/2020/09/27.html">
+        <img src="/skins/autumn/images/link.gif" style="height: 15px; width: 12px; border-width: 0" alt="" />
+        2020年9月27日
+    </a>
+</h1>
+
+
+<div class="block">
+
+        <div class="post">
+            <div class="posttitle">
+                
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/niCong/p/13741299.html">
+    <span>
+        SpringMVC+Spring+Mybatis整合
+    </span>
+    
+
+
+
+</a>
+
+            </div>
+            <div class="postcontent">
+                
+
+    <div class="c_b_p_desc">
+摘要：SpringMVC+Spring+Mybatis整合 maven工程结构: pom文件的依赖: &lt;dependencies&gt; &lt;!--mybatis环境--&gt; &lt;dependency&gt; &lt;groupId&gt;org.mybatis&lt;/groupId&gt; &lt;artifactId&gt;mybatis&lt;/artif        <a href="https://www.cnblogs.com/niCong/p/13741299.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+
+            </div>
+            <div class="itemdesc">
+                posted @ 2020-09-27 19:07
+statics
+<span data-post-id="13741299" class="post-view-count">阅读(108)</span> 
+<span data-post-id="13741299" class="post-comment-count">评论(1)</span> 
+<span data-post-id="13741299" class="post-digg-count">推荐(1)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=13741299" rel="nofollow">
+    编辑
+</a>
+
+            </div>
+        </div>
+
+    <div class="block_footer">&nbsp;</div>
+</div>
+		
+
+
+<h1 class="block_title">
+    <a href="https://www.cnblogs.com/niCong/archive/2020/08/19.html">
+        <img src="/skins/autumn/images/link.gif" style="height: 15px; width: 12px; border-width: 0" alt="" />
+        2020年8月19日
+    </a>
+</h1>
+
+
+<div class="block">
+
+        <div class="post">
+            <div class="posttitle">
+                
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/niCong/p/13527891.html">
+    <span>
+        shiro安全框架和spring整合
+    </span>
+    
+
+
+
+</a>
+
+            </div>
+            <div class="postcontent">
+                
+
+    <div class="c_b_p_desc">
+摘要：上干货......... 整合spring的配置文件 &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot; xmlns:xsi=&quot;http://www.w3.o        <a href="https://www.cnblogs.com/niCong/p/13527891.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+
+            </div>
+            <div class="itemdesc">
+                posted @ 2020-08-19 10:38
+statics
+<span data-post-id="13527891" class="post-view-count">阅读(44)</span> 
+<span data-post-id="13527891" class="post-comment-count">评论(0)</span> 
+<span data-post-id="13527891" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=13527891" rel="nofollow">
+    编辑
+</a>
+
+            </div>
+        </div>
+
+    <div class="block_footer">&nbsp;</div>
+</div>
+
+<div class="topicListFooter">
+    <div id="nav_next_page">
+        
+    
+
+    </div>    
+</div>
+
+
+
+
+
+
+<script>
+    updatePostStats(
+        $(".post-view-count").map(function () { return this.dataset.postId }).get(),
+        function(id, count) { $(".post-view-count[data-post-id=" + id + "]").text("阅读(" + count + ")") },
+        function(id, count) { $(".post-comment-count[data-post-id=" + id + "]").text("评论(" + count + ")") },
+        function(id, count) { $(".post-digg-count[data-post-id=" + id + "]").text("推荐(" + count + ")") });
+</script>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+
+    
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8L-rpLgFVEJMgssCVvNUAjsZHXrBIdE8CEkHtw8Ieo7RVd6sm8kuPMhJl3ww4QLBfUrY16RL_OQ3GKQGVZXCw6lqu6oCVEWfUv2EoqKKgTl1GWICWwNzec2fmsuH4MNTWAXinoeLxORW7Bi93wqA7-I" />
+</body>
+</html>

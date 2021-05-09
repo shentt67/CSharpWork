@@ -1,0 +1,459 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin-when-crossorigin" />
+    <meta name="description" content="水平居中： （1）内联元素： text-align: center; 利用 text-align: center ；可以实现在块级元素内部的内联元素水平居中。 如果一行中有多个块级元素，可以通过设置块" />
+    <meta property="og:description" content="水平居中： （1）内联元素： text-align: center; 利用 text-align: center ；可以实现在块级元素内部的内联元素水平居中。 如果一行中有多个块级元素，可以通过设置块" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>前端基础问题：CSS居中的几种方式 - Du9191 - 博客园</title>
+    <link id="favicon" rel="shortcut icon" href="//common.cnblogs.com/favicon.svg" type="image/svg+xml" />
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=zS6-e1bxywlu3kpHvpr1J6MySwya3ztFtEnS7RYQ0Fk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/simplememory/bundle-simplememory.min.css?v=uknaX_hejnSu-njQgx4Hj1R0JiPLwUhFPUlwWNmWyB4" />
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/Du9191/custom.css?v=DgJUjaFZP0sX3mmNOG6XO6DUd4A=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/SimpleMemory/bundle-SimpleMemory-mobile.min.css" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/Du9191/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/Du9191/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/Du9191/wlwmanifest.xml" />
+    <script>
+        var currentBlogId = 682065;
+        var currentBlogApp = 'Du9191';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var isBlogOwner = false;
+        var skinName = 'SimpleMemory';
+        var visitorUserId = '';
+    </script>
+        <script>
+            var currentPostDateAdded = '2021-05-08 09:47';
+        </script>
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=2Mic1VLeHXarpdzASbXqFMIMVLEBiWXNO5yiTHUcmhw"></script>
+    
+    
+    
+</head>
+<body class="no-navbar">
+    <a name="top"></a>
+        <div id="bannerbar" class="bannerbar-mobile formobile">
+            <a href="https://www.aliyun.com/activity/daily/bestoffer?userCode=swh7dvlt" target="_blank" onclick="ga('send', 'event', 'Link', 'click', 'aliyun-cps-blog-bannerbar-mobile')">
+                <img src="https://img2020.cnblogs.com/blog/35695/202104/35695-20210428213541700-642740375.jpg" alt="" />
+            </a>
+        </div>
+    <div id="top_nav" class="navbar forpc navbar-custom">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding"><a href="https://www.cnblogs.com/" title="开发者的网上家园"><img src="/images/logo.svg?v=R9M0WmLAIPVydmdzE2keuvnjl-bPR7_35oHqtiBzGsM" alt="博客园Logo" /></a></li>
+                <li><a href="/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-sitehome')">首页</a></li>
+                <li><a href="https://news.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-news')">新闻</a></li>
+                <li><a href="https://q.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-q')">博问</a></li>
+                <li><a id="nav_brandzone" href="https://brands.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-brands')">专区</a></li>
+                <li><a href="https://ing.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-ing')">闪存</a></li>
+                <li><a href="https://edu.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-edu')">班级</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search" action="https://zzk.cnblogs.com/s" method="get">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="text" tabindex="3" />
+                        <button type="submit" id="zzk_search_button">
+                            <img src="/images/aggsite/search.svg" alt="搜索" />
+                        </button>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔">
+                        <img id="new_post_icon" class="navbar-icon" src="/images/aggsite/newpost.svg" alt="写随笔" />
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx" alt="我的博客" title="我的博客">
+                        <img id="myblog_icon" class="navbar-icon" src="/images/aggsite/myblog.svg" alt="我的博客" />
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息">
+                        <img id="msg_icon" class="navbar-icon" src="/images/aggsite/message.svg?v=J0WS2P2iPgaIVgXxcAhliw4AFZIpaTWxtdoNAv9eiCA" alt="短消息" />
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/">
+                            <img id="user_icon" class="navbar-avatar" src="/images/aggsite/avatar-default.svg" alt="用户头像" />
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <img id="navbar_lite_mode_on" src="/images/lite-mode-check.svg" class="hide" /><span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup/">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    
+    <!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/Du9191/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/Du9191/">Du</a>
+</h1>
+<h2>    制之以衡，行之有度</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/Du9191/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/Du9191">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/Du9191/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			<div id="blog_stats_place_holder"><script>loadBlogStats();</script></div>
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/Du9191/p/14742908.html">
+    <span>前端基础问题：CSS居中的几种方式</span>
+    
+
+
+
+</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                <div id="cnblogs_post_body" class="blogpost-body blogpost-body-html">
+<h1><span style="font-family: &quot;Microsoft YaHei&quot;">水平居中：</span></h1>
+<p><span style="font-family: &quot;Microsoft YaHei&quot;; font-size: 18px">（1）内联元素：</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-size: 16px">text-align: center;</span></pre>
+</div>
+<p><span style="font-family: &quot;Microsoft YaHei&quot;; font-size: 16px">利用 text-align: center ；可以实现在<span style="color: rgba(254, 31, 0, 1)"><span style="color: rgba(0, 0, 0, 1)">块级元素内部的</span>内联元素水平居中</span>。</span></p>
+<p><span style="font-family: &quot;Microsoft YaHei&quot;; font-size: 16px">如果一行中有多个块级元素，可以通过设置块级元素的显示类型为inline-block和父容器的text-align属性从而使多块级元素水平居中。</span></p>
+<p><span style="font-family: &quot;Microsoft YaHei&quot;; font-size: 16px"><span style="color: rgba(254, 16, 0, 1)">注意</span>：此方法对内联(inline), 内联块(inline-block),内联表(inline-table), 内联块级弹性盒(inline-flex)元素水平居中都有效。</span></p>
+<p><span style="font-family: &quot;Microsoft YaHei&quot;; font-size: 18px">（2）块级元素：</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-size: 16px">margin: <span style="color: rgba(128, 0, 128, 1)">0</span> auto；</span></pre>
+</div>
+<p><span style="font-family: &quot;Microsoft YaHei&quot;; font-size: 16px"><span style="color: rgba(254, 16, 0, 1)">注意</span>：</span><span style="font-size: 16px"><span style="font-family: &quot;Microsoft YaHei&quot;">当块级元素的</span><span style="font-family: &quot;Microsoft YaHei&quot;"><span style="color: rgba(251, 33, 3, 1)">宽</span></span><span style="font-family: &quot;Microsoft YaHei&quot;"><span style="color: rgba(251, 33, 3, 1)">度固定</span></span><span style="font-family: &quot;Microsoft YaHei&quot;">时，可通过</span>margin: 0 auto；使块级元素水平居中。（未定宽度，居中无效）</span></p>
+<p><span style="font-family: &quot;Microsoft YaHei&quot;; font-size: 18px">（3）绝对定位+2D平移：</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-size: 16px"><span style="color: rgba(0, 0, 0, 1)">position: absolute；
+
+left:</span><span style="color: rgba(128, 0, 128, 1)">50</span>%<span style="color: rgba(0, 0, 0, 1)">；
+
+transform: translateX(</span>-<span style="color: rgba(128, 0, 128, 1)">50</span>%)；</span></pre>
+</div>
+<p><span style="font-family: &quot;Microsoft YaHei&quot;; font-size: 16px"><span style="color: rgba(254, 16, 0, 1)">注意</span>：</span><span style="font-size: 16px"><span style="font-family: &quot;Microsoft YaHei&quot;">当</span><span style="font-family: &quot;Microsoft YaHei&quot;">块级元素的</span><span style="font-family: &quot;Microsoft YaHei&quot;"><span style="color: rgba(251, 33, 3, 1)">宽度不固定</span></span><span style="font-family: &quot;Microsoft YaHei&quot;">时，可通过绝对定位配合2D平移（平移相对于自身宽高的百分比），使块级元素水</span><span style="font-family: &quot;Microsoft YaHei&quot;">平居中。</span></span></p>
+<p><span style="font-size: 18px"><span style="font-family: &quot;Microsoft YaHei&quot;">（4）弹性<span style="font-family: &quot;Microsoft YaHei&quot;">盒子</span></span><span style="font-family: &quot;Microsoft YaHei&quot;">使用justify-content属性：</span></span></p>
+<div class="cnblogs_code">
+<pre><span style="font-size: 16px"><span style="color: rgba(0, 0, 0, 1)">display: flex；
+
+justify</span>-content: center；</span></pre>
+</div>
+<p><span style="font-family: 黑体; font-size: 16px"><span style="color: rgba(254, 16, 0, 1)">注意</span><span style="font-family: &quot;Microsoft YaHei&quot;">：</span>需将父盒子设置为<span style="color: rgba(254, 16, 0, 1)">弹性盒子</span>，利用justify-content 属性（用于设置弹性盒子元素在主轴（横轴）方向上的对齐方式）实现水平居中。</span></p>
+<p><span style="font-family: &quot;Microsoft YaHei&quot;"><strong><span style="font-size: 18pt">垂直居中：</span></strong></span></p>
+<p><span style="font-size: 18px">（1）内联元素：</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-size: 16px">vertical-align:middle;</span></pre>
+</div>
+<p><span style="font-size: 16px">vertical-align是用来指定<span style="color: rgba(254, 16, 0, 1)">内联元素</span>或者<span style="color: rgba(254, 16, 0, 1)">表格单元格元素</span>的垂直对齐方式。</span></p>
+<p><span style="font-size: 16px">可被用于：使内联元素盒模型与其内联元素容器垂直对齐。用于垂直对齐一行文本的内的图片，</span><span style="font-size: 16px">垂直对齐表格单元内容。</span></p>
+<p><span style="font-size: 16px"><span style="color: rgba(254, 16, 0, 1)">注意</span>：使用vertical-align要清楚基线、边界的概念</span></p>
+<p><span style="font-size: 16px">vertical-align只对内联元素（inline、inline-block、inline-table）、表格单元格元素（table-cell）生效。不能用它垂直对齐块级元素。</span></p>
+<p><span style="font-family: &quot;Microsoft YaHei&quot;; font-size: 18px">（2）行高与高度一致：</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-size: 16px">line-height: **<span style="color: rgba(0, 0, 0, 1)">px;<br>
+height: </span>**px;</span></pre>
+</div>
+<p><span style="font-size: 16px"><span style="color: rgba(254, 16, 0, 1)">内联元素</span>的高度(height)和行高(line-height)相等时，元素垂直居中。</span></p>
+<p><span style="font-size: 18px; font-family: &quot;Microsoft YaHei&quot;">（3）块级元素：</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-size: 16px"><span style="color: rgba(0, 0, 0, 1)">position: absolute;
+
+top: </span><span style="color: rgba(128, 0, 128, 1)">50</span>%<span style="color: rgba(0, 0, 0, 1)">;
+
+height: 100px;
+
+margin</span>-top: -50px;</span></pre>
+</div>
+<p><span style="font-size: 16px"><span style="color: rgba(254, 16, 0, 1)">注意</span>：当块级元素的高度固定时，通过绝对定位元素距离顶部50%，并设置margin-top向上偏移元素高度的一半，使块级元素垂直居中。</span></p>
+<p><span style="font-size: 18px"><span style="font-family: &quot;Microsoft YaHei&quot;">（4）</span>绝对定位+2D平移：</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-size: 16px"><span style="color: rgba(0, 0, 0, 1)">position: absolute;
+
+top: </span><span style="color: rgba(128, 0, 128, 1)">50</span>%<span style="color: rgba(0, 0, 0, 1)">;
+
+transform: translateY(</span>-<span style="color: rgba(128, 0, 128, 1)">50</span>%)；</span></pre>
+</div>
+<p><span style="font-size: 16px"><span style="font-family: &quot;Microsoft YaHei&quot;"><span style="color: rgba(254, 16, 0, 1)">注意</span>：当块级元素的高度不固定时，可通过绝对定位配合2D平移（平移相对于自身宽高的百分比），使块级元素垂直居中。部分浏览器存在兼容性的问题。</span></span></p>
+<p><span style="font-size: 18px"><span style="font-family: &quot;Microsoft YaHei&quot;">（5）</span>弹性盒子使用&nbsp;align-items属性：</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-size: 16px">display: flex；
+
+align-items: center；</span></pre>
+</div>
+<p><span style="font-family: &quot;Microsoft YaHei&quot;; font-size: 16px"><span style="color: rgba(254, 16, 0, 1)">注意</span>：需将父盒子设置为弹性盒子，利用align-items 属性（用于设置弹性盒子元素在侧轴（纵轴）方向上的对齐方式）实现垂直居中。</span></p>
+<p><span style="font-family: &quot;Microsoft YaHei&quot;; font-size: 18px">（6）利用表布局（table）</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-size: 16px"><span style="color: rgba(0, 0, 0, 1)">display:table；
+
+display:table</span>-cell；</span></pre>
+</div>
+<p><span style="font-family: &quot;Microsoft YaHei&quot;; font-size: 16px"><span style="color: rgba(254, 16, 0, 1)">注意</span>：父容器设为display:table让他成为一个块级表格元素，子元素display:table-cell使子元素成为表格单元格，</span></p>
+<p><span style="font-family: &quot;Microsoft YaHei&quot;; font-size: 16px">然后就像在表格里一样，给子元素加个vertical-align: middle就行了,多行文字垂直居中。（</span><span style="font-family: &quot;Microsoft YaHei&quot;; font-size: 16px">常规的登录及注册页面都需要用到）</span></p>
+<p><span style="font-family: &quot;Microsoft YaHei&quot;; font-size: 18px">（7）精灵元素(ghost element)技术</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-size: 16px">.ghost-<span style="color: rgba(0, 0, 0, 1)">center {
+    position: relative;
+}
+.ghost</span>-<span style="color: rgba(0, 0, 0, 1)">center::before {
+    content: </span><span style="color: rgba(128, 0, 0, 1)">"</span> <span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">;<br>
+    display: inline</span>-<span style="color: rgba(0, 0, 0, 1)">block;
+
+    height: </span><span style="color: rgba(128, 0, 128, 1)">100</span>%<span style="color: rgba(0, 0, 0, 1)">;
+
+    width: </span><span style="color: rgba(128, 0, 128, 1)">1</span>%<span style="color: rgba(0, 0, 0, 1)">;
+
+    vertical</span>-<span style="color: rgba(0, 0, 0, 1)">align: middle;
+}
+.ghost</span>-<span style="color: rgba(0, 0, 0, 1)">center p {
+    display: inline</span>-<span style="color: rgba(0, 0, 0, 1)">block;
+
+    vertical</span>-<span style="color: rgba(0, 0, 0, 1)">align: middle;
+
+    width: 20rem;
+}</span></span></pre>
+</div>
+<p><span style="font-family: &quot;Microsoft YaHei&quot;; font-size: 16px">在父容器内放一个100%高度的伪元素，让文本和伪元素垂直对齐，从而达到垂直居中的目的。个人认为本质就是第（1）种方法。</span></p>
+<p><span style="font-family: &quot;Microsoft YaHei&quot;; font-size: 18pt"><strong>水平垂直居中：</strong></span></p>
+<p><span style="font-family: &quot;Microsoft YaHei&quot;; font-size: 18px">（1）固定宽高</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-size: 16px"><span style="color: rgba(0, 0, 0, 1)">.parent {
+&nbsp; &nbsp; position: relative;
+}
+
+.child {
+&nbsp; &nbsp; position: absolute;
+
+&nbsp; &nbsp; top: </span><span style="color: rgba(128, 0, 128, 1)">50</span>%<span style="color: rgba(0, 0, 0, 1)">;
+
+&nbsp; &nbsp; left: </span><span style="color: rgba(128, 0, 128, 1)">50</span>%<span style="color: rgba(0, 0, 0, 1)">;
+
+&nbsp; &nbsp; margin: </span>-50px <span style="color: rgba(128, 0, 128, 1)">0</span> <span style="color: rgba(128, 0, 128, 1)">0</span> -5<span style="color: rgba(0, 0, 0, 1)">0px;<br></span></span></pre>
+<pre><span style="font-size: 16px">&nbsp; &nbsp; width: 100px;<br>
+&nbsp; &nbsp; height: 100px;</span></pre>
+<pre><span style="color: rgba(0, 0, 0, 1); font-size: 16px">}</span></pre>
+</div>
+<p><span style="font-family: &quot;Microsoft YaHei&quot;; font-size: 18px">（2）不定宽高</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-size: 16px"><span style="color: rgba(0, 0, 0, 1)">.parent {
+&nbsp; &nbsp; position: relative;
+}
+
+.child {
+&nbsp; &nbsp; position: absolute;<br>
+&nbsp; &nbsp; top: </span><span style="color: rgba(128, 0, 128, 1)">50</span>%<span style="color: rgba(0, 0, 0, 1)">;
+
+&nbsp; &nbsp; left: </span><span style="color: rgba(128, 0, 128, 1)">50</span>%<span style="color: rgba(0, 0, 0, 1)">;
+
+&nbsp; &nbsp; transform: translate(</span>-<span style="color: rgba(128, 0, 128, 1)">50</span>%, -<span style="color: rgba(128, 0, 128, 1)">50</span>%<span style="color: rgba(0, 0, 0, 1)">);
+}</span></span></pre>
+</div>
+<p><span style="font-size: 18px">（3）利用flex布局</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-size: 16px"><span style="color: rgba(0, 0, 0, 1)">.parent {
+    display: flex;
+
+    justify</span>-<span style="color: rgba(0, 0, 0, 1)">content: center;
+
+    align</span>-<span style="color: rgba(0, 0, 0, 1)">items: center;
+}</span></span></pre>
+</div>
+<p><span style="font-size: 18px">（4）利用grid布局（兼容性较差，不推荐）</span></p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 0, 0, 1); font-size: 16px">.parent {
+  height: 140px;<br>
+  display: grid;
+}
+.child { 
+  margin: auto;
+}</span></pre>
+</div>
+<p><span style="font-size: 18px">（5）利用表布局（table）</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-size: 16px"><span style="color: rgba(0, 0, 0, 1)">.outer {
+    display: table;<br>
+    position: absolute;
+
+    height: </span><span style="color: rgba(128, 0, 128, 1)">100</span>%<span style="color: rgba(0, 0, 0, 1)">;
+
+    width: </span><span style="color: rgba(128, 0, 128, 1)">100</span>%<span style="color: rgba(0, 0, 0, 1)">;
+}
+
+.middle {
+    display: table</span>-<span style="color: rgba(0, 0, 0, 1)">cell;
+
+    vertical</span>-<span style="color: rgba(0, 0, 0, 1)">align: middle;
+}
+
+.inner {
+    margin</span>-<span style="color: rgba(0, 0, 0, 1)">left: auto;
+
+    margin</span>-<span style="color: rgba(0, 0, 0, 1)">right: auto; 
+
+    width: 400px;
+}</span></span></pre>
+</div>
+<p>————————————————<br>资料参考：</p>
+<p>CSDN博主「微个日光日」<br>原文链接：https://blog.csdn.net/xiebaochun/article/details/89838522</p>
+<p>&nbsp;简书博主「<a class="name" href="https://www.jianshu.com/u/fe17b85a3247">Iam_Bling</a>」<br>&nbsp;原文链接：https://www.jianshu.com/p/ce7e4a997a2c</p>
+<p>&nbsp;</p>
+<p>&nbsp; 前端小白，有哪些不足的地方，希望大家多多指教</p>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2021-05-08 21:47</span>&nbsp;
+<a href="https://www.cnblogs.com/Du9191/">Du9191</a>&nbsp;
+阅读(<span id="post_view_count">80</span>)&nbsp;
+评论(<span id="post_comment_count">0</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14742908" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(14742908);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/10.3.1/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 682065, cb_blogApp = 'Du9191', cb_blogUserGuid = '6c578ed7-77b8-4798-c695-08d8d71b5727';
+    var cb_entryId = 14742908, cb_entryCreatedDate = '2021-05-08 21:47', cb_postType = 1;
+    updatePostStats(
+        [cb_entryId],
+        function(id, count) { $("#post_view_count").text(count) },
+        function(id, count) { $("#post_comment_count").text(count) })
+    zoomManager.apply("#cnblogs_post_body img:not(.code_img_closed):not(.code_img_opened)");
+</script>
+<a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <div id="cnblogs_c1" class="under-post-card">
+        <div id='div-gpt-ad-1592365906576-0' style='width: 300px; height: 250px;'></div>
+    </div>
+    <div id="under_post_card1"></div>
+    <div id="cnblogs_c2" class="under-post-card">
+        <div id='div-gpt-ad-1592366332455-0' style='width: 468px; height: 60px;'></div>
+    </div>
+    <div id="under_post_card2"></div>
+    <div id="HistoryToday" class="under-post-card"></div>
+    <script type="text/javascript">
+       var commentManager = new blogCommentManager();
+       commentManager.renderComments(0);
+       fixPostBody();
+       deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);       deliverT2();
+       deliverC1C2();
+       loadNewsAndKb();
+       loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);       LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+       GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+       loadOptUnderPost();
+       GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+	<div id="sideBar">
+		<div id="sideBarMain">
+			<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+<div id="sidebar_c3"></div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2021 Du9191
+<br /><span id="poweredby">Powered by .NET 5.0 on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8L-rpLgFVEJMgssCVvNUAjsVNof9GAPE_J2AjBbm_A0sUB3MPk0Zol4KoctFvSyrZQ7HWHTs50yEpAjGcYb8tVsVbFbAqKVPESSkHxqqie3n68cB9yhmfJ0N798dhCxLYmHBHwOdQXUNOTQxz_FLPds" />
+</body>
+</html>

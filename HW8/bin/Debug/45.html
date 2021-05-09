@@ -1,0 +1,383 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin-when-crossorigin" />
+    <meta name="description" content="JMeter的主要元件有测试计划、线程组、取样器、逻辑控制器、配置元件、前置处理器、后置处理器、监听器、定时器、断言。 其中共有8类可被执行的元件，test plan（测试计划）和thread gro" />
+    <meta property="og:description" content="JMeter的主要元件有测试计划、线程组、取样器、逻辑控制器、配置元件、前置处理器、后置处理器、监听器、定时器、断言。 其中共有8类可被执行的元件，test plan（测试计划）和thread gro" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>『动善时』JMeter基础 — 8、JMeter主要元件介绍 - 繁华似锦Fighting - 博客园</title>
+    <link id="favicon" rel="shortcut icon" href="//common.cnblogs.com/favicon.svg" type="image/svg+xml" />
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=zS6-e1bxywlu3kpHvpr1J6MySwya3ztFtEnS7RYQ0Fk" />
+    
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/liuyuelinfighting/custom.css?v=J55tLAjEZDHrJ4cToIvb4eVDvd8=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/SimpleMemory/bundle-SimpleMemory-mobile.min.css" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/liuyuelinfighting/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/liuyuelinfighting/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/liuyuelinfighting/wlwmanifest.xml" />
+    <script>
+        var currentBlogId = 271969;
+        var currentBlogApp = 'liuyuelinfighting';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var isBlogOwner = false;
+        var skinName = 'SimpleMemory';
+        var visitorUserId = '';
+    </script>
+        <script>
+            var currentPostDateAdded = '2021-05-08 09:38';
+        </script>
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=2Mic1VLeHXarpdzASbXqFMIMVLEBiWXNO5yiTHUcmhw"></script>
+    
+    
+    
+</head>
+<body class="no-navbar">
+    <a name="top"></a>
+        <div id="bannerbar" class="bannerbar-mobile formobile">
+            <a href="https://www.aliyun.com/activity/daily/bestoffer?userCode=swh7dvlt" target="_blank" onclick="ga('send', 'event', 'Link', 'click', 'aliyun-cps-blog-bannerbar-mobile')">
+                <img src="https://img2020.cnblogs.com/blog/35695/202104/35695-20210428213541700-642740375.jpg" alt="" />
+            </a>
+        </div>
+    <div id="top_nav" class="navbar forpc navbar-custom">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding"><a href="https://www.cnblogs.com/" title="开发者的网上家园"><img src="/images/logo.svg?v=R9M0WmLAIPVydmdzE2keuvnjl-bPR7_35oHqtiBzGsM" alt="博客园Logo" /></a></li>
+                <li><a href="/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-sitehome')">首页</a></li>
+                <li><a href="https://news.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-news')">新闻</a></li>
+                <li><a href="https://q.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-q')">博问</a></li>
+                <li><a id="nav_brandzone" href="https://brands.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-brands')">专区</a></li>
+                <li><a href="https://ing.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-ing')">闪存</a></li>
+                <li><a href="https://edu.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-edu')">班级</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search" action="https://zzk.cnblogs.com/s" method="get">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="text" tabindex="3" />
+                        <button type="submit" id="zzk_search_button">
+                            <img src="/images/aggsite/search.svg" alt="搜索" />
+                        </button>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔">
+                        <img id="new_post_icon" class="navbar-icon" src="/images/aggsite/newpost.svg" alt="写随笔" />
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx" alt="我的博客" title="我的博客">
+                        <img id="myblog_icon" class="navbar-icon" src="/images/aggsite/myblog.svg" alt="我的博客" />
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息">
+                        <img id="msg_icon" class="navbar-icon" src="/images/aggsite/message.svg?v=J0WS2P2iPgaIVgXxcAhliw4AFZIpaTWxtdoNAv9eiCA" alt="短消息" />
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/">
+                            <img id="user_icon" class="navbar-avatar" src="/images/aggsite/avatar-default.svg" alt="用户头像" />
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <img id="navbar_lite_mode_on" src="/images/lite-mode-check.svg" class="hide" /><span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup/">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div id="page_begin_html">
+        <script>loadPageBeginHtml();</script>
+    </div>
+    <!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/liuyuelinfighting/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/liuyuelinfighting/">繁华似锦Fighting</a>
+</h1>
+<h2>老子不老，庄子不装。</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/liuyuelinfighting/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/%E7%B9%81%E5%8D%8E%E4%BC%BC%E9%94%A6Fighting">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/liuyuelinfighting/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			<div id="blog_stats_place_holder"><script>loadBlogStats();</script></div>
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/liuyuelinfighting/p/14746570.html">
+    <span>『动善时』JMeter基础 — 8、JMeter主要元件介绍</span>
+    
+
+
+
+</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                <div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+<p></p><div class="toc"><div class="toc-container-header">目录</div><ul><li><a href="#1、测试计划（test-plan）">1、测试计划（Test Plan）</a></li><li><a href="#2、线程组threadsusers">2、线程组<threads(users)></threads(users)></a></li><li><a href="#3、取样器（sampler）">3、取样器（sampler）</a></li><li><a href="#4、逻辑控制器（logic-controller）">4、逻辑控制器（Logic Controller）</a></li><li><a href="#5、配置元件（config-element）">5、配置元件（Config Element）</a></li><li><a href="#6、定时器（timer）">6、定时器（Timer）</a></li><li><a href="#7、前置处理器（per-processors）">7、前置处理器（Per Processors）</a></li><li><a href="#8、后置处理器（post-processors）">8、后置处理器（Post Processors）</a></li><li><a href="#9、断言（assertions）">9、断言（Assertions）</a></li><li><a href="#10、监听器（listener）">10、监听器（Listener）</a></li></ul></div><br>
+JMeter的主要元件有<code>测试计划</code>、<code>线程组</code>、<code>取样器</code>、<code>逻辑控制器</code>、<code>配置元件</code>、<code>前置处理器</code>、<code>后置处理器</code>、<code>监听器</code>、<code>定时器</code>、<code>断言</code>。<p></p>
+<p>其中共有8类可被执行的元件，<code>test plan</code>（测试计划）和<code>thread group</code>（线程组）不属于可被执行的元件，而<code>sampler</code>（取样器）是不与其他元件发生交互的作用的元件。</p>
+<p>下面我们就来逐一介绍一下这些元件。（这里只做介绍，后面会详细说明每一个元件）</p>
+<h2 id="1、测试计划（test-plan）">1、测试计划（Test Plan）</h2>
+<p>用来描述一个<strong>性能/接口</strong>测试脚本和场景设计，包含与本次测试所有相关的功能。</p>
+<p>也就是说，使用JMeter进行测试的所有内容，都是于基于一个测试计划中。</p>
+<p>在换个说法，一个测试计划就对应一个JMeter测试脚本。</p>
+<p>在<code>JMeter-GUI</code>中，只能编辑一个测试计划，如果需要新创建一个测试计划，就要开启一个新的<code>JMeter-GUI</code>窗口界面。</p>
+<h2 id="2、线程组threadsusers">2、线程组&lt;Threads(Users)&gt;</h2>
+<p>线程组元件是任何一个测试流程的起始点，在一个测试计划中的所有元件都必须在某个线程组下。</p>
+<p>JMeter自带的线程组，如下图所示：<br>
+<img src="https://img2020.cnblogs.com/blog/909968/202105/909968-20210508213048426-1848505987.png" alt="image" loading="lazy"></p>
+<p>上图可以看到，JMeter有三个添加线程组的选项，名字不一样， 但是创建之后，其界面是完全一样的。</p>
+<p><strong>线程组概括说明</strong>：</p>
+<ol>
+<li>线程组是一个测试流程的起始点。</li>
+<li>线程组中可以有多个线程。线程组也可以看作是一个虚拟用户组，线程组中的每一个线程都可以理解为相当于一个“虚拟用户”。</li>
+<li>线程组中一个取样器代表一个请求，一个请求等同于一个线程。</li>
+<li>每个线程都会独立的运行测试计划，互不干扰，多个线程用于模仿对服务器的并发访问。</li>
+<li>线程组元件可以设置线程数、设置执行测试的次数等操作。</li>
+</ol>
+<h2 id="3、取样器（sampler）">3、取样器（sampler）</h2>
+<p>取样器是用来模拟用户操作的，向服务器发送请求以及接收服务器的响应数据。</p>
+<p>取样器是线程组内部的元件，也就是说取样器只能在线程组中添加。</p>
+<p>取样器(Sampler)是性能测试中向服务器发送请求，记录响应信息，记录响应时间的最小单元。（取样器通常要进行这三个工作）</p>
+<p>取样器是按照测试计划树的顺序从上到下执行的。且取样器配合控制器使用，可以修改取样器的执行顺序和次数。</p>
+<p>JMeter自带的取样器，如下图所示：<br>
+<img src="https://img2020.cnblogs.com/blog/909968/202105/909968-20210508213117338-1128290281.png" alt="image" loading="lazy"></p>
+<h2 id="4、逻辑控制器（logic-controller）">4、逻辑控制器（Logic Controller）</h2>
+<p>我们有编程基础的人都知道，提到逻辑主要就是条件和循环。</p>
+<p>JMeter官网对逻辑控制器的解释是：<code>Logic Controllers determine the order in which Samplers are processed.</code></p>
+<p>意思是说，<strong>逻辑控制器可以控制采样器(samplers)的执行顺序</strong>。</p>
+<p>由此可知，控制器需要和采样器一起使用，否则控制器就没有什么意义了。放在控制器下面的所有的采样器都会当做一个整体，执行时也会一起被执行。</p>
+<p>JMeter提供了17种逻辑控制器，它们各个功能都不尽相同，大致可分为2种类型：</p>
+<ul>
+<li>一类是用于控制 <code>test plan</code> （测试计划）中 <code>sampler</code> （取样器）节点发送请求的逻辑顺序的控制器，常用的有<code>If Controller</code> 、 <code>switch Controller</code> 、<code>Runtime Controller</code>、<code>Loop Controller</code>（循环控制器）等。</li>
+<li>另一类是用来组织可控制的<code>sampler</code> 节点，也就是对测试计划中的取样器进行分组，方便JMeter统计执行结果，以及运行脚本时的控制操作等。 如<code>Transaction Controller</code>（事务控制器）、<code>Throughput Controller</code>（吞吐量控制器）等。</li>
+</ul>
+<p>JMeter自带的逻辑控制器，如下图所示：<br>
+<img src="https://img2020.cnblogs.com/blog/909968/202105/909968-20210508213153212-523826905.png" alt="image" loading="lazy"></p>
+<h2 id="5、配置元件（config-element）">5、配置元件（Config Element）</h2>
+<p>JMeter的配置元件（<code>config element</code>）用于提供对静态数据的配置支持，可以为取样器设置默认值和变量。</p>
+<p>配置元件有很多的功能，读取文件数据，设置公共请求参数，赋予变量值等，以便后续取样器使用。</p>
+<p>（类似于项目中配置文件的作用，如数据、地址、数据库链接等进行配置）</p>
+<p>例如：性能测试中为了模拟大量用户操作我们往往需要做参数化， JMeter的参数化可以通过配置元件来完成，利用<code>CSV Data Set config</code>（CSV数据文件设置）可以将本地数据文件形成数据池 （Data Pool），它可以帮助我们从文件中读取测试数据。</p>
+<p>另外JMeter也提供了众多的函数来帮我们生成动态数据。（通过函数助手可以查看到，后续会讲到）</p>
+<p>再例如，配置元件还可以用来记录服务器的返回数据，如<code>HTTP Cookie Manager</code> 可以用于对 <code>HTTP Request Sampler</code> 的 <code>cookie</code> 进行管理。</p>
+<p>简而言之，配置元件是为取样器提供预备数据，然后由取样器发出请求。</p>
+<p>JMeter自带的配置元件，如下图所示：<br>
+<img src="https://img2020.cnblogs.com/blog/909968/202105/909968-20210508213219435-691147529.png" alt="image" loading="lazy"></p>
+<h2 id="6、定时器（timer）">6、定时器（Timer）</h2>
+<p>用户实际操作时，并非是连续点击，而是存在很多停顿的情况，例如：用户需要时间阅读文字内容、填表、或者查找需要点击的链接等。为了模拟用户实际情况，在性能测试中我们需要考虑操作时间。若不认真考虑操作时间很可能会导致测试结果的失真。例如，估计的可支撑用户数可能会偏小。</p>
+<p>在性能测试中，访问请求之间的停顿时间被称之为<strong>思考时间</strong>。</p>
+<p>那么如何模拟这种停顿呢？我们可以借助JMeter的定时器元件实现。</p>
+<p>JMeter中的定时器一般被我们用来设置延迟与同步（操作之间的等待时间）。定时器的执行优先级高于<code>Sampler</code>（取样器），在同一作用域（例如控制器下）下有多个定时器存在时，每一个定时器都会执行，如果想让某一定时器仅对某一<code>Sampler</code>有效，则可以把定时器加在此<code>Sampler</code>节点下。</p>
+<p>JMeter自带的定时器，如下图所示：<br>
+<img src="https://img2020.cnblogs.com/blog/909968/202105/909968-20210508213248264-533818912.png" alt="image" loading="lazy"></p>
+<blockquote>
+<p>提示：定时器常用于控制客户端QPS的手段。</p>
+</blockquote>
+<h2 id="7、前置处理器（per-processors）">7、前置处理器（Per Processors）</h2>
+<p>前置处理器是在取样器发出请求之前执行一些操作。即：如果将前置处理器附加到取样器元件，则它将在该取样器元件运行之前执行。</p>
+<p>前置处理器主要是用来处理，请求在实际发送之前的一些准备工作，比如取样器参数设置、环境变量设置、脚本预处理等操作。</p>
+<p>例如：当URL中有sessionID一类的session信息时，可以通过该处理器填充发出请求实际的sessionID。</p>
+<p>JMeter自带的前置处理器，如下图所示：<br>
+<img src="https://img2020.cnblogs.com/blog/909968/202105/909968-20210508213308494-1447625152.png" alt="image" loading="lazy"></p>
+<h2 id="8、后置处理器（post-processors）">8、后置处理器（Post Processors）</h2>
+<p>用于对<code>Sampler</code>发出请求后得到的服务器响应进行处理。一般用来提取响应中的特定数据（类似LoadRunner中的关联）。</p>
+<p>例如：我们在做接口测试的时候，难免会遇到一个接口的请求参数是另一个接口的响应结果，这个时候就需要用到后置处理器来处理我们的请求参数。如系统登录成功后我们要获取<code>sessionid</code>，在后面业务操作中服务器会验证这个<code>sessionID</code>，获取<code>sessionID</code>这个过程，就是用后置处理器中的正则表达式提取器来完成。</p>
+<p>后置处理器常用于：处理响应数据，提取某个值。</p>
+<p>JMeter自带的后置处理器，如下图所示：<br>
+<img src="https://img2020.cnblogs.com/blog/909968/202105/909968-20210508213328155-55387949.png" alt="image" loading="lazy"></p>
+<h2 id="9、断言（assertions）">9、断言（Assertions）</h2>
+<p>断言是自动化测试中最重要且绕不开的一个概念，让自己的程序尽可能像人一样去做判断，这是自动化测试需要实现的重要功能。</p>
+<p>JMeter中的断言用于检查测试中得到的响应数据等是否符合预期，<code>Assertions</code>一般用来设置检查点，用以保证性能测试过程中的数据交互与预期一致。（它的作用和LoadRunner中的检查点类似）</p>
+<p>JMeter中断言的原理：在Request的返回层面，增加一层判断机制，因为Request成功了，并不代表结果一定正确。</p>
+<p>一个<code>Sampler</code>可以添加多个断言，根据你的检查需求来添加相应的断言，多个断言属于并的操作。当<code>Sampler</code>下所有的断言都通过了，那么才算是请求成功。</p>
+<p>JMeter自带的断言，如下图所示：<br>
+<img src="https://img2020.cnblogs.com/blog/909968/202105/909968-20210508213352496-750766270.png" alt="image" loading="lazy"></p>
+<h2 id="10、监听器（listener）">10、监听器（Listener）</h2>
+<p>JMeter中的监听器，是对测试结果进行处理和可视化展示的一系列组件，能够显示取样器请求和响应的细节以及请求结果，包括消息头，请求的数据，响应的数据。</p>
+<p>常用的监听器有图形结果、查看结果树、聚合报告等。</p>
+<p><strong>注意</strong>：</p>
+<ol>
+<li>监听器放的位置不同，查看的结果也不同。<br>
+在线程组下添加监听器，查看线程组下所有请求的结果；<br>
+放在具体某个请求下，只查看此请求的结果；<br>
+若放在某个控制器节点下，则查看此控制器下节点执行的结果；</li>
+<li>该监听器推荐做调试用，在实际运行压测时，应该禁用。因为大量请求时，启用监听器时打印的日志比较多，会造成大IO消耗，影响压力机性能。</li>
+<li>不同的监听器，通过不同的方式，展示服务器响应信息，但是它们原始结果数据都是一样的。</li>
+<li>JMeter监听器有两种方式存储监听记录：<br>
+1）默认保存方式：CSV格式。占用磁盘比较少，推荐使用这种方式保存。<br>
+2）<code>xml</code>保存方式：保存数据最全面，但是占用内存大。</li>
+</ol>
+<p>JMeter自带的监听器，如下图所示：<br>
+<img src="https://img2020.cnblogs.com/blog/909968/202105/909968-20210508213418642-85826207.png" alt="image" loading="lazy"></p>
+<blockquote>
+<p>参考：</p>
+<ul>
+<li><a href="https://copyfuture.com/blogs-details/202008041651527922ld7vnymru0bwps" target="_blank">https://copyfuture.com/blogs-details/202008041651527922ld7vnymru0bwps</a></li>
+<li><a href="https://blog.csdn.net/weixin_42996498/article/details/89522462" target="_blank">https://blog.csdn.net/weixin_42996498/article/details/89522462</a></li>
+<li><a href="https://copyfuture.com/blogs-details/20200628143052218b3w3osj8oq51eqo" target="_blank">https://copyfuture.com/blogs-details/20200628143052218b3w3osj8oq51eqo</a></li>
+</ul>
+</blockquote>
+
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2021-05-08 21:38</span>&nbsp;
+<a href="https://www.cnblogs.com/liuyuelinfighting/">繁华似锦Fighting</a>&nbsp;
+阅读(<span id="post_view_count">54</span>)&nbsp;
+评论(<span id="post_comment_count">0</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14746570" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(14746570);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/10.3.1/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 271969, cb_blogApp = 'liuyuelinfighting', cb_blogUserGuid = 'f205ded5-70e6-e511-9fc1-ac853d9f53cc';
+    var cb_entryId = 14746570, cb_entryCreatedDate = '2021-05-08 21:38', cb_postType = 1;
+    updatePostStats(
+        [cb_entryId],
+        function(id, count) { $("#post_view_count").text(count) },
+        function(id, count) { $("#post_comment_count").text(count) })
+    zoomManager.apply("#cnblogs_post_body img:not(.code_img_closed):not(.code_img_opened)");
+</script>
+<a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <div id="cnblogs_c1" class="under-post-card">
+        <div id='div-gpt-ad-1592365906576-0' style='width: 300px; height: 250px;'></div>
+    </div>
+    <div id="under_post_card1"></div>
+    <div id="cnblogs_c2" class="under-post-card">
+        <div id='div-gpt-ad-1592366332455-0' style='width: 468px; height: 60px;'></div>
+    </div>
+    <div id="under_post_card2"></div>
+    <div id="HistoryToday" class="under-post-card"></div>
+    <script type="text/javascript">
+       var commentManager = new blogCommentManager();
+       commentManager.renderComments(0);
+       fixPostBody();
+       deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);       deliverT2();
+       deliverC1C2();
+       loadNewsAndKb();
+       loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);       LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+       GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+       loadOptUnderPost();
+       GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+	<div id="sideBar">
+		<div id="sideBarMain">
+			<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+<div id="sidebar_c3"></div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2021 繁华似锦Fighting
+<br /><span id="poweredby">Powered by .NET 5.0 on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    <div id="page_end_html">
+        
+
+    </div>
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8L-rpLgFVEJMgssCVvNUAjurkCFd4LXLWJ8gR8wJ7Zi7wLo5N5slKljy8hun9qb25YNN8JOIXHEq3eBdZOaNNYq2kOEiCUkImvvnW_WmC_lSNY7ZDxSB6mht5Zwx2HmPC-lZfg9GIq5IYczID97rGuQ" />
+</body>
+</html>

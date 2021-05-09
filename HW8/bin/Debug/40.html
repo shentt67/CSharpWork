@@ -1,0 +1,713 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin-when-crossorigin" />
+    <meta name="description" content="有很多文章讨论绑定的概念，并讲解如何使用StaticResources和DynamicResources绑定属性。这些概念使用WPF提供的数据绑定表达式。在本文中，让我们研究WPF提供的不同类型的数据" />
+    <meta property="og:description" content="有很多文章讨论绑定的概念，并讲解如何使用StaticResources和DynamicResources绑定属性。这些概念使用WPF提供的数据绑定表达式。在本文中，让我们研究WPF提供的不同类型的数据" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>【翻译】WPF中的数据绑定表达式 - Dotnet9个人博客 - 博客园</title>
+    <link id="favicon" rel="shortcut icon" href="//common.cnblogs.com/favicon.svg" type="image/svg+xml" />
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=zS6-e1bxywlu3kpHvpr1J6MySwya3ztFtEnS7RYQ0Fk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/buildtowin/bundle-buildtowin.min.css?v=Tgl1d--mRuaeqinLMFZ2zu1KEazOmNWHLTJIcXu4SXU" />
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/buildtowin/bundle-buildtowin-mobile.min.css?v=iPf_XHQsJ-ofZZ2RiaeMCHG0JEaMNLa9yhkUGK3xTSQ" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/Dotnet9-com/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/Dotnet9-com/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/Dotnet9-com/wlwmanifest.xml" />
+    <script>
+        var currentBlogId = 568212;
+        var currentBlogApp = 'Dotnet9-com';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var isBlogOwner = false;
+        var skinName = 'BuildtoWin';
+        var visitorUserId = '';
+    </script>
+        <script>
+            var currentPostDateAdded = '2021-05-08 10:49';
+        </script>
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=2Mic1VLeHXarpdzASbXqFMIMVLEBiWXNO5yiTHUcmhw"></script>
+    
+    
+    
+</head>
+<body class="has-navbar has-bannerbar">
+    <a name="top"></a>
+        <a target="_blank" href="https://www.aliyun.com/activity/daily/bestoffer?userCode=swh7dvlt" onclick="ga('send', 'event', 'Link', 'click', 'aliyun-cps-blog-bannerbar-pc')">
+            <div class="bannerbar aliyun forpc" style="background-size: contain;background-image: url(https://img2020.cnblogs.com/blog/35695/202104/35695-20210428221933214-737067094.jpg)">
+            </div>
+        </a>
+        <div id="bannerbar" class="bannerbar-mobile formobile">
+            <a href="https://www.aliyun.com/activity/daily/bestoffer?userCode=swh7dvlt" target="_blank" onclick="ga('send', 'event', 'Link', 'click', 'aliyun-cps-blog-bannerbar-mobile')">
+                <img src="https://img2020.cnblogs.com/blog/35695/202104/35695-20210428213541700-642740375.jpg" alt="" />
+            </a>
+        </div>
+    <div id="top_nav" class="navbar forpc">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding"><a href="https://www.cnblogs.com/" title="开发者的网上家园"><img src="/images/logo.svg?v=R9M0WmLAIPVydmdzE2keuvnjl-bPR7_35oHqtiBzGsM" alt="博客园Logo" /></a></li>
+                <li><a href="/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-sitehome')">首页</a></li>
+                <li><a href="https://news.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-news')">新闻</a></li>
+                <li><a href="https://q.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-q')">博问</a></li>
+                <li><a id="nav_brandzone" href="https://brands.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-brands')">专区</a></li>
+                <li><a href="https://ing.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-ing')">闪存</a></li>
+                <li><a href="https://edu.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-edu')">班级</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search" action="https://zzk.cnblogs.com/s" method="get">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="text" tabindex="3" />
+                        <button type="submit" id="zzk_search_button">
+                            <img src="/images/aggsite/search.svg" alt="搜索" />
+                        </button>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔">
+                        <img id="new_post_icon" class="navbar-icon" src="/images/aggsite/newpost.svg" alt="写随笔" />
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx" alt="我的博客" title="我的博客">
+                        <img id="myblog_icon" class="navbar-icon" src="/images/aggsite/myblog.svg" alt="我的博客" />
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息">
+                        <img id="msg_icon" class="navbar-icon" src="/images/aggsite/message.svg?v=J0WS2P2iPgaIVgXxcAhliw4AFZIpaTWxtdoNAv9eiCA" alt="短消息" />
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/">
+                            <img id="user_icon" class="navbar-avatar" src="/images/aggsite/avatar-default.svg" alt="用户头像" />
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <img id="navbar_lite_mode_on" src="/images/lite-mode-check.svg" class="hide" /><span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup/">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    
+    <!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/Dotnet9-com/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/Dotnet9-com/">Dotnet9个人博客</a>
+</h1>
+<h2></h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/Dotnet9-com/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/Dotnet9%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/Dotnet9-com/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			<div id="blog_stats_place_holder"><script>loadBlogStats();</script></div>
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/Dotnet9-com/p/14746823.html">
+    <span>【翻译】WPF中的数据绑定表达式</span>
+    
+
+
+
+</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                <div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+<p>有很多文章讨论绑定的概念，并讲解如何使用StaticResources和DynamicResources绑定属性。这些概念使用WPF提供的数据绑定表达式。在本文中，让我们研究WPF提供的不同类型的数据绑定表达式。</p>
+<h2 id="介绍">介绍</h2>
+<p>数据绑定是一种强大的技术，它允许数据在UI元素和业务模型之间流动。当业务模型中的数据发生变化时，它会自动将更改反映到UI元素上。</p>
+<table>
+<thead>
+<tr>
+<th>Models</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OneWay</td>
+<td>Source → Destination</td>
+</tr>
+<tr>
+<td>TwoWay</td>
+<td>Source ←→ Destination</td>
+</tr>
+<tr>
+<td>OneWayToSource</td>
+<td>Source ← Destination</td>
+</tr>
+<tr>
+<td>OneTime</td>
+<td>Source → Destination (only once)</td>
+</tr>
+</tbody>
+</table>
+<p>这可以通过WPF提供的不同类型的数据绑定表达式来实现。</p>
+<p>数据绑定表达式的类型如下所示。</p>
+<ul>
+<li>DataContext绑定</li>
+<li>RelativeSource绑定</li>
+<li>ItemSource绑定</li>
+</ul>
+<h2 id="1、datacontext绑定">1、DataContext绑定</h2>
+<p>DataContext是一个依赖属性，它是绑定的默认源。Datacontext沿着逻辑树继承。因此，如果您设置一个DataContext来控制逻辑树中的所有子元素，它也将引用同一个DataContext，除非并且直到显式指定了另一个源。</p>
+<p>让我们举个例子来更详细地理解它。</p>
+<p>1.1 创建一个类Book，如下所示。</p>
+<pre><code class="language-C#">public class Book 
+{  
+    public string Name 
+    {  
+        get;  
+        set;  
+    }  
+    public string Author 
+    {  
+        get;  
+        set;  
+    }  
+}  
+</code></pre>
+<p>1.2 添加一个XAML文件<code>DataContextBinding.XAML</code>并放置四个TextBlock，如下所示。</p>
+<pre><code class="language-XAML">&lt;Grid VerticalAlignment="Center"&gt;  
+    &lt;Grid.RowDefinitions&gt;  
+        &lt;RowDefinition Height="40" /&gt;  
+        &lt;RowDefinition Height="40" /&gt;  
+    &lt;/Grid.RowDefinitions&gt;  
+    &lt;Grid.ColumnDefinitions&gt;  
+        &lt;ColumnDefinition Width="Auto" /&gt;  
+        &lt;ColumnDefinition Width="Auto" /&gt;  
+    &lt;/Grid.ColumnDefinitions&gt;  
+    &lt;TextBlock Text="Book Name:" FontWeight="Bold" /&gt;  
+    &lt;TextBlock Grid.Column="1" /&gt;  
+    &lt;TextBlock Text="Author:" FontWeight="Bold" Grid.Row="1" /&gt;  
+    &lt;TextBlock Grid.Row="1" Grid.Column="1" /&gt;  
+&lt;/Grid&gt;  
+</code></pre>
+<p>现在，让我们看看如何使用这个DataContext属性来显示数据。</p>
+<p>它有两种用法，如下所示。</p>
+<ul>
+<li>1.使用{Binding}表达式</li>
+</ul>
+<p>用于直接绑定DataContext。</p>
+<p>创建类Book的实例，初始化其属性，并将类的Name属性分配给Window的DataContext属性。</p>
+<pre><code class="language-C#">public partial class DataContextBinding: Window 
+{  
+    public DataContextBinding() 
+    {  
+        InitializeComponent();  
+        //Create the instance  
+        Book book = new Book();  
+        //initialize the properties  
+        book.Name = "Computer Networking";  
+        //Assign the Property as DataContext  
+        this.DataContext = book.Name;  
+    }  
+}  
+</code></pre>
+<p>由于DataContext是沿着逻辑树和数据book继承的，因此Name被绑定到Control Window。Window的所有子元素也将引用同一个对象（book.Name）。</p>
+<p>要显示数据，请将DataContext与Textblock绑定，如下所示。</p>
+<pre><code class="language-XAML">&lt;TextBlock Text="Book Name:" FontWeight="Bold"/&gt;  
+&lt;TextBlock Text="{Binding}" Grid.Column="1" /&gt;   
+</code></pre>
+<p>输出</p>
+<p><img src="https://img2020.cnblogs.com/blog/1899750/202105/1899750-20210508224233577-1360878441.png" alt="" loading="lazy"></p>
+<ol start="2">
+<li>使用{Binding Property}表达式</li>
+</ol>
+<p>绑定Datacontext的属性。</p>
+<p>创建类Book的实例，初始化其属性并将类的实例（Book）分配给Window的DataContext属性。</p>
+<pre><code class="language-C#">Book book = new Book();  
+//initialize the properties  
+book.Name = "Computer Networking";  
+book.Author = "James F. Kurose";  
+//Assign the instance as DataContext  
+this.DataContext = book;  
+</code></pre>
+<p>现在，让我们看看输出。</p>
+<p><img src="https://img2020.cnblogs.com/blog/1899750/202105/1899750-20210508224259780-1187808412.png" alt="" loading="lazy"></p>
+<p>由于绑定表达式{Binding}用于绑定Book类型的DataContext对象，因此调用ToString（）方法，并将数据显示为字符串。为了以正确的格式显示数据，我们必须将数据对象的属性与TextBlock绑定，如下所示：</p>
+<pre><code class="language-XAML">&lt;TextBlock Text="Book Name:" FontWeight="Bold"/&gt;  
+&lt;TextBlock Text="{Binding Name}" Grid.Column="1" /&gt;  
+&lt;TextBlock Text="Author:" FontWeight="Bold" Grid.Row="1" /&gt;  
+&lt;TextBlock Text="{Binding Author}" Grid.Row="1" Grid.Column="1"/&gt;
+</code></pre>
+<p>绑定表达式{Binding Name}用于绑定DataContext绑定的Name属性。</p>
+<p>输出</p>
+<p><img src="https://img2020.cnblogs.com/blog/1899750/202105/1899750-20210508224332805-2104457060.png" alt="" loading="lazy"></p>
+<h2 id="2、relativesource-绑定">2、RelativeSource 绑定</h2>
+<p>RelativeSource是一个属性，它用相对关系设置绑定源以绑定目标。此扩展主要用于必须将元素的一个属性绑定到同一元素的另一个属性时。</p>
+<p>RelativeSource有四种类型，如下所示。</p>
+<ol>
+<li>Self</li>
+<li>FindAncestor</li>
+<li>TemplatedParent</li>
+<li>PreviousData</li>
+</ol>
+<p>让我们一个一个详细地探讨一下。</p>
+<h3 id="21-self">2.1 Self</h3>
+<p>Self用于绑定源和绑定目标相同的场景中。对象的一个属性与同一对象的另一个属性绑定。</p>
+<p>例如，让我们取一个高度和宽度相同的椭圆。</p>
+<p>在XAML文件中添加下面给出的代码。宽度属性与高度属性相对绑定。</p>
+<pre><code class="language-XAML">&lt;Grid&gt;  
+    &lt;Ellipse Fill="Black" Height="100" Width="{Binding RelativeSource={RelativeSource Self},Path=Height}"&gt;  
+    &lt;/Ellipse&gt;  
+&lt;/Grid&gt;   
+</code></pre>
+<p>输出</p>
+<p><img src="https://img2020.cnblogs.com/blog/1899750/202105/1899750-20210508224402757-1835946717.png" alt="" loading="lazy"></p>
+<p>如果改变椭圆的高度，宽度也会相对变化。</p>
+<h3 id="22-findancestor">2.2 FindAncestor</h3>
+<p>顾名思义，当绑定源是绑定目标的祖先（父级）之一时使用此选项。使用FindAncestor扩展，可以找到任何级别的祖先。</p>
+<p>让我们举个例子来更清楚地理解它。</p>
+<h4 id="步骤">步骤</h4>
+<p>创建XAML，它表示下面给出的元素的逻辑树。</p>
+<p><img src="https://img2020.cnblogs.com/blog/1899750/202105/1899750-20210508224425129-782716310.png" alt="" loading="lazy"></p>
+<pre><code class="language-XAML">&lt;Grid Name="Parent_3"&gt;  
+    &lt;StackPanel Name="Parent_2"&gt;  
+        &lt;Border Name="Parent_1"&gt;  
+            &lt;StackPanel x:Name="Parent_0" Orientation="Vertical"&gt;  
+                &lt;Button&gt;&lt;/Button&gt;  
+            &lt;/StackPanel&gt;  
+        &lt;/Border&gt;  
+    &lt;/StackPanel&gt;  
+&lt;/Grid&gt;  
+</code></pre>
+<p>现在，让我们使用FindAncestor扩展将祖先的Name属性绑定到子元素button的Content属性。</p>
+<pre><code class="language-XAML">&lt;Grid Name="Parent_3"&gt;  
+    &lt;StackPanel Name="Parent_2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100"&gt;  
+        &lt;Border Name="Parent_1"&gt;  
+            &lt;StackPanel x:Name="Parent_0" Orientation="Vertical"&gt;  
+                &lt;Button Height="50" Content="{Binding RelativeSource={RelativeSource FindAncestor,  
+AncestorType={x:Type StackPanel},  
+AncestorLevel=2},Path=Name}"&gt;&lt;/Button&gt;  
+            &lt;/StackPanel&gt;  
+        &lt;/Border&gt;  
+    &lt;/StackPanel&gt;  
+&lt;/Grid&gt;  
+</code></pre>
+<p>输出</p>
+<p><img src="https://img2020.cnblogs.com/blog/1899750/202105/1899750-20210508224448771-675793190.png" alt="" loading="lazy"></p>
+<p>AncestorType为“StackPanel”与AcestorLevel为“2”组合，将button的content属性与StackPanel的Name属性（Parent_2）绑定在一起。</p>
+<h3 id="23-templatedparent">2.3 TemplatedParent</h3>
+<p>TemplatedParent是一个属性，它使您能够创建一个包含少量未知值的控件模板。这些值取决于应用ControlTemplate的控件的属性。</p>
+<p>让我们举个例子来更详细地理解它</p>
+<h4 id="步骤-1">步骤</h4>
+<ol>
+<li>为按钮创建一个ControlTemplate，如下所示。</li>
+</ol>
+<pre><code class="language-XAML">&lt;Window.Resources&gt;  
+    &lt;ControlTemplate x:Key="template"&gt;  
+        &lt;Canvas&gt;  
+            &lt;Ellipse Height="110" Width="155"  
+             Fill="Black"/&gt;  
+            &lt;Ellipse Height="100" Width="150"  
+             Fill="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Background}"&gt;  
+            &lt;/Ellipse&gt;  
+            &lt;ContentPresenter Margin="35"  
+             Content="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Content}"/&gt;  
+       &lt;/Canvas&gt;  
+    &lt;/ControlTemplate&gt;  
+&lt;/Window.Resources&gt;  
+</code></pre>
+<p>在上面给出的代码中，椭圆的Fill属性和ContentPresenter的Content属性依赖于将应用此模板的控件的属性值。</p>
+<ol start="2">
+<li>添加一个按钮并对其应用模板。</li>
+</ol>
+<pre><code class="language-XAML">&lt;Button Margin="50" Background="Beige" Template="{StaticResource template}" Height="0" Content="Click me" FontSize="22"&gt;  
+&lt;/Button&gt;   
+</code></pre>
+<p>在应用模板时，按钮的Background（Beige）与椭圆的Fill属性相对绑定，Content（Click me）与ContentPresenter的Content属性相对绑定。依赖值生效并给出以下输出。</p>
+<p>输出</p>
+<p><img src="https://img2020.cnblogs.com/blog/1899750/202105/1899750-20210508224517776-217517050.png" alt="" loading="lazy"></p>
+<h3 id="24-previousdata">2.4 PreviousData</h3>
+<p>这是相对使用最少的方式。当数据被分析时，这就出现了，我们需要表示值相对于以前数据的变化。</p>
+<p>让我们举个例子来更详细地理解它。</p>
+<h4 id="步骤-2">步骤</h4>
+<ol>
+<li>创建一个类Data并实现INotifyPropertyChanged接口，如下所示</li>
+</ol>
+<pre><code class="language-C#">public class Data: INotifyPropertyChanged 
+{  
+    public int DataValue 
+    {  
+        get;  
+        set;  
+    }  
+    public event PropertyChangedEventHandler PropertyChanged;  
+    protected void OnPropertyChanged(string PropertyName) 
+    {  
+        if (null != PropertyChanged) 
+        {  
+            PropertyChanged(this,  
+                new PropertyChangedEventArgs(PropertyName));  
+        }  
+    }  
+}   
+</code></pre>
+<ol start="2">
+<li>创建一个Data类型的列表并将其指定为DataContext。</li>
+</ol>
+<pre><code class="language-C#">public RelativeSourcePreviousData() 
+{  
+    InitializeComponent();  
+    List &lt; Data &gt; data = new List &lt; Data &gt; ();  
+    data.Add(new Data() 
+    {  
+        DataValue = 60  
+    });  
+    data.Add(new Data() 
+    {  
+        DataValue = 100  
+    });  
+    data.Add(new Data() 
+    {  
+        DataValue = 120  
+    });  
+    this.DataContext = data;  
+}   
+</code></pre>
+<ol start="3">
+<li>在XAML文件中添加ItemsControl。</li>
+</ol>
+<pre><code class="language-XAML">&lt;ItemsControl ItemsSource="{Binding}"&gt;&lt;/ItemsControl&gt;  
+</code></pre>
+<ol start="4">
+<li>为其创建ItemsPanel模板，如下。</li>
+</ol>
+<pre><code class="language-XAML">&lt;ItemsControl ItemsSource="{Binding}"&gt;  
+    &lt;ItemsControl.ItemsPanel&gt;  
+        &lt;ItemsPanelTemplate&gt;  
+            &lt;StackPanel Orientation="Vertical" /&gt;  
+        &lt;/ItemsPanelTemplate&gt;  
+    &lt;/ItemsControl.ItemsPanel&gt;  
+&lt;/ItemsControl&gt;  
+</code></pre>
+<ol start="5">
+<li>现在，为了正确地表示数据，创建DataTemplate，如下所示。</li>
+</ol>
+<pre><code class="language-XAML">&lt;ItemsControl.ItemTemplate&gt;  
+    &lt;DataTemplate&gt;  
+        &lt;StackPanel Orientation="Horizontal"&gt;  
+            &lt;Grid Margin="30,20,0,0"&gt;  
+                &lt;Rectangle Width="80" Height="{Binding DataValue}" Fill="Blue" /&gt;  
+                &lt;TextBlock Foreground="White" Margin="35,0,0,0" Text="{Binding DataValue}"&gt;&lt;/TextBlock&gt;  
+            &lt;/Grid&gt;  
+            &lt;TextBlock Margin="30,20,0,0" Text="Previous Data:"&gt;&lt;/TextBlock&gt;  
+            &lt;TextBlock VerticalAlignment="Center" Margin="5,20,0,0" Text="{Binding  
+             RelativeSource={RelativeSource PreviousData}, Path=DataValue}" /&gt;  
+        &lt;/StackPanel&gt;  
+    &lt;/DataTemplate&gt;  
+&lt;/ItemsControl.ItemTemplate&gt;  
+</code></pre>
+<p>输出</p>
+<p><img src="https://img2020.cnblogs.com/blog/1899750/202105/1899750-20210508224543268-1817400326.png" alt="" loading="lazy"></p>
+<p>蓝色框的高度是列表中项目的值，旧数据显示在右侧。该项的第一个值为“60”。因此，第一项没有旧值。</p>
+<h2 id="3、itemsource绑定">3、ItemSource绑定</h2>
+<p>在处理集合时使用。使用这个绑定表达式，您可以非常容易地读取SelectedItem的属性。斜杠是一种特殊运算符，用于处理集合中的当前项。</p>
+<p>下面给出了三种表达式。</p>
+<ol>
+<li>{Binding / }</li>
+<li>{Binding Collection / }</li>
+<li>{Binding Collection / Property}</li>
+</ol>
+<h3 id="31-binding--">3.1 {Binding / }</h3>
+<p>此表达式用于绑定DataContext中的当前项。</p>
+<p>让我们采取一个示例：</p>
+<p>在下面给出的示例中，DataContext是字符串类型的国家/地区的集合，并且与Listbox绑定在一起。</p>
+<h4 id="步骤-3">步骤</h4>
+<ol>
+<li>创建一个Countries类并添加一个GetCountriesName()方法，该方法返回string数据类型的国家的集合，如下所示。</li>
+</ol>
+<pre><code class="language-C#">public class Countries 
+{  
+    public static List &lt;string&gt; GetCountriesName() 
+    {  
+        List &lt;string&gt; countries = new List &lt;string&gt; ();  
+        foreach(CultureInfo culture in CultureInfo.GetCultures(CultureTypes.SpecificCultures)) 
+        {  
+            RegionInfo country = new RegionInfo(culture.LCID);  
+            if (!countries.Contains(country.EnglishName))  
+                countries.Add(country.EnglishName);  
+        }  
+        countries.Sort();  
+        return countries;  
+    }  
+}  
+</code></pre>
+<ol start="2">
+<li>添加一个XAMl文件，一个ListBox和TextBlock，如下所示。</li>
+</ol>
+<pre><code class="language-XAML">&lt;DockPanel Name="Collection"&gt;  
+    &lt;ListBox ItemsSource="{Binding}" IsSynchronizedWithCurrentItem="True"&gt;  
+    &lt;/ListBox&gt;  
+    &lt;TextBlock DockPanel.Dock="Top" /&gt;  
+&lt;/DockPanel&gt;  
+</code></pre>
+<ol start="3">
+<li>创建类Countries的实例并将Countries集合指定为DataContext。</li>
+</ol>
+<pre><code class="language-C#">public CurrentItemCollection() 
+{  
+    InitializeComponent();  
+    Countries countries = new Countries();  
+    this.DataContext = countries.GetCountriesName()  
+} 
+</code></pre>
+<ol start="4">
+<li>绑定TextBlock的Text属性以将其绑定到集合的当前选定项，如下所示。</li>
+</ol>
+<pre><code class="language-XAML">&lt;TextBlock DockPanel.Dock="Top" Text="{Binding /}" /&gt;  
+</code></pre>
+<p>输出</p>
+<p><img src="https://img2020.cnblogs.com/blog/1899750/202105/1899750-20210508224631620-859293973.png" alt="" loading="lazy"></p>
+<p>一旦列表项被选中，它将在右侧显示所选国家/地区。</p>
+<h3 id="32-binding-collection-">3.2 {Binding Collection /}</h3>
+<p>此表达式用于绑定DataContext中集合属性的当前项。</p>
+<p>例如，</p>
+<p>DataContext是Countries类</p>
+<p>Collection属性是CounriesList，它与ListBox绑定。</p>
+<h4 id="步骤-4">步骤</h4>
+<ol>
+<li>使用上面创建的类似的国家类，只是略有不同。创建返回类型为RegionInfo的方法。</li>
+</ol>
+<pre><code class="language-C#">public static List &lt;RegionInfo&gt; GetCountries() 
+{  
+    List &lt;RegionInfo&gt; countries = new List &lt;RegionInfo&gt; ();  
+    foreach(CultureInfo culture in CultureInfo.GetCultures(CultureTypes.SpecificCultures)) 
+    {  
+        RegionInfo country = new RegionInfo(culture.LCID);  
+        if (countries.Where(p =&gt; p.Name == country.Name).Count() == 0)  
+            countries.Add(country);  
+    }  
+    return countries.OrderBy(p =&gt; p.EnglishName).ToList();  
+}
+</code></pre>
+<ol start="2">
+<li>添加RegionInfo类型的CountriesList属性。</li>
+</ol>
+<pre><code class="language-C#">private List &lt;RegionInfo&gt; countries = null;  
+public List &lt;RegionInfo&gt; CountriesList 
+{  
+    get 
+    {  
+        if (countries == null)  
+            countries = GetCountries();  
+        return countries;  
+    }  
+}  
+</code></pre>
+<p>下面是CountriesList集合中的值的截图。</p>
+<p><img src="https://img2020.cnblogs.com/blog/1899750/202105/1899750-20210508224658588-1069853576.png" alt="" loading="lazy"></p>
+<ol start="3">
+<li>将类Countries指定为DataContext，并将Listbox与DataContext的CountriesList属性绑定。</li>
+</ol>
+<pre><code class="language-XAML">&lt;Window.Resources&gt;  
+    &lt;vm:Countries x:Key="Countries"&gt;&lt;/vm:Countries&gt;  
+&lt;/Window.Resources&gt;  
+&lt;Grid&gt;  
+    &lt;DockPanel Name="Collection" DataContext="{StaticResource Countries}"&gt;  
+        &lt;ListBox ItemsSource="{Binding CountriesList}" IsSynchronizedWithCurrentItem="True"&gt;  
+            &lt;ListBox.ItemTemplate&gt;  
+                &lt;DataTemplate&gt;  
+                    &lt;TextBlock Text="{Binding EnglishName}"&gt;&lt;/TextBlock&gt;  
+                &lt;/DataTemplate&gt;  
+            &lt;/ListBox.ItemTemplate&gt;  
+        &lt;/ListBox&gt;  
+    &lt;/DockPanel&gt;  
+&lt;/Grid&gt;  
+</code></pre>
+<ol start="4">
+<li>要计算CountriesList属性的当前项，请绑定TextBlock的Text属性，如下所示。</li>
+</ol>
+<pre><code class="language-XAML">&lt;TextBlock DockPanel.Dock="Top" Text="{Binding CountriesList/}" HorizontalAlignment="Center" FontSize="16" VerticalAlignment="Center" /&gt;
+</code></pre>
+<p>输出</p>
+<p><img src="https://img2020.cnblogs.com/blog/1899750/202105/1899750-20210508224722932-268042215.png" alt="" loading="lazy"></p>
+<p>右侧显示DataContext（CountriesList）中集合的当前项（CountriesList）。</p>
+<h3 id="33-binding-collection--property">3.3 {Binding Collection / Property}</h3>
+<p>此表达式用于绑定DataContext中集合的当前项的属性。</p>
+<p>例如，如果必须计算CountriesList集合的当前项的特定属性。</p>
+<p>在这个例子中，我想显示属性“EnglishName”的值。</p>
+<p><img src="https://img2020.cnblogs.com/blog/1899750/202105/1899750-20210508224744751-980818135.png" alt="" loading="lazy"></p>
+<p>为此，绑定TextBlock的Text属性，如下所示。</p>
+<pre><code class="language-XAML">&lt;TextBlock DockPanel.Dock="Top" Text="{Binding CountriesList/EnglishName}" /&gt;  
+</code></pre>
+<p>输出</p>
+<p><img src="https://img2020.cnblogs.com/blog/1899750/202105/1899750-20210508224806538-153853024.png" alt="" loading="lazy"></p>
+<p>现在，当列表中的项被选中时，它显示属性“EnglishName”的值。</p>
+<h2 id="结论">结论</h2>
+<p>我已经详细介绍了所有的数据绑定表达式。我希望这有助于您理解绑定的概念和WPF提供的表达式。</p>
+<hr>
+<blockquote>
+<p>时间如流水，只能流去不流回。</p>
+<ul>
+<li>作者：Swati Gupta</li>
+<li>原文标题：DataBinding Expressions In WPF</li>
+<li>原文链接：<a href="https://www.c-sharpcorner.com/article/data-binding-expression-in-wpf/" target="_blank">https://www.c-sharpcorner.com/article/data-binding-expression-in-wpf/</a></li>
+<li>翻译、编辑：沙漠尽头的狼</li>
+<li>公众号：Dotnet9</li>
+<li>日期：2021-05-04</li>
+</ul>
+</blockquote>
+
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2021-05-08 22:49</span>&nbsp;
+<a href="https://www.cnblogs.com/Dotnet9-com/">Dotnet9个人博客</a>&nbsp;
+阅读(<span id="post_view_count">81</span>)&nbsp;
+评论(<span id="post_comment_count">2</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14746823" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(14746823);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/10.3.1/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 568212, cb_blogApp = 'Dotnet9-com', cb_blogUserGuid = 'cec4a227-b408-40d9-d9ef-08d7804a3aa0';
+    var cb_entryId = 14746823, cb_entryCreatedDate = '2021-05-08 22:49', cb_postType = 1;
+    updatePostStats(
+        [cb_entryId],
+        function(id, count) { $("#post_view_count").text(count) },
+        function(id, count) { $("#post_comment_count").text(count) })
+    zoomManager.apply("#cnblogs_post_body img:not(.code_img_closed):not(.code_img_opened)");
+</script>
+<a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <div id="cnblogs_c1" class="under-post-card">
+        <div id='div-gpt-ad-1592365906576-0' style='width: 300px; height: 250px;'></div>
+    </div>
+    <div id="under_post_card1"></div>
+    <div id="cnblogs_c2" class="under-post-card">
+        <div id='div-gpt-ad-1592366332455-0' style='width: 468px; height: 60px;'></div>
+    </div>
+    <div id="under_post_card2"></div>
+    <div id="HistoryToday" class="under-post-card"></div>
+    <script type="text/javascript">
+       var commentManager = new blogCommentManager();
+       commentManager.renderComments(0);
+       fixPostBody();
+       deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);       deliverT2();
+       deliverC1C2();
+       loadNewsAndKb();
+       loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);       LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+       GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+       loadOptUnderPost();
+       GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+	<div id="sideBar">
+		<div id="sideBarMain">
+			<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+<div id="sidebar_c3"></div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2021 Dotnet9个人博客
+<br /><span id="poweredby">Powered by .NET 5.0 on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8L-rpLgFVEJMgssCVvNUAjujGIuby-luGhRIYpO5y0JfXa2ahwxCW8OJ2yy-yE_KRi_9bbVvy8W3UFE0WO5KiV1MsbyQLdQxQayTQUx9l3QuqSE3N4jpXvtg3l3jmlO8qtW8ZRJAD8RwRlT1KTrIX7I" />
+</body>
+</html>

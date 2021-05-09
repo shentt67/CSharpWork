@@ -1,0 +1,341 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="never" />
+    <meta name="description" content="之前一直想将一个 Git 仓库放到另一个 Git 仓库，有 Maven 多模块项目（Maven Multimodule Project）和 Gradle 多项目构建（Gradle Multiproje" />
+    <meta property="og:description" content="之前一直想将一个 Git 仓库放到另一个 Git 仓库，有 Maven 多模块项目（Maven Multimodule Project）和 Gradle 多项目构建（Gradle Multiproje" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>初探 Git Submodules - yeshan333 - 博客园</title>
+    <link id="favicon" rel="shortcut icon" href="//common.cnblogs.com/favicon.svg" type="image/svg+xml" />
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=zS6-e1bxywlu3kpHvpr1J6MySwya3ztFtEnS7RYQ0Fk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/blacklowkey/bundle-blacklowkey.min.css?v=1gj9-XJKL9BZFkjdvROYQPiPWjQXk-hsXXZGtqkfaSc" />
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/blacklowkey/bundle-blacklowkey-mobile.min.css?v=zrVn_w7PYXoSvEFaixHbQGlNNXNZ3h27-9PpkXZLYns" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/sikongji-yeshan/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/sikongji-yeshan/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/sikongji-yeshan/wlwmanifest.xml" />
+    <script>
+        var currentBlogId = 441474;
+        var currentBlogApp = 'sikongji-yeshan';
+        var cb_enable_mathjax = true;
+        var isLogined = false;
+        var isBlogOwner = false;
+        var skinName = 'BlackLowKey';
+        var visitorUserId = '';
+    </script>
+        <script>
+            var currentPostDateAdded = '2021-05-09 09:35';
+        </script>
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=2Mic1VLeHXarpdzASbXqFMIMVLEBiWXNO5yiTHUcmhw"></script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']], processClass: 'math', processEscapes: true },
+        TeX: {
+        equationNumbers: { autoNumber: ['AMS'], useLabelIds: true },
+        extensions: ['extpfeil.js', 'mediawiki-texvc.js'],
+        Macros: {bm: "\\boldsymbol"}
+        },
+        'HTML-CSS': { linebreaks: { automatic: true } },
+        SVG: { linebreaks: { automatic: true } }
+        });
+    </script>
+    <script src="https://mathjax.cnblogs.com/2_7_5/MathJax.js?config=TeX-AMS-MML_HTMLorMML&amp;v=20200504"></script>
+    
+</head>
+<body class="has-navbar has-bannerbar">
+    <a name="top"></a>
+        <a target="_blank" href="https://www.aliyun.com/activity/daily/bestoffer?userCode=swh7dvlt" onclick="ga('send', 'event', 'Link', 'click', 'aliyun-cps-blog-bannerbar-pc')">
+            <div class="bannerbar aliyun forpc" style="background-size: contain;background-image: url(https://img2020.cnblogs.com/blog/35695/202104/35695-20210428221933214-737067094.jpg)">
+            </div>
+        </a>
+        <div id="bannerbar" class="bannerbar-mobile formobile">
+            <a href="https://www.aliyun.com/activity/daily/bestoffer?userCode=swh7dvlt" target="_blank" onclick="ga('send', 'event', 'Link', 'click', 'aliyun-cps-blog-bannerbar-mobile')">
+                <img src="https://img2020.cnblogs.com/blog/35695/202104/35695-20210428213541700-642740375.jpg" alt="" />
+            </a>
+        </div>
+    <div id="top_nav" class="navbar forpc">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding"><a href="https://www.cnblogs.com/" title="开发者的网上家园"><img src="/images/logo.svg?v=R9M0WmLAIPVydmdzE2keuvnjl-bPR7_35oHqtiBzGsM" alt="博客园Logo" /></a></li>
+                <li><a href="/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-sitehome')">首页</a></li>
+                <li><a href="https://news.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-news')">新闻</a></li>
+                <li><a href="https://q.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-q')">博问</a></li>
+                <li><a id="nav_brandzone" href="https://brands.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-brands')">专区</a></li>
+                <li><a href="https://ing.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-ing')">闪存</a></li>
+                <li><a href="https://edu.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-edu')">班级</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search" action="https://zzk.cnblogs.com/s" method="get">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="text" tabindex="3" />
+                        <button type="submit" id="zzk_search_button">
+                            <img src="/images/aggsite/search.svg" alt="搜索" />
+                        </button>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔">
+                        <img id="new_post_icon" class="navbar-icon" src="/images/aggsite/newpost.svg" alt="写随笔" />
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx" alt="我的博客" title="我的博客">
+                        <img id="myblog_icon" class="navbar-icon" src="/images/aggsite/myblog.svg" alt="我的博客" />
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息">
+                        <img id="msg_icon" class="navbar-icon" src="/images/aggsite/message.svg?v=J0WS2P2iPgaIVgXxcAhliw4AFZIpaTWxtdoNAv9eiCA" alt="短消息" />
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/">
+                            <img id="user_icon" class="navbar-avatar" src="/images/aggsite/avatar-default.svg" alt="用户头像" />
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <img id="navbar_lite_mode_on" src="/images/lite-mode-check.svg" class="hide" /><span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup/">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    
+    <!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/sikongji-yeshan/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/sikongji-yeshan/">Cloudys</a>
+</h1>
+<h2></h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/sikongji-yeshan/">
+首页</a>
+</li>
+<li>
+
+
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/yeshan333">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/sikongji-yeshan/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			<div id="blog_stats_place_holder"><script>loadBlogStats();</script></div>
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/sikongji-yeshan/p/git-submodules.html">
+    <span>初探 Git Submodules</span>
+    
+
+
+
+</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                <div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+<p>之前一直想将一个 Git 仓库放到另一个 Git 仓库，有 Maven 多模块项目（Maven Multimodule Project）和 Gradle 多项目构建（Gradle Multiproject Build）那味儿。Git 这么骚，肯定也可以。“扫”了多个开源仓库，Get 到了 Git <code>submodule</code> 可以做这种操作，水篇文章记录波。</p>
+<h2 id="没有使用-git-submodules-之前">没有使用 Git Submodules 之前</h2>
+<p>没有使用 submodule 之前，如果在一个 Git 项目追踪另一个 Git 项目，会报一个 warning「我敲，有暗示用 submodule，之前没注意」，操作如下：</p>
+<pre><code class="language-shell">mkdir git-submodule
+cd git-submodule
+git init
+git clone https://github.com/volantis-x/hexo-theme-volantis --depth 1
+</code></pre>
+<p>执行 <code>git add hexo-theme-volantis</code>，会出现如下 warning（adding embedded git repository）：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ssmath/picgo-pic/img/20210310182846.png" alt="追踪执行结果" loading="lazy"></p>
+<p>然后使用 <code>git status</code> 查看，虽然 <code>git add</code> 成功了，但是并没有成功 <code>add</code> 到 hexo-theme-volantis 里面的内容。提示也说了（will not contain the contents of the embedded repository），提交到 GitHub 后，显示结果如下， folder 戳也戳不开。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ssmath/picgo-pic/img/20210310182904.png" alt="push to GitHub" loading="lazy"></p>
+<p>可以明显的看到，并不能保证 子目录/文件 的完整性。就我之前如果想在一个 Git 项目保留另一个 Git 项目，那么我只能将一个项目的 Git 版本库去掉，从后续的使用感受来看，此后我追踪另一个项目的更新会有点麻烦。从 yeshan333/actions-for-hexo-blog 项目的对 volantis 项目追踪的历史commit@3ce9316 可以看得出来 <img src="https://github.com/yeshan333/actions-for-hexo-blog/tree/3ce93169ec7bfd49d91e8dc38415cc08886e052a" alt="actions-for-hexo-blog@3ce9316" loading="lazy"></p>
+<h2 id="git-submodules-的作用">Git Submodules 的作用</h2>
+<p>是时候该见识 submodule 的作用了，从官方文档可以看到，它可以解决之前上面提到的一些问题。略微概括下就是：</p>
+<ul>
+<li>Git的 submodule 可以将一个 Git 版本库<strong>作为一个子目录</strong>保存在另一个 Git 版本库中，并可以保留两个版本库之间 commit 的分离，保持父项目和子项目相互独立，实现更为精确的版本控制。</li>
+</ul>
+<h2 id="git-submodules-的本质">Git Submodules 的本质</h2>
+<p>拿 <a href="https://github.com/yeshan333/actions-for-hexo-blog" target="_blank">actions-for-hexo-blog</a> 项目来实践感受下 submodule。操作如下：</p>
+<pre><code class="language-shell">git clone git@github.com:yeshan333/actions-for-hexo-blog.git &amp;&amp; cd actions-for-hexo-blog
+git submodule add git@github.com:volantis-x/hexo-theme-volantis.git themes/volantis
+</code></pre>
+<p>执行上述命令之后，会看到当前项目下生成了个 <code>.gitmodules</code> 文件，内容如下：</p>
+<pre><code>[submodule "themes/volantis"]
+	path = themes/volantis
+	url = git@github.com:volantis-x/hexo-theme-volantis.git
+</code></pre>
+<p>同时，<code>.git/config</code> 文件也会被追加写入如下内容：</p>
+<pre><code>[submodule "themes/volantis"]
+	url = git@github.com:volantis-x/hexo-theme-volantis.git
+	active = true
+</code></pre>
+<p>再看看 <code>theme/volantis</code> 目录，发现该项目的 Git 版本库不见了，之前提到 <code>git submodule</code> 可以保留两个版本库之间 commit 的分离，那么项目 volantis 的版本库放哪了？摸索下当前项目的版本库可以看到被放在了 <code>.git/modules/themes/volantis</code> 下。尝试提交到 GitHub 看看。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/ssmath/picgo-pic/img/20210310183050.png" alt="GitHub 提交结果" loading="lazy"></p>
+<p>emm......，收工，目录名显示多个 commit 引用，可以进行跳转。</p>
+<h2 id="更多操作">更多操作</h2>
+<ul>
+<li>与 submodule 类似的 subtree：<a href="https://martowen.com/2016/05/01/git-submodules-vs-git-subtrees/" target="_blank">Git Submodules vs Git Subtrees</a></li>
+<li>子模块更新：<code>git submodule update</code></li>
+<li><a href="http://reader.epubee.com/books/mobile/ed/ededfda8184ebf210b5960a5f22be1c7/text00025.html" target="_blank">submodule 最佳实践</a></li>
+</ul>
+<pre><code># 子模块删除
+- 删除.gitsubmodule文件中子模块的相关字段；
+- 删除.git/config文件中子模块的相关字段；
+- 删除模块目录：
+- git rm --cached &lt;submodule-path&gt;
+</code></pre>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://git-scm.com/book/en/v2/Git-Tools-Submodules" target="_blank">Git Tools - Submodules</a></li>
+<li><a href="https://github.blog/2016-02-01-working-with-submodules/" target="_blank">Working with submodules</a></li>
+<li><a href="https://book.douban.com/subject/26341974/" target="_blank">《Git版本控制管理》- 子模块最佳实践</a></li>
+</ul>
+
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2021-05-09 09:35</span>&nbsp;
+<a href="https://www.cnblogs.com/sikongji-yeshan/">yeshan333</a>&nbsp;
+阅读(<span id="post_view_count">46</span>)&nbsp;
+评论(<span id="post_comment_count">0</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14747220" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(14747220);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/10.3.1/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 441474, cb_blogApp = 'sikongji-yeshan', cb_blogUserGuid = '63294abd-8e01-4d92-18a3-08d5dd9535dc';
+    var cb_entryId = 14747220, cb_entryCreatedDate = '2021-05-09 09:35', cb_postType = 1;
+    updatePostStats(
+        [cb_entryId],
+        function(id, count) { $("#post_view_count").text(count) },
+        function(id, count) { $("#post_comment_count").text(count) })
+    zoomManager.apply("#cnblogs_post_body img:not(.code_img_closed):not(.code_img_opened)");
+</script>
+<a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <div id="cnblogs_c1" class="under-post-card">
+        <div id='div-gpt-ad-1592365906576-0' style='width: 300px; height: 250px;'></div>
+    </div>
+    <div id="under_post_card1"></div>
+    <div id="cnblogs_c2" class="under-post-card">
+        <div id='div-gpt-ad-1592366332455-0' style='width: 468px; height: 60px;'></div>
+    </div>
+    <div id="under_post_card2"></div>
+    <div id="HistoryToday" class="under-post-card"></div>
+    <script type="text/javascript">
+       var commentManager = new blogCommentManager();
+       commentManager.renderComments(0);
+       fixPostBody();
+       deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);       deliverT2();
+       deliverC1C2();
+       loadNewsAndKb();
+       loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);       LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+       GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+       loadOptUnderPost();
+       GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+	<div id="sideBar">
+		<div id="sideBarMain">
+			<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+<div id="sidebar_c3"></div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2021 yeshan333
+<br /><span id="poweredby">Powered by .NET 5.0 on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8L-rpLgFVEJMgssCVvNUAjt79mPvescju4GvcCRQMLEe4Ox2kSI4CFAxxysLiBQmLFqmS-8cFz_WqkxrDm8VFkYHnQO83uQhndRvZYwHiAbR5YRK2CC1JSTD_VgjCRfdyl90AnRuf_TbLI3SOaYZ34g" />
+</body>
+</html>

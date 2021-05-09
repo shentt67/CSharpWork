@@ -1,0 +1,576 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="never" />
+    <meta name="description" content="在介绍新的 CSS 属性 contain 之前，读者首先需要了解什么是页面的重绘与重排。 之前已经描述过很多次了，还不太了解的可以先看看这个提高 CSS 动画性能的正确姿势。 OK，下面进入本文正题，" />
+    <meta property="og:description" content="在介绍新的 CSS 属性 contain 之前，读者首先需要了解什么是页面的重绘与重排。 之前已经描述过很多次了，还不太了解的可以先看看这个提高 CSS 动画性能的正确姿势。 OK，下面进入本文正题，" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>CSS新特性contain，控制页面的重绘与重排 - ChokCoco - 博客园</title>
+    <link id="favicon" rel="shortcut icon" href="//common.cnblogs.com/favicon.svg" type="image/svg+xml" />
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=zS6-e1bxywlu3kpHvpr1J6MySwya3ztFtEnS7RYQ0Fk" />
+    
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/coco1s/custom.css?v=VHn8LeNN7I759yDzp6MQstdw9tw=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/thinkinside/bundle-thinkinside-mobile.min.css?v=1kb6JMrYnH_hQyNadevonyt40TkBWckdUtnStHWa0bs" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/coco1s/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/coco1s/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/coco1s/wlwmanifest.xml" />
+    <script>
+        var currentBlogId = 177636;
+        var currentBlogApp = 'coco1s';
+        var cb_enable_mathjax = true;
+        var isLogined = false;
+        var isBlogOwner = false;
+        var skinName = 'ThinkInside';
+        var visitorUserId = '';
+    </script>
+        <script>
+            var currentPostDateAdded = '2021-05-06 10:00';
+        </script>
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=2Mic1VLeHXarpdzASbXqFMIMVLEBiWXNO5yiTHUcmhw"></script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']], processClass: 'math', processEscapes: true },
+        TeX: {
+        equationNumbers: { autoNumber: ['AMS'], useLabelIds: true },
+        extensions: ['extpfeil.js', 'mediawiki-texvc.js'],
+        Macros: {bm: "\\boldsymbol"}
+        },
+        'HTML-CSS': { linebreaks: { automatic: true } },
+        SVG: { linebreaks: { automatic: true } }
+        });
+    </script>
+    <script src="https://mathjax.cnblogs.com/2_7_5/MathJax.js?config=TeX-AMS-MML_HTMLorMML&amp;v=20200504"></script>
+    
+</head>
+<body class="no-navbar">
+    <a name="top"></a>
+        <div id="bannerbar" class="bannerbar-mobile formobile">
+            <a href="https://www.aliyun.com/activity/daily/bestoffer?userCode=swh7dvlt" target="_blank" onclick="ga('send', 'event', 'Link', 'click', 'aliyun-cps-blog-bannerbar-mobile')">
+                <img src="https://img2020.cnblogs.com/blog/35695/202104/35695-20210428213541700-642740375.jpg" alt="" />
+            </a>
+        </div>
+    <div id="top_nav" class="navbar forpc navbar-custom">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding"><a href="https://www.cnblogs.com/" title="开发者的网上家园"><img src="/images/logo.svg?v=R9M0WmLAIPVydmdzE2keuvnjl-bPR7_35oHqtiBzGsM" alt="博客园Logo" /></a></li>
+                <li><a href="/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-sitehome')">首页</a></li>
+                <li><a href="https://news.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-news')">新闻</a></li>
+                <li><a href="https://q.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-q')">博问</a></li>
+                <li><a id="nav_brandzone" href="https://brands.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-brands')">专区</a></li>
+                <li><a href="https://ing.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-ing')">闪存</a></li>
+                <li><a href="https://edu.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-edu')">班级</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search" action="https://zzk.cnblogs.com/s" method="get">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="text" tabindex="3" />
+                        <button type="submit" id="zzk_search_button">
+                            <img src="/images/aggsite/search.svg" alt="搜索" />
+                        </button>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔">
+                        <img id="new_post_icon" class="navbar-icon" src="/images/aggsite/newpost.svg" alt="写随笔" />
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx" alt="我的博客" title="我的博客">
+                        <img id="myblog_icon" class="navbar-icon" src="/images/aggsite/myblog.svg" alt="我的博客" />
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息">
+                        <img id="msg_icon" class="navbar-icon" src="/images/aggsite/message.svg?v=J0WS2P2iPgaIVgXxcAhliw4AFZIpaTWxtdoNAv9eiCA" alt="短消息" />
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/">
+                            <img id="user_icon" class="navbar-avatar" src="/images/aggsite/avatar-default.svg" alt="用户头像" />
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <img id="navbar_lite_mode_on" src="/images/lite-mode-check.svg" class="hide" /><span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup/">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div id="page_begin_html">
+        <script>loadPageBeginHtml();</script>
+    </div>
+    <!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/coco1s/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/coco1s/">ChokCoco</a>
+</h1>
+<h2>经不住流年似水, 逃不过此间少年</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/coco1s/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/ChokCoco">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/coco1s/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			<div id="blog_stats_place_holder"><script>loadBlogStats();</script></div>
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/coco1s/p/14733974.html">
+    <span>CSS新特性contain，控制页面的重绘与重排</span>
+    
+
+
+
+</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                <div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+<p>在介绍新的 CSS 属性 <code>contain</code> 之前，读者首先需要了解什么是页面的重绘与重排。</p>
+<p>之前已经描述过很多次了，还不太了解的可以先看看这个<a href="https://github.com/chokcoco/iCSS/issues/11" target="_blank">提高 CSS 动画性能的正确姿势</a>。</p>
+<p>OK，下面进入本文正题，</p>
+<h2 id="contain-为何？"><code>contain</code> 为何？</h2>
+<p><code>contain</code> 属性允许我们指定特定的 DOM 元素和它的子元素，让它们能够独立于整个 DOM 树结构之外。目的是能够让浏览器有能力只对部分元素进行重绘、重排，而不必每次都针对整个页面。</p>
+<blockquote>
+<p>The contain property allows an author to indicate that an element and its contents are, as much as possible, independent of the rest of the document tree. This allows the browser to recalculate layout, style, paint, size, or any combination of them for a limited area of the DOM and not the entire page.</p>
+</blockquote>
+<h2 id="contain-语法"><code>contain</code> 语法</h2>
+<p>看看它的语法：</p>
+<pre><code class="language-CSS">{
+  /* No layout containment. */
+  contain: none;
+  /* Turn on size containment for an element. */
+  contain: size;
+  /* Turn on layout containment for an element. */
+  contain: layout;
+  /* Turn on style containment for an element. */
+  contain: style;
+  /* Turn on paint containment for an element. */
+  contain: paint;
+
+  /* Turn on containment for layout, paint, and size. */
+  contain: strict;
+  /* Turn on containment for layout, and paint. */
+  contain: content;
+}
+</code></pre>
+<p>除去 <code>none</code>，取值还有 6 个，我们一个一个来看看。</p>
+<h2 id="contain-size">contain: size</h2>
+<p>contain: size: 设定了 <code>contain: size</code> 的元素的渲染不会受到其子元素内容的影响。</p>
+<blockquote>
+<p>The value turns on size containment for the element. This ensures that the containing box can be laid out without needing to examine its descendants.</p>
+</blockquote>
+<p>我开始看到这个定义也是一头雾水，光看定义很难明白到底是什么意思。还需实践一番：</p>
+<p>假设我们有如下简单结构：</p>
+<pre><code class="language-HTML">&lt;div class="container"&gt;
+   
+&lt;/div&gt;
+</code></pre>
+<pre><code class="language-CSS">.container {
+    width: 300px;
+    padding: 10px;
+    border: 1px solid red;
+}
+
+p {
+    border: 1px solid #333;
+    margin: 5px;
+    font-size: 14px;
+}
+</code></pre>
+<p>并且，借助 jQuery 实现每次点击容器添加一个 <code>&lt;p&gt;Coco&lt;/p&gt;</code> 结构：</p>
+<pre><code class="language-javascript">$('.container').on('click', e =&gt; {
+    $('.container').append('&lt;p&gt;Coco&lt;/p&gt;')
+})
+</code></pre>
+<p>那么会得到如下结果：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ad0040e236d245649f52d199cd25ff6b~tplv-k3u1fbpfcp-zoom-1.image" alt="containsize" loading="lazy"></p>
+<p>可以看到，容器 <code>.container</code> 的高度是会随着元素的增加而增加的，这是正常的现象。</p>
+<p>此刻，我们给容器 <code>.container</code> 添加一个 <code>contain: size</code>，也就会出现上述说的：<strong>设定了 <code>contain: size</code> 的元素的渲染不会受到其子元素内容的影响</strong>。</p>
+<pre><code class="language-CSS">.container {
+    width: 300px;
+    padding: 10px;
+    border: 1px solid red;
++   contain: size
+}
+</code></pre>
+<p>再看看会发生什么：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/41c8e8578776435591bcc23a096e355b~tplv-k3u1fbpfcp-zoom-1.image" alt="containsize2" loading="lazy"></p>
+<p>正常而言，父元素的高度会因为子元素的增多而被撑高，而现在，子元素的变化不再影响父元素的样式布局，这就是 <code>contain: size</code> 的作用。</p>
+<h2 id="contain-style">contain: style</h2>
+<p>接下来再说说 <code>contain: style</code>、<code>contain: layout</code> 、<code>contain: paint</code>。先看看 contain: style。</p>
+<p>截止至本文书写的过程中，<code>contain: style</code> 暂时被移除了。</p>
+<blockquote>
+<p><a href="https://www.w3.org/TR/css-contain-1/" target="_blank">CSS Containment Module Level 1</a>: Drop the at-risk “style containment” feature from this specification, move it Level 2。</p>
+</blockquote>
+<p>嗯，官方说辞是因为存在某些风险，暂时被移除，可能在规范的第二版会重新定义吧，那这个属性也暂且放一放。</p>
+<h2 id="contain-paint">contain: paint</h2>
+<p>contain: paint：设定了 <code>contain: paint</code> 的元素即是设定了布局限制，也就是说告知 User Agent，此元素的子元素不会在此元素的边界之外被展示，因此，如果元素不在屏幕上或以其他方式设定为不可见，则还可以保证其后代不可见不被渲染。</p>
+<blockquote>
+<p>This value turns on paint containment for the element. This ensures that the descendants of the containing box don’t display outside its bounds, so if an element is off-screen or otherwise not visible, its descendants are also guaranteed to be not visible.</p>
+</blockquote>
+<p>这个稍微好理解一点，先来看第一个特性：</p>
+<h3 id="设定了-contain-paint-的元素的子元素不会在此元素的边界之外被展示">设定了 <code>contain: paint</code> 的元素的子元素不会在此元素的边界之外被展示</h3>
+<ul>
+<li>设定了 <code>contain: paint</code> 的元素的子元素不会在此元素的边界之外被展示</li>
+</ul>
+<p>这个特点有点类似与 <code>overflow: hidden</code>，也就是明确告知用户代理，子元素的内容不会超出元素的边界，所以超出部分无需渲染。</p>
+<p>简单示例，假设元素结构如下：</p>
+<pre><code class="language-HTML">&lt;div class="container"&gt;
+    &lt;p&gt;Coco&lt;/p&gt;
+&lt;/div&gt;
+</code></pre>
+<pre><code class="language-CSS">.container {
+    contain: paint;
+    border: 1px solid red;
+}
+
+p{
+    left: -100px;
+}
+</code></pre>
+<p>我们来看看，设定了 <code>contain: paint</code> 与没设定时会发生什么：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e1edabb7b354493cb0ed38a5c03b9db6~tplv-k3u1fbpfcp-zoom-1.image" alt="containsize3" loading="lazy"></p>
+<p><a href="https://codepen.io/Chokcoco/pen/KKwmgmN" target="_blank">CodePen Demo -- contain: paint Demo</a></p>
+<h3 id="设定了-contain-paint-的元素在屏幕之外时不会渲染绘制">设定了 <code>contain: paint</code> 的元素在屏幕之外时不会渲染绘制</h3>
+<p>通过使用 <code>contain: paint</code>， 如果元素处于屏幕外，那么用户代理就会忽略渲染这些元素，从而能更快的渲染其它内容。</p>
+<h2 id="contain-layout">contain: layout</h2>
+<p>contain: layout：设定了 <code>contain: layout</code> 的元素即是设定了布局限制，也就是说告知 User Agent，此元素内部的样式变化不会引起元素外部的样式变化，反之亦然。</p>
+<blockquote>
+<p>This value turns on layout containment for the element. This ensures that the containing box is totally opaque for layout purposes; nothing outside can affect its internal layout, and vice versa.</p>
+</blockquote>
+<p>启用 <code>contain: layout</code> 可以潜在地将每一帧需要渲染的元素数量减少到少数，而不是重新渲染整个文档，从而为浏览器节省了大量不必要的工作，并显着提高了性能。</p>
+<p>使用 <code>contain：layout</code>，开发人员可以指定对该元素任何后代的任何更改都不会影响任何外部元素的布局，反之亦然。</p>
+<p>因此，浏览器仅计算内部元素的位置（如果对其进行了修改），而其余DOM保持不变。因此，这意味着帧渲染管道中的布局过程将加快。</p>
+<h3 id="存在的问题">存在的问题</h3>
+<p>描述很美好，但是在实际 Demo 测试的过程中（截止至2021/04/27，Chrome 90.0.4430.85），仅仅单独使用 <code>contain：layout</code> 并没有验证得到上述那么美好的结果。</p>
+<p><strong>设定了 <code>contain: layout</code> 的指定元素，改元素的任何后代的任何更改还是会影响任何外部元素的布局</strong>，点击红框会增加一条 <code>&lt;p&gt;Coco&lt;p&gt;</code> 元素插入到 <code>container</code> 中：</p>
+<p>简单的代码如下：</p>
+<pre><code class="language-HTML">&lt;div class="container"&gt;
+    &lt;p&gt;Coco&lt;/p&gt;
+    ...
+&lt;/div&gt;
+&lt;div class="g-test"&gt;&lt;/div&gt;
+</code></pre>
+<pre><code class="language-CSS">html,
+body {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.container {
+    width: 150px;
+    padding: 10px;
+    contain: layout;
+    border: 1px solid red;
+}
+
+.g-test {
+    width: 150px;
+    height: 150px;
+    border: 1px solid green;
+}
+</code></pre>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/02c6ecc821d845e593faa7c8f83e1550~tplv-k3u1fbpfcp-zoom-1.image" alt="" loading="lazy"></p>
+<p><a href="https://codepen.io/Chokcoco/pen/rNjRELL" target="_blank">CodePen Demo -- contain: layout Demo</a></p>
+<p>目前看来，<code>contain: layout</code> 的实际作用不那么明显，更多的关于它的用法，你可以再看看这篇文章：<a href="https://css-tricks.com/almanac/properties/c/contain/" target="_blank">CSS-tricks - contain</a></p>
+<h2 id="contain-strict--contain-content">contain: strict | contain: content</h2>
+<p>这两个属性稍微有点特殊，效果是上述介绍的几个属性的聚合效果：</p>
+<ul>
+<li><code>contain: strict</code>：同时开启 layout、style、paint 以及 size 的功能，它相当于 <code>contain: size layout paint</code></li>
+<li><code>contain: content</code>：同时开启 layout、style 以及 paint 的功能，它相当于 <code>contain: layout paint</code></li>
+</ul>
+<p>所以，这里也提一下，contain 属性是可以同时定义几个的。</p>
+<h2 id="can-i-use----css-contain">Can i Use -- CSS Contain</h2>
+<p>截止至 2021-04-27，Can i Use  上的 CSS Contain 兼容性，已经可以开始使用起来：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c34ec138a05b4cc6916aad01600ed651~tplv-k3u1fbpfcp-zoom-1.image" alt="" loading="lazy"></p>
+<h2 id="参考文献">参考文献</h2>
+<ul>
+<li><a href="https://www.w3.org/TR/css-contain-1/" target="_blank">CSS Containment Module Level 1</a></li>
+<li><a href="https://justmarkup.com/articles/2016-04-05-css-containment/" target="_blank">CSS containment</a></li>
+<li><a href="https://developers.google.com/web/updates/2016/06/css-containment" target="_blank">CSS Containment in Chrome 52</a></li>
+</ul>
+<h2 id="最后">最后</h2>
+<p>好了，本文到此结束，希望对你有帮助 😃</p>
+<p>更多精彩 CSS 技术文章汇总在我的 <a href="https://github.com/chokcoco/iCSS" target="_blank">Github -- iCSS</a> ，持续更新，欢迎点个 star 订阅收藏。</p>
+<p>如果还有什么疑问或者建议，可以多多交流，原创文章，文笔有限，才疏学浅，文中若有不正之处，万望告知。</p>
+
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2021-05-06 10:00</span>&nbsp;
+<a href="https://www.cnblogs.com/coco1s/">ChokCoco</a>&nbsp;
+阅读(<span id="post_view_count">428</span>)&nbsp;
+评论(<span id="post_comment_count">1</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14733974" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(14733974);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/10.3.1/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 177636, cb_blogApp = 'coco1s', cb_blogUserGuid = '97b0660a-69a1-e311-8d02-90b11c0b17d6';
+    var cb_entryId = 14733974, cb_entryCreatedDate = '2021-05-06 10:00', cb_postType = 1;
+    updatePostStats(
+        [cb_entryId],
+        function(id, count) { $("#post_view_count").text(count) },
+        function(id, count) { $("#post_comment_count").text(count) })
+    zoomManager.apply("#cnblogs_post_body img:not(.code_img_closed):not(.code_img_opened)");
+</script>
+<a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <div id="cnblogs_c1" class="under-post-card">
+        <div id='div-gpt-ad-1592365906576-0' style='width: 300px; height: 250px;'></div>
+    </div>
+    <div id="under_post_card1"></div>
+    <div id="cnblogs_c2" class="under-post-card">
+        <div id='div-gpt-ad-1592366332455-0' style='width: 468px; height: 60px;'></div>
+    </div>
+    <div id="under_post_card2"></div>
+    <div id="HistoryToday" class="under-post-card"></div>
+    <script type="text/javascript">
+       var commentManager = new blogCommentManager();
+       commentManager.renderComments(0);
+       fixPostBody();
+       deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);       deliverT2();
+       deliverC1C2();
+       loadNewsAndKb();
+       loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);       LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+       GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+       loadOptUnderPost();
+       GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+	<div id="sideBar">
+		<div id="sideBarMain">
+			<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+<div id="sidebar_c3"></div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2021 ChokCoco
+<br /><span id="poweredby">Powered by .NET 5.0 on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    <div id="page_end_html">
+        <script>
+var href = location.href;
+
+if(/https/.test(href)) {
+     document.querySelectorAll('iframe').forEach(val => { 
+	val.src = 'https:' + val.src.split(':')[1];
+    });
+}
+
+var l = document.createElement('link');
+l.rel = "shortcut icon";
+l.href = "http://images.cnblogs.com/cnblogs_com/coco1s/965277/o_favicon.png";
+document.getElementsByTagName("head")[0].appendChild(l);
+
+</script>
+<div id="rocket"></div>
+<script>
+var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259286380'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259286380%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script>
+var i = 0,
+	deIframe = setInterval(function(){
+		i++;
+		$('#sideBar').find('iframe').parent().remove();
+		$('#sideBar>div').not('#sideBarMain').remove();
+		if(i == 10){
+			clearInterval(deIframe);
+		}
+	}, 200);
+</script>
+<script>
+var reward = (function(){
+	function dataInsert(){
+var data = '<div class="g-gongzhonghao">'
+    +    '<p><strong><span style="font-size: 14px; font-family: verdana, geneva;">想 Get 到最有意思的 CSS 资讯，千万不要错过我的 iCSS 公众号 😄 ：</span></strong></p>'
+    +    '<p><span style="font-size: 14px; font-family: verdana, geneva;"><a href="https://images.cnblogs.com/cnblogs_com/coco1s/965277/o_201030023049qrcode.png" target="_blank"><img src="https://images.cnblogs.com/cnblogs_com/coco1s/881614/o_20031002540054919342-6d0dfd00-4ef8-11e9-9ee8-fbae9241d89e.png" alt="image" width="180" height="144"></a></span></p>'
+    + '</div>'
+    + '<div class="m-reward">' 
+							+ '<div class="m-desc">如果觉得文章对您有用，请随意打赏。您的支持将鼓励我继续创作！</div>'
+							+ '<div class="reward-btn">打赏支持</div>'
+							+ '</div>'
+							+ '<div class="reward-wrap">'
+							+ '<div class="reward-btn-close">+</div>'
+							+ '<h2>(^_^)打个赏喝个咖啡(^_^)</h2>'
+							+ '<div class="wechat">'
+							+ '<img src="https://images.cnblogs.com/cnblogs_com/coco1s/881614/o_weixin.png" alt="微信支付" />'
+							+ '</div>'
+							+ '<div class="zhifubao">'
+							+ '<img src="https://images.cnblogs.com/cnblogs_com/coco1s/881614/o_zhifubao.png" alt="支付宝支付" />'
+							+ '</div>	'
+							+ '</div>';
+
+		if($('#cnblogs_post_body')){
+			$('#cnblogs_post_body').append(data);		
+			eventBind();
+		}					
+	}
+
+	function eventBind(){
+		$('.reward-btn').on('click', function(event) {
+			$('.reward-wrap').fadeIn(300);
+		});
+
+		$('.reward-btn-close').on('click', function(event) {
+			$('.reward-wrap').fadeOut(500);
+		});
+	}
+	
+	return{
+		init:function(){
+			dataInsert();
+		}
+	}
+})();
+reward.init();
+</script>
+<script>
+/** 侧边栏回到顶部 */
+var rocket = $('#rocket');
+
+$(window).on('scroll', debounce(slideTopSet, 300));
+
+function debounce(func, wait) {
+	var timeout;
+	return function() {
+		clearTimeout(timeout);
+		timeout = setTimeout(func, wait);
+	};
+};
+function slideTopSet() {
+	var top = $(document).scrollTop();
+
+	if (top > 200) {
+		rocket.addClass('show');
+	} else {
+		rocket.removeClass('show');
+	}
+}
+$(document).on('click', '#rocket', function(event) {
+	rocket.addClass('move');
+	$('body, html').animate({
+		scrollTop: 0
+	}, 800);
+});
+$(document).on('animationEnd', function() {
+	setTimeout(function() {
+		rocket.removeClass('move');
+	}, 400);
+
+});
+$(document).on('webkitAnimationEnd', function() {
+	setTimeout(function() {
+		rocket.removeClass('move');
+	}, 400);
+});
+</script>
+    </div>
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8L-rpLgFVEJMgssCVvNUAjuB4rzLbjJ663B61u4pQU6MIIrn4BNgPzpel3opcq6PM2QkYnN53uxviQmKxx2Sx_28s5i24RzBZJ0NCDQA74jMxluuowEYKaq1i1YqaJtIo8mYLJ8Yq8ytA7iVY3utSFQ" />
+</body>
+</html>

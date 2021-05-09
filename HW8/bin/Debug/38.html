@@ -1,0 +1,871 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin-when-crossorigin" />
+    <meta name="description" content="在前一篇文章&amp;#160;深入探索Android热修复技术原理读书笔记 —— 热修复技术介绍中，对热修复技术进行了介绍，下面将详细介绍其中的代码修复技术。 1&amp;#160;底层热替换原理 在各种 Andr" />
+    <meta property="og:description" content="在前一篇文章&amp;#160;深入探索Android热修复技术原理读书笔记 —— 热修复技术介绍中，对热修复技术进行了介绍，下面将详细介绍其中的代码修复技术。 1&amp;#160;底层热替换原理 在各种 Andr" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>深入探索Android热修复技术原理读书笔记 —— 代码热修复技术 - huansky - 博客园</title>
+    <link id="favicon" rel="shortcut icon" href="//common.cnblogs.com/favicon.svg" type="image/svg+xml" />
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=zS6-e1bxywlu3kpHvpr1J6MySwya3ztFtEnS7RYQ0Fk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/codinglife/bundle-codinglife.min.css?v=2uJkpdACLVfstRQ7zeCFK19brTwKuDEaNBLgKz9nm3A" />
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/codinglife/bundle-codinglife-mobile.min.css?v=DwDRKMd1bmjnJZ4iQqrTCO9QLlYb6OZaUAzHoHIIihg" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/huansky/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/huansky/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/huansky/wlwmanifest.xml" />
+    <script>
+        var currentBlogId = 274049;
+        var currentBlogApp = 'huansky';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var isBlogOwner = false;
+        var skinName = 'CodingLife';
+        var visitorUserId = '';
+    </script>
+        <script>
+            var currentPostDateAdded = '2021-05-08 10:50';
+        </script>
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=2Mic1VLeHXarpdzASbXqFMIMVLEBiWXNO5yiTHUcmhw"></script>
+    
+    
+    
+</head>
+<body class="has-navbar has-bannerbar">
+    <a name="top"></a>
+        <a target="_blank" href="https://www.aliyun.com/activity/daily/bestoffer?userCode=swh7dvlt" onclick="ga('send', 'event', 'Link', 'click', 'aliyun-cps-blog-bannerbar-pc')">
+            <div class="bannerbar aliyun forpc" style="background-size: contain;background-image: url(https://img2020.cnblogs.com/blog/35695/202104/35695-20210428221933214-737067094.jpg)">
+            </div>
+        </a>
+        <div id="bannerbar" class="bannerbar-mobile formobile">
+            <a href="https://www.aliyun.com/activity/daily/bestoffer?userCode=swh7dvlt" target="_blank" onclick="ga('send', 'event', 'Link', 'click', 'aliyun-cps-blog-bannerbar-mobile')">
+                <img src="https://img2020.cnblogs.com/blog/35695/202104/35695-20210428213541700-642740375.jpg" alt="" />
+            </a>
+        </div>
+    <div id="top_nav" class="navbar forpc">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding"><a href="https://www.cnblogs.com/" title="开发者的网上家园"><img src="/images/logo.svg?v=R9M0WmLAIPVydmdzE2keuvnjl-bPR7_35oHqtiBzGsM" alt="博客园Logo" /></a></li>
+                <li><a href="/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-sitehome')">首页</a></li>
+                <li><a href="https://news.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-news')">新闻</a></li>
+                <li><a href="https://q.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-q')">博问</a></li>
+                <li><a id="nav_brandzone" href="https://brands.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-brands')">专区</a></li>
+                <li><a href="https://ing.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-ing')">闪存</a></li>
+                <li><a href="https://edu.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-edu')">班级</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search" action="https://zzk.cnblogs.com/s" method="get">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="text" tabindex="3" />
+                        <button type="submit" id="zzk_search_button">
+                            <img src="/images/aggsite/search.svg" alt="搜索" />
+                        </button>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔">
+                        <img id="new_post_icon" class="navbar-icon" src="/images/aggsite/newpost.svg" alt="写随笔" />
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx" alt="我的博客" title="我的博客">
+                        <img id="myblog_icon" class="navbar-icon" src="/images/aggsite/myblog.svg" alt="我的博客" />
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息">
+                        <img id="msg_icon" class="navbar-icon" src="/images/aggsite/message.svg?v=J0WS2P2iPgaIVgXxcAhliw4AFZIpaTWxtdoNAv9eiCA" alt="短消息" />
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/">
+                            <img id="user_icon" class="navbar-avatar" src="/images/aggsite/avatar-default.svg" alt="用户头像" />
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <img id="navbar_lite_mode_on" src="/images/lite-mode-check.svg" class="hide" /><span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup/">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    
+    <!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/huansky/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/huansky/">huansky</a>
+</h1>
+<h2></h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/huansky/">
+首页</a>
+</li>
+<li>
+
+
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/huansky">
+联系</a></li>
+<li>
+
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			<div id="blog_stats_place_holder"><script>loadBlogStats();</script></div>
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/huansky/p/14736412.html">
+    <span>深入探索Android热修复技术原理读书笔记 —— 代码热修复技术</span>
+    
+
+
+
+</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                <div id="cnblogs_post_body" class="blogpost-body blogpost-body-html">
+<p class="17">在前一篇文章&nbsp;<a href="https://www.cnblogs.com/huansky/p/14699738.html">深入探索Android热修复技术原理读书笔记 —— 热修复技术介绍</a>中，对热修复技术进行了介绍，下面将详细介绍其中的代码修复技术。</p>
+<h1 style="background-color: rgba(51, 204, 204, 1)"><strong>1&nbsp;</strong>底层热替换原理</h1>
+<p class="15" align="justify">在各种 Android 热修复方案中，Andfix&nbsp;<span style="font-family: 宋体">的即时生效令人印象深刻，它稍显另类</span>, 并不需要重新启动，而是在加载补丁后直接对方法进行替换就可以完成修复，然而它的使用限制也遭遇到更多的质疑。</p>
+<h2 style="background-color: rgba(51, 204, 255, 1)">1.1 Andfix 回顾</h2>
+<p class="15">我们先来看一下，为何唯独 Andfix 能够做到即时生效呢？</p>
+<p class="15" align="justify">原因是这样的，在 app&nbsp;<span style="font-family: 宋体">运行到一半的时候，所有需要发生变更的分类已经被</span><span style="font-family: 宋体">加载过了，在&nbsp;</span>Android 上<span style="font-family: 宋体">是无法对一个分类进行卸载的。而腾讯系的方案，都是让</span> Classloader&nbsp;<span style="font-family: 宋体">去加载新的类。如果不重启，原来的类还在虚拟机中，就无法加载新</span><span style="font-family: 宋体">类。因此，只有在下次重启的时候，在还没走到业务逻辑之前抢先加载补丁中的新</span><span style="font-family: 宋体">类，这样后续访问这个类时，就会&nbsp;</span>Resolve 为新的类。从而达到热修复的目的。</p>
+<p>Andfix 采用的方法是，在已经加载了的类中直接在 native&nbsp;<span style="font-family: &quot;Times New Roman&quot;">层替换掉原有方法</span>, 是在原来类的基础上进行修改的。<span style="font-family: 宋体">对于不同&nbsp;</span>Android&nbsp;<span style="font-family: 宋体">版本的&nbsp;</span>art，<span style="font-family: 宋体">底层&nbsp;</span>Java&nbsp;<span style="font-family: 宋体">对象的数据结构是</span><span style="font-family: 宋体">不同的，因而会进一步区分不同的替换函数。</span>每一个 Java 方法在 art 中都对应着一个 ArtMethod，ArtMethod&nbsp;<span style="font-family: 宋体">记录了这个</span> Java 方法的所有信息，包括所属类、访问权限、代码执行地址等等。</p>
+<p>通过 env-&gt;FromReflectedMethod，可以由 Method&nbsp;<span style="font-family: 宋体">对象得到这个方法对应</span><span style="font-family: 宋体">的&nbsp;</span>ArtMethod 的真正起始地址。然后就可以把它强转为 ArtMethod&nbsp;<span style="font-family: 宋体">指针，从而对其</span><span style="font-family: 宋体">所有成员进行修改。</span>&nbsp;</p>
+<p class="15" align="justify"><span style="font-family: 宋体">这样全部替换完之后就完成了热修复逻辑。以后调用这个方法时就会直接走到新</span> <span style="font-family: 宋体">方法的实现中了。</span></p>
+<h2 style="background-color: rgba(51, 204, 255, 1)">1.2 虚拟机调用方法的原理</h2>
+<p class="16">为什么这样替换完就可以实现热修复呢？这需要从虚拟机调用方法的原理说起。</p>
+<p class="15">在 Android 6.0, art 虚拟机中 ArtMethod 的结构是这个样子的：</p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 0, 255, 1)">class</span><span style="color: rgba(0, 0, 0, 1)"> ArtMethod FINAL {<br>...
+ </span><span style="color: rgba(0, 0, 255, 1)">protected</span><span style="color: rgba(0, 0, 0, 1)">:
+  </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> Field order required by test "ValidateFieldOrderOfJavaCppUnionClasses".
+  </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> The class we are a part of.</span>
+  GcRoot&lt;mirror::Class&gt;<span style="color: rgba(0, 0, 0, 1)"> declaring_class_;
+
+  </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> Short cuts to declaring_class_-&gt;dex_cache_ member for fast compiled code access.</span>
+  GcRoot&lt;mirror::PointerArray&gt;<span style="color: rgba(0, 0, 0, 1)"> dex_cache_resolved_methods_;
+
+  </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> Short cuts to declaring_class_-&gt;dex_cache_ member for fast compiled code access.</span>
+  GcRoot&lt;mirror::ObjectArray&lt;mirror::Class&gt;&gt;<span style="color: rgba(0, 0, 0, 1)"> dex_cache_resolved_types_;
+
+  </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> Access flags; low 16 bits are defined by spec.</span>
+<span style="color: rgba(0, 0, 0, 1)">  uint32_t access_flags_;
+
+  </span><span style="color: rgba(0, 128, 0, 1)">/*</span><span style="color: rgba(0, 128, 0, 1)"> Dex file fields. The defining dex file is available via declaring_class_-&gt;dex_cache_ </span><span style="color: rgba(0, 128, 0, 1)">*/</span>
+
+  <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> Offset to the CodeItem.</span>
+<span style="color: rgba(0, 0, 0, 1)">  uint32_t dex_code_item_offset_;
+
+  </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> Index into method_ids of the dex file associated with this method.</span>
+<span style="color: rgba(0, 0, 0, 1)">  uint32_t dex_method_index_;
+
+  </span><span style="color: rgba(0, 128, 0, 1)">/*</span><span style="color: rgba(0, 128, 0, 1)"> End of dex file fields. </span><span style="color: rgba(0, 128, 0, 1)">*/</span>
+
+  <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> Entry within a dispatch table for this method. For static/direct methods the index is into
+  </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> the declaringClass.directMethods, for virtual methods the vtable and for interface methods the
+  </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> ifTable.</span>
+<span style="color: rgba(0, 0, 0, 1)">  uint32_t method_index_;
+
+  </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> Fake padding field gets inserted here.
+
+  </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> Must be the last fields in the method.
+  </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> PACKED(4) is necessary for the correctness of
+  </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> RoundUp(OFFSETOF_MEMBER(ArtMethod, ptr_sized_fields_), pointer_size).</span>
+  struct PACKED(4<span style="color: rgba(0, 0, 0, 1)">) PtrSizedFields {
+    </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> Method dispatch from the interpreter invokes this pointer which may cause a bridge into
+    </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> compiled code.</span>
+    <span style="color: rgba(0, 0, 255, 1)">void</span>*<span style="color: rgba(0, 0, 0, 1)"> entry_point_from_interpreter_;
+
+    </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> Pointer to JNI function registered to this method, or a function to resolve the JNI function.</span>
+    <span style="color: rgba(0, 0, 255, 1)">void</span>*<span style="color: rgba(0, 0, 0, 1)"> entry_point_from_jni_;
+
+    </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> Method dispatch from quick compiled code invokes this pointer which may cause bridging into
+    </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> the interpreter.</span>
+    <span style="color: rgba(0, 0, 255, 1)">void</span>*<span style="color: rgba(0, 0, 0, 1)"> entry_point_from_quick_compiled_code_;
+  } ptr_sized_fields_;<br>...
+}</span></pre>
+</div>
+<p class="16" align="justify"><span style="font-family: 宋体">这其中最重要的字段就是</span> entry_point_from_interprete_ <span style="font-family: 宋体">和</span> entry_point_ from_quick_compiled_code_&nbsp;<span style="font-family: 宋体">了，从名字可以看出来，他们就是方法的执行入口。</span> <span style="font-family: 宋体">我们知道，</span>Java 代码在 Android 中会被编译为 Dex Code。</p>
+<p class="15" align="justify">art 中可以采用解释模式或者 AOT 机器码模式执行。</p>
+<ul>
+<li class="15">
+<p><span style="color: rgba(153, 51, 0, 1)">解释模式，就是取出 Dex Code，<span style="font-family: 宋体">逐条解释执行就行了。如果方法的调用者是</span><span style="font-family: 宋体">以解释模式运行的，在调用这个方法时，就会取得这个方法的&nbsp;</span>entry_point_fronn_ interpreter，然后跳转过去执行。</span></p>
+</li>
+<li class="15">
+<p><span style="color: rgba(153, 51, 0, 1)">AOT方式，就会先预编译好 Dex Code&nbsp;<span style="font-family: 宋体">对应的机器码，然后运行</span><span style="font-family: 宋体">期直接执行机器码就行了，不需要一条条地解释执行&nbsp;</span>Dex Code。<span style="font-family: 宋体">如果方法的调用者</span> <span style="font-family: 宋体">是以</span>AOT机器码方式执行的，在调用这个方法时，就是跳转到 entry_point_from_ quick_compiled_code_ 执行。</span></p>
+</li>
+</ul>
+<p class="15" align="justify">那我们是不是只需要替换这几个 entry_point_*&nbsp;<span style="font-family: 宋体">入口地址就能够实现方法替换</span><span style="font-family: 宋体">了呢？</span></p>
+<p class="15" align="justify">并没有这么简单。<span style="font-family: 宋体">在实际代码中，有许多更为复杂的调用情况。很多</span><span style="font-family: 宋体">情况下还需要用到&nbsp;</span>dex_code_item_offset_ 等字段。由此可以看出，AOT&nbsp;<span style="font-family: 宋体">机器码</span><span style="font-family: 宋体">的执行过程，还是会有对于虚拟机以及</span>ArtMethod 其他成员字段的依赖。</p>
+<p class="15" align="justify"><span style="font-family: 宋体">因此，当把一个旧方法的所有成员字段都换成新方法后，执行时所有数据就可以</span> <span style="font-family: 宋体">保持和新方法的一致。这样在所有执行到旧方法的地方，会取得新方法的执行</span><span style="font-family: 宋体">入口、</span> 所属class、方法索引号以及所属 dex&nbsp;<span style="font-family: 宋体">信息，然后像调用旧方法一样顺滑地执行到新</span> <span style="font-family: 宋体">方法的逻辑。</span>&nbsp;</p>
+<h2 style="background-color: rgba(51, 204, 255, 1)">1.3 兼容性问题的根源</h2>
+<p class="15" align="justify">然而，目前市面上几乎所有的 native 替换方案，比如 Andfix&nbsp;<span style="font-family: 宋体">和其他安全界的</span> Hook&nbsp;<span style="font-family: 宋体">方案，都是写死了</span> ArtMethod 结构体，这会带来巨大的兼容性问题。</p>
+<p>由于Android<span style="font-family: &quot;Times New Roman&quot;">是开源的，各个手机厂商都可以对代码进行改造，而</span> Andfix 里 ArtMethod 的结构是根据公开的 Android&nbsp;<span style="font-family: &quot;Times New Roman&quot;">源码中的结构写死的。如果某个</span><span style="font-family: &quot;Times New Roman&quot;">厂商对这个&nbsp;</span>ArtMethod&nbsp;<span style="font-family: &quot;Times New Roman&quot;">结构体进行了修改，就和原先开源代码里的结构不一致，那</span> <span style="font-family: &quot;Times New Roman&quot;">么在这个修改过了的设备上，替换机制就会出问题。</span></p>
+<p class="15" align="justify">这也正是 Andfix&nbsp;<span style="font-family: 宋体">不支持很多机型的原因，很大的可能，就是因为这些机型修改</span><span style="font-family: 宋体">了底层的虚拟机结构。</span></p>
+<h2 style="background-color: rgba(51, 204, 255, 1)">1.4 突破底层结构差异</h2>
+<p class="15" align="justify"><span style="font-family: 宋体">知道了</span> native&nbsp;<span style="font-family: 宋体">替换方式兼容性问题的原因，我们是否有办法寻求一种新的方式，</span>不依赖于 ROM 底层方法结构的实现而达到替换效果呢？</p>
+<p class="15" align="justify">我们发现，这样 native 层面替换思路，其实就是替换 ArtMethod&nbsp;<span style="font-family: 宋体">的所有成员。</span> <span style="font-family: 宋体">那么，我们并不需要构造出&nbsp;</span>ArtMethod 具体的各个成员字段，只要把 ArtMethod&nbsp;<span style="font-family: 宋体">的</span><span style="font-family: 宋体">作为整体进行替换，这样不就可以了吗？</span></p>
+<p class="15">也就是把原先这样的逐一替换：</p>
+<p class="15"><img src="https://img2020.cnblogs.com/blog/916005/202105/916005-20210506190242839-1161369742.png" alt="" width="556" height="242" loading="lazy">&nbsp;</p>
+<p class="15">变成了这样的整体替换：</p>
+<p class="15"><img src="https://img2020.cnblogs.com/blog/916005/202105/916005-20210506190321458-2091628122.png" alt="" width="563" height="243" loading="lazy"></p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> %%把旧函数的所有成员变量都替换为新函数的。</span>
+smeth-&gt;declaring_class_ = dmeth-&gt;<span style="color: rgba(0, 0, 0, 1)">declaring_class_；
+smeth</span>-&gt;dex_cache_resolved_methods_ = dmeth-&gt;<span style="color: rgba(0, 0, 0, 1)">dex_cache_resolved_methods_；
+smeth</span>-&gt;dex_cache_resolved_types_ = dmeth-&gt;dex_cache_reso1ved_types_； smeth-&gt;access_flags_ = dmeth-&gt;<span style="color: rgba(0, 0, 0, 1)">access_flags_；
+smeth</span>-&gt;dex_code_item_offset_ = dmeth-&gt;<span style="color: rgba(0, 0, 0, 1)">dex_code_item_offset_；
+smeth</span>-&gt;dex_method_index_ = dmeth-&gt;<span style="color: rgba(0, 0, 0, 1)">dex_method_index_；
+smeth</span>-&gt;method_index_ = dmeth-&gt;method_index_；</pre>
+</div>
+<p class="16" align="justify">其实可以浓缩为：</p>
+<div class="cnblogs_code">
+<pre>memcpy(smeth, dmeth, <span style="color: rgba(0, 0, 255, 1)">sizeof</span>(ArtMethod));</pre>
+</div>
+<p class="16" align="justify">就是这样，一句话就能取代上面一<span style="font-family: 宋体">堆代码，这正是我们深入理解替换机制的本质</span><span style="font-family: 宋体">之后研发出的新替换方案。</span></p>
+<p class="15" align="justify"><strong>但这其中最关键的地方，在于</strong><strong>sizeof(ArtMethod)□</strong><strong>如果</strong><strong>sizeit</strong><strong><span style="font-family: 宋体">算有偏差</span>, 导致部分成员没有被替换，或者替换区域超出了边界，都会导致严重的问题。</strong></p>
+<p class="15" align="justify">对于ROM开发者而言，是在art源代码里面，所以一个简单的sizeof (Art- Method)就行了，因为这是在编译期就可以决定的。</p>
+<p>但我们是上层开发者，app会被下发给各式各样的Android<span style="font-family: &quot;Times New Roman&quot;">设备，所以我们是</span> <span style="font-family: &quot;Times New Roman&quot;">需要在运行时动态地得到</span>app所运行设备上面的底层ArtMethod<span style="font-family: &quot;Times New Roman&quot;">大小的，这就没那</span> <span style="font-family: &quot;Times New Roman&quot;">么简单了。</span></p>
+<p><span style="font-family: 宋体">在&nbsp;</span>art&nbsp;<span style="font-family: 宋体">里面，初始化一个类的时候会给这个类的所有方法分配空间，</span><span style="font-family: 宋体">类的方法有&nbsp;</span>direct&nbsp;<span style="font-family: 宋体">方法和&nbsp;</span>virtual&nbsp;<span style="font-family: 宋体">方法。</span>direct&nbsp;<span style="font-family: 宋体">方法包含&nbsp;</span>static&nbsp;<span style="font-family: 宋体">方法和所有不可</span> <span style="font-family: 宋体">继承的对象方法。而&nbsp;</span>virtual&nbsp;<span style="font-family: 宋体">方法就是所有可以继承的对象方法了。需要对两中类型方法都进行分配空间。</span></p>
+<p><span style="font-family: 宋体">方法是一个接一个紧密地</span>new<span style="font-family: 宋体">出来排</span><span style="font-family: 宋体">列在 ArtMethod Array&nbsp; 中的。这时只是分配出空间，还没填入真正的&nbsp;</span>ArtMethod&nbsp;<span style="font-family: 宋体">的各个</span> <span style="font-family: 宋体">成员值：</span></p>
+<p><span style="font-family: 宋体"><img src="https://img2020.cnblogs.com/blog/916005/202105/916005-20210506190928764-1309367855.png" alt="" width="428" height="266" loading="lazy">&nbsp;</span></p>
+<p class="15" align="justify">正是这里给了我们启示，ArtMethod 们是紧密排列的，所以一个 ArtMethod&nbsp;<span style="font-family: 宋体">的</span><span style="font-family: 宋体">大小，不就是相邻两个方法所对应的&nbsp;</span>ArtMethod 的起始地址的差值吗？</p>
+<p class="15" align="justify"><span style="font-family: 宋体">正是如此。我们就从这个排列特点入手，自己构造一个类，以一种巧妙的方式获</span> <span style="font-family: 宋体">取到这个差值。</span></p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 0, 255, 1)">public</span> <span style="color: rgba(0, 0, 255, 1)">class</span><span style="color: rgba(0, 0, 0, 1)"> NativeStructsModel {
+    </span><span style="color: rgba(0, 0, 255, 1)">final</span> <span style="color: rgba(0, 0, 255, 1)">public</span> <span style="color: rgba(0, 0, 255, 1)">static</span> <span style="color: rgba(0, 0, 255, 1)">void</span> fl 0<span style="color: rgba(0, 0, 0, 1)"> {}
+    </span><span style="color: rgba(0, 0, 255, 1)">final</span> <span style="color: rgba(0, 0, 255, 1)">public</span> <span style="color: rgba(0, 0, 255, 1)">static</span> <span style="color: rgba(0, 0, 255, 1)">void</span><span style="color: rgba(0, 0, 0, 1)"> f2() {}
+}</span>&nbsp;</pre>
+</div>
+<p class="16" align="justify">由于 f1 和 f2 都是 static 方法，所以都属于 direct ArtMethod Array。<span style="font-family: 宋体">由于</span> NativeStructsModel 类中只存在这两个方法，因此它们肯定是相邻的。</p>
+<p class="15">那么我们就可以在JNI层取得它们地址的差值：</p>
+<div class="cnblogs_code">
+<pre>size_t firMid = (size_t) env-&gt;<span style="color: rgba(0, 0, 0, 1)">GetStaticMethodID(nativeStructsModelClazzf
+</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">fl</span><span style="color: rgba(128, 0, 0, 1)">"</span>, <span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)"> ()V,r)；</span>
+size_t secMid = (size_t) env-&gt;<span style="color: rgba(0, 0, 0, 1)">GetStaticMethodID(nativeStructsModelClazz,
+uf2H, </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)"> OV</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">);
+size_t methsize </span>= secMid - firMid；</pre>
+</div>
+<p class="17" align="justify">然后，就以这个methSize作为sizeof (ArtMethod),代入之前的代码。</p>
+<div class="cnblogs_code">
+<pre>memcpy(smeth, dmeth, methSize)；</pre>
+</div>
+<p class="16" align="justify">问题就迎刃而解了。</p>
+<p><strong>值得一提的是，由于忽略了底层&nbsp;</strong><strong>ArtMethod&nbsp;</strong><strong><span style="font-family: &quot;Times New Roman&quot;">结构的差异，对于所有的</span> </strong><strong>Android&nbsp;</strong><strong>版本都不再需要区分，而统一以&nbsp;</strong><strong>memcpy&nbsp;</strong><strong><span style="font-family: &quot;Times New Roman&quot;">实现即可，代码量大大减少。即</span> <span style="font-family: &quot;Times New Roman&quot;">使以后的&nbsp;</span></strong><strong>Android&nbsp;</strong><strong>版本不断修改</strong><strong>ArtMethod</strong><strong>的成员，只要保证&nbsp;</strong><strong>ArtMethod&nbsp;</strong><strong><span style="font-family: &quot;Times New Roman&quot;">数组</span><span style="font-family: &quot;Times New Roman&quot;">仍是以线性结构排列，就能直接适用于将来的&nbsp;</span></strong><strong>Android </strong><strong>8.0</strong><strong>、</strong><strong>9.0&nbsp;</strong><strong><span style="font-family: &quot;Times New Roman&quot;">等新版本，无需再</span><span style="font-family: &quot;Times New Roman&quot;">针对新的系统版本进行适配了。</span></strong></p>
+<h2 style="background-color: rgba(51, 204, 255, 1)">1.5 访问权限的问题</h2>
+<h3 style="background-color: rgba(51, 255, 255, 1)">1.5.1 方法调用时的权限检查</h3>
+<p class="15" align="justify"><span style="font-family: 宋体">看到这里，你可能会有疑惑：我们只是替换了</span> ArtMethod&nbsp;<span style="font-family: 宋体">的内容，但新替换的</span><span style="font-family: 宋体">方法的所属类，和原先方法的所属类，是不同的类，被替换的方法有权限访问这个类</span><span style="font-family: 宋体">的其他&nbsp;</span>private 方法吗？</p>
+<p class="15" align="justify"><span style="font-family: 宋体">在构造函数</span> <span style="font-family: 宋体">调用同一个类下的私有方法</span>func<span style="font-family: 宋体">时，不会做任何权限检查。也就是说，这时即使我</span>偷梁换柱，也能直接跳过去正常执行而不会报错。</p>
+<p class="15" align="justify">可以推测，在 dex2oat 生成 AOT&nbsp;<span style="font-family: 宋体">机器码时是有做一些检查和优化的，由于在</span> dex2oat&nbsp;<span style="font-family: 宋体">编译机器码时确认了两个方法同属一</span>个类，所以机器码中就不存在权限检查的相关代码。&nbsp;</p>
+<h3 style="background-color: rgba(51, 255, 255, 1)">1.5.2 同包名下的权限问题</h3>
+<p class="15" align="justify"><span style="font-family: 宋体">但是，并非所有方法都可以这么顺利地进行访问的。我们发现补丁中的类在访问</span><span style="font-family: 宋体">同包名下的类时，会报出访问权限异常：</span></p>
+<p class="15">具体的校验逻辑是在虚拟机代码的 Class : : IsInSamePackage 中：</p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> android-6.0.I_r62/art/runtime/mirror/class.cc</span>
+bool Class::IsInSamePackage(Class*<span style="color: rgba(0, 0, 0, 1)"> that) {
+    Class</span>* klassl = <span style="color: rgba(0, 0, 255, 1)">this</span><span style="color: rgba(0, 0, 0, 1)">；
+    Class</span>* klass2 =<span style="color: rgba(0, 0, 0, 1)"> that;
+    </span><span style="color: rgba(0, 0, 255, 1)">if</span> (klassl ==<span style="color: rgba(0, 0, 0, 1)"> klass2) {
+        </span><span style="color: rgba(0, 0, 255, 1)">return</span> <span style="color: rgba(0, 0, 255, 1)">true</span><span style="color: rgba(0, 0, 0, 1)">；
+    }
+    </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> Class loaders must match.</span>
+    <span style="color: rgba(0, 0, 255, 1)">if</span> (klassl-&gt;GetClassLoader() != klass2-&gt;<span style="color: rgba(0, 0, 0, 1)">GetClassLoader()) {
+        </span><span style="color: rgba(0, 0, 255, 1)">return</span> <span style="color: rgba(0, 0, 255, 1)">false</span><span style="color: rgba(0, 0, 0, 1)">；
+    }
+    </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> Arrays are in the same package when their element classes are.</span>
+    <span style="color: rgba(0, 0, 255, 1)">while</span> (klassl-&gt;<span style="color: rgba(0, 0, 0, 1)">IsArrayClass0) {
+        klassl </span>= klassl-&gt;<span style="color: rgba(0, 0, 0, 1)">GetComponentType()；
+    }
+    </span><span style="color: rgba(0, 0, 255, 1)">while</span> (klass2-&gt;<span style="color: rgba(0, 0, 0, 1)">IsArrayClass()) {
+        klass2 </span>= klass2-&gt;<span style="color: rgba(0, 0, 0, 1)">GetComponentType();
+    }
+    </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> trivial check again for array types</span>
+    <span style="color: rgba(0, 0, 255, 1)">if</span> (klassl ==<span style="color: rgba(0, 0, 0, 1)"> klass2) {
+        </span><span style="color: rgba(0, 0, 255, 1)">return</span> <span style="color: rgba(0, 0, 255, 1)">true</span><span style="color: rgba(0, 0, 0, 1)">；
+    }
+    </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> Compare the package part of the descriptor string.</span>
+<span style="color: rgba(0, 0, 0, 1)">    std：:string tempi, temp2；
+    </span><span style="color: rgba(0, 0, 255, 1)">return</span> IslnSamePackage(klassl-&gt;GetDescriptor(&amp;templ), klass2-
+    &gt;GetDescriptor(&amp;<span style="color: rgba(0, 0, 0, 1)">temp2))；
+}</span></pre>
+</div>
+<p class="16" align="justify">关键点在于，Class loaders must match 这行注释。</p>
+<p class="15" align="justify">知道了原因就好解决了，我们只要设置新类的Classloader<span style="font-family: 宋体">为原来类就可以了。</span> <span style="font-family: 宋体">而这一步同样不需要在</span>JNI<span style="font-family: 宋体">层构造底层的结构，只需要通过反射进行设置。这样仍旧</span><span style="font-family: 宋体">能够保证良好的兼容性。</span></p>
+<p class="15"><span style="font-family: 宋体">实现代码如下</span>:</p>
+<div class="cnblogs_code">
+<pre>Field classLoaderField = Class.<span style="color: rgba(0, 0, 255, 1)">class</span>.getDeclaredField("classLoader")； <br>classLoaderField.setAccessible(<span style="color: rgba(0, 0, 255, 1)">true</span><span style="color: rgba(0, 0, 0, 1)">)；
+classLoaderField.set(newClass, oldClass.getClassLoader())；</span></pre>
+</div>
+<p class="15">这样就解决了同包名下的访问权限问题。</p>
+<h3 style="background-color: rgba(51, 255, 255, 1)">1.5.3 反射调用非静态方法产生的问题</h3>
+<p class="15">当一个非静态方法被热替换后，在反射调用这个方法时，会抛出异常。</p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> BaseBug. test方法已经被热替换了。</span>
+BaseBug bb = <span style="color: rgba(0, 0, 255, 1)">new</span><span style="color: rgba(0, 0, 0, 1)"> BaseBug()；
+Method testMeth </span>= BaseBug. <span style="color: rgba(0, 0, 255, 1)">class</span>. getDeclaredMethod (11 test")； testMeth.invoke(bb)；</pre>
+</div>
+<p class="15">invoke&nbsp;<span style="font-family: 宋体">的时候就会报：</span></p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 0, 0, 1)">Caused by: java.lang.IllegalArgumentException:
+Expected receiver of type com.patch.demo.BaseBug, but got com.patch.demo.BaseBug</span></pre>
+</div>
+<p class="16" align="justify">这里面，expected receiver <span style="font-family: 宋体">的</span> BaseBug，<span style="font-family: 宋体">和</span> got <span style="font-family: 宋体">到的</span> BaseBug，<span style="font-family: 宋体">虽然都叫</span> com.patch.demo.BaseBug，但却是不同的类。</p>
+<p class="15" align="justify">前者是被热替换的方法所属的类，由于我们把它的 ArtMethod 的 declaring_class_ 替换了，因此就是新的补丁类。而后者作为被调用的实例对象 bb&nbsp;<span style="font-family: 宋体">的所属类</span>, 是原有的 BaseBug。两者是不同的。</p>
+<p class="15" align="justify"><span style="font-family: 宋体">那为什么方法是非静态才有这个问题呢？因为如果是静态方法，是在类的级别直</span><span style="font-family: 宋体">接进行调用的，就不需要接收对象实例作为参数。所以就没有这方面的检查了。</span></p>
+<p class="15" align="justify"><span style="font-family: 宋体">对于这种反射调用非静态方法的问题，我们会采用另一种冷启动机制对付，本文</span><span style="font-family: 宋体">在最后会说明如何解决。</span></p>
+<h2 style="background-color: rgba(51, 204, 255, 1)">1.6 即时生效所带来的限制</h2>
+<p class="15" align="justify">除了反射的问题，像本方案以及 Andfix&nbsp;<span style="font-family: 宋体">这样直接在运行期修改底层结构的热修</span><span style="font-family: 宋体">复，都存在着一个限制，那就是只能支持方法的替换。而对于补丁类里面存在方法增</span><span style="font-family: 宋体">加和减少，以及成员字段的增加和减少的情况，都是不适用的。</span></p>
+<p class="15" align="justify"><span style="font-family: 宋体">原因是这样的，一旦补丁类中出现了方法的增加和减少，就会导致这个类以及整</span><span style="font-family: 宋体">个&nbsp;</span>Dex&nbsp;<span style="font-family: 宋体">的方法数的变化。方法数的变化伴随着方法索引的变化，这样在访问方法时</span><span style="font-family: 宋体">就无法正常地索引到正确的方法了。</span></p>
+<p class="15" align="justify"><span style="font-family: 宋体">而如果字段发生了增加和减少，和方法变化的情况一样，所有字段的索引都会发</span><span style="font-family: 宋体">生变化。并且更严重的问题是，如果在程序运行中间某个类突然增加了一个字段，那</span> <span style="font-family: 宋体">么对于原先已经产生的这个类的实例，它们还是原来的结构，这是无法改变的。而新</span> <span style="font-family: 宋体">方法使用到这些老的实例对象时，访问新增字段就会产生不可预期的结果。</span></p>
+<p class="15" align="justify">不过新增一个完整的、原先包里面不存在的新类是可以的，这个不受限制。</p>
+<p class="15" align="justify">总之，只有两种情况是不适用的：</p>
+<ol>
+<li class="15">
+<p><span style="color: rgba(153, 51, 0, 1)">引起原有了类中发生结构变化的修改</span></p>
+</li>
+<li class="15">
+<p><span style="color: rgba(153, 51, 0, 1)">修复了的非静态方法会被反射调用</span></p>
+</li>
+</ol>
+<p class="15" align="justify">而对于其他情况，这种方式的热修复都可以任意使用。</p>
+<p class="15" align="justify"><span style="font-family: 宋体">虽然有着一些使用限制，但一旦满足使用条件，这种热修复方式是十分出众的，</span> <span style="font-family: 宋体">它补丁小，加载迅速，能够实时生效无需重新启动&nbsp;</span>app,<span style="font-family: 宋体">并且具有着完美的设备兼容</span><span style="font-family: 宋体">性。对于较小程度的修复再适合不过了。</span></p>
+<h1 style="background-color: rgba(51, 204, 204, 1)"><strong>2&nbsp;</strong>你所不知的<strong>Java</strong></h1>
+<p class="15" align="justify">和业界很多热修复方案不同，Sophix 热修复一直秉承粒度小、注重快捷修复、<span style="font-family: 宋体">无</span><span style="font-family: 宋体">侵入适合原生工程。因为坚持这个原则，我们在研发过程中遇到很多编译期的问题，这</span><span style="font-family: 宋体">些问题对我们最终方案的实施和热部署也带来或多或少地影响，令人印象深刻。</span></p>
+<p class="15" align="justify">本节列举了我们在项目实战中遇到的一些挑战，这些都是 Java&nbsp;<span style="font-family: 宋体">语言在编译实现</span><span style="font-family: 宋体">上的一些特点，虽然这些特点与热修复没有直接关系，但深入研究它们对&nbsp;</span>Android&nbsp;<span style="font-family: 宋体">及</span> Java 语言的理解都颇有脾益。&nbsp;</p>
+<h2 style="background-color: rgba(51, 204, 255, 1)">2.1 内部类编译</h2>
+<p class="15" align="justify"><span style="font-family: 宋体">有时候我们会发现，修改外部类某个方法逻辑为访问内部类的某个方法时，最后</span><span style="font-family: 宋体">打出来的补丁包竟然提示新增了一个方法，这真的很匪夷所思。所有我们有必要了解</span> <span style="font-family: 宋体">下内部类在编译期间是怎么编译的</span>,首先我们要知<strong><span style="font-family: 宋体">道内部类会在编译期会被编译为跟</span> <span style="font-family: 宋体">外部类一样的顶级类。</span></strong></p>
+<h3 style="background-color: rgba(51, 255, 255, 1)">2.1.1 静态内部类/非静态内部类区别</h3>
+<p class="15" align="justify"><span style="font-family: 宋体">静态内部类</span>/非静态内部类的区别大家应该都很熟悉，非静态内部类持有外部类的引用，静态内部类不持有外部类的引用。所以在android性能优化中建议handle 的实现尽量使用静态内部类，防止外部类Activity类不能被回收导致可能 OOM。非静态内部类，编译期间会自动合成 this$0 域表示的就是外部类的引用。</p>
+<p class="16">内部类和外部类互相访问</p>
+<p class="15" align="justify"><span style="font-family: 宋体">既然内部类实际上跟外部类一样都是顶级类，既然都是顶级类，那是不是意味着</span><span style="font-family: 宋体">对方&nbsp;</span>private 的 method/field&nbsp;<span style="font-family: 宋体">是没法被访问得到的，事实上外部类为了访问内部类私</span><span style="font-family: 宋体">有的域</span>/方法，编译期间自动会为内部类生成 access&amp;** 相关方法</p>
+<p class="15" align="justify"><img src="https://img2020.cnblogs.com/blog/916005/202105/916005-20210506194023997-199834570.png" alt="" width="423" height="196" loading="lazy"></p>
+<p class="15" align="justify">此时外部类 BaseBug 为了能访问到内部类 InnerClass 的私有域 s，<span style="font-family: 宋体">所以编译</span> <span style="font-family: 宋体">器自动为&nbsp;</span>InnerClass 这个内部类合成 access&amp;100&nbsp;<span style="font-family: 宋体">方法，这个方法的实现简单返</span> <span style="font-family: 宋体">回私有域</span>s的值。同样的如果此时匿名内部类需要访问外部类的 private&nbsp;<span style="font-family: 宋体">属性</span>/方法, 那么外部类也会自动生成 access&amp;** 相关方法提供给内部类访问使用。</p>
+<div class="Section0">
+<h3 style="background-color: rgba(51, 255, 255, 1)">2.1.2 热部署解决方案</h3>
+<p class="16" align="justify">所以有这样一种场景，patch 前的 test 方法没访问 inner.s, patch 后的 test&nbsp;<span style="font-family: 宋体">方</span><span style="font-family: 宋体">法访问了</span> inner.s，<span style="font-family: 宋体">那么补丁工具最后检测到了新增了</span> access&amp;ioo&nbsp;<span style="font-family: 宋体">方法。那么我们</span> <span style="font-family: 宋体">只要防止生成&nbsp;</span>access&amp;** 相关方法，就能走热部署，也就是底层替换方式热修复。&nbsp;</p>
+</div>
+<p class="16">所以只要满足以下条件，就能避免编译器自动生成 access&amp;** 相关方法</p>
+<ul>
+<li>
+<p><span style="color: rgba(153, 51, 0, 1)">一个外部类如果有内部类，把所有 method/field 的 private&nbsp;<span style="font-family: 宋体">访问权限改成</span> protected 或者默认访问权限或 public。<sub><br></sub></span></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</li>
+<li>
+<p><span style="color: rgba(153, 51, 0, 1)">同时把内部类的所有 method/field 的 private 访问权限改成 protected&nbsp;<span style="font-family: 宋体">或者</span><span style="font-family: 宋体">默认访问权限或&nbsp;</span>public。</span><span style="font-family: 宋体">&nbsp;</span></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</ul>
+<h2 style="background-color: rgba(51, 204, 255, 1)">2.2匿名内部类编译</h2>
+<p class="15" align="justify"><span style="font-family: 宋体">匿名内部类其实也是个内部类，所以自然也有上一小节说明情况的影响，但是我</span> <span style="font-family: 宋体">们发现新增一个匿名类（补丁热部署模式下是允许新增类），同时规避上一节的情况</span>, 但是匪夷所思的还是提示了 method&nbsp;<span style="font-family: 宋体">的新增，所以接下来看下匿名内部类跟非匿名内</span> <span style="font-family: 宋体">部类相比，又有怎么样的特殊性。</span></p>
+<h3 style="background-color: rgba(51, 255, 255, 1)">2.2.1 匿名内部类编译命名规则</h3>
+<p>匿名内部类顾名思义就是没名字的。匿名内部类的名称格式一般是<span style="font-family: &quot;Times New Roman&quot;">外部类</span>&nbsp;&amp;numble，后面的 numble，<span style="font-family: &quot;Times New Roman&quot;">编译期根据该匿名内部类在外部类中出现的先后关系</span>, 依次剛命名。一旦新增或者减少内部类会导致名字与方法含义出现乱套的情况。</p>
+<h3 style="background-color: rgba(51, 255, 255, 1)">2.2.2 热部署解决方案</h3>
+<p class="15" align="justify"><span style="font-family: 宋体">新增</span>/减少匿名内部类，实际上对于热部署来说是无解的，因为补丁工具拿到的 已经是编译后的 .class 文件，所以根本没法去区分 DexFixDemo&amp;1/DexFixDemo&amp;2&nbsp;<span style="font-family: 宋体">类。所以这种情况下，如果有补丁热部署的需求，应该极力避免插入一个新的</span><span style="font-family: 宋体">匿名内部类。当然如果</span><strong>是匿名内部类是插入到外部类的末尾，那么是允许的。</strong>&nbsp;</p>
+<h2 style="background-color: rgba(51, 204, 255, 1)"><strong>2.3&nbsp;</strong>有趣的域编译</h2>
+<h3 style="background-color: rgba(51, 255, 255, 1)">2.3.1 静态<strong>field，</strong>非静态<strong>field</strong>编译</h3>
+<p class="15" align="justify">实际上在热部署方案中除了不支持 method/fleld&nbsp;<span style="font-family: 宋体">的新增，同时也是不支持</span> <span style="font-family: &quot;Times New Roman&quot;">＜</span>ciinit＞的修复，这个方法会在 Dalvik&nbsp;<span style="font-family: 宋体">虚拟机中类加载的时候进行类初始化时候调</span> <span style="font-family: 宋体">用。在&nbsp;</span>java 源码中本身并没有 clinit 这个方<em><span style="font-family: 宋体">法</span>,</em>这个方法是 android&nbsp;<span style="font-family: 宋体">编译器自动合成的</span> <span style="font-family: 宋体">方法。通过测试发现，静态</span>field<span style="font-family: 宋体">的初始化和静态代码块实际上就会被编译器编译在</span> <span style="font-family: &quot;Times New Roman&quot;">＜</span>ciinit＞这个方法，所以我们有必要去了解一下 field/<strong>代码块</strong>到底是怎么编译的。这块内容其实在&nbsp;<a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/huansky/p/12084204.html">Java 类加载机制详解</a>&nbsp;一文中也有详细介绍。</p>
+<div class="Section0">
+<p class="16" align="justify">来看个简单的示例。</p>
+<div class="cnblogs_code">
+<pre> <span style="color: rgba(0, 0, 255, 1)">public</span> <span style="color: rgba(0, 0, 255, 1)">class</span><span style="color: rgba(0, 0, 0, 1)"> DexFixDemo {
+        {
+            i </span>= 2<span style="color: rgba(0, 0, 0, 1)">;
+        }
+        </span><span style="color: rgba(0, 0, 255, 1)">private</span> <span style="color: rgba(0, 0, 255, 1)">int</span> i = 1<span style="color: rgba(0, 0, 0, 1)">;
+        </span><span style="color: rgba(0, 0, 255, 1)">private</span> <span style="color: rgba(0, 0, 255, 1)">static</span> <span style="color: rgba(0, 0, 255, 1)">int</span> j = 1<span style="color: rgba(0, 0, 0, 1)">;
+        </span><span style="color: rgba(0, 0, 255, 1)">static</span><span style="color: rgba(0, 0, 0, 1)"> {
+            j </span>= 2<span style="color: rgba(0, 0, 0, 1)">;
+        }
+    }</span></pre>
+</div>
+</div>
+<p class="16">反编译为smali看下</p>
+<p class="16"><img src="https://img2020.cnblogs.com/blog/916005/202105/916005-20210506215813292-693110338.png" alt="" width="490" height="265" loading="lazy"></p>
+<h3 style="background-color: rgba(51, 255, 255, 1)">2.3.2 静态<strong>field</strong>初始化，静态代码块</h3>
+<p class="16" align="justify">上面的示例中，能够很明显静态 field&nbsp;<span style="font-family: 宋体">初始化和静态代码块被编译器翻译在</span> <span style="font-family: &quot;Times New Roman&quot;">＜</span>clinit＞方法中。<strong>静态代码块和静态域初始化在&nbsp;</strong><strong>clinit&nbsp;</strong><strong><span style="font-family: 宋体">中的先后关系就是两者出</span><span style="font-family: 宋体">现在源码中的先后关系，</span></strong>所以上述示例中最后 j==2 。<span style="font-family: 宋体">前面说过，类加载然后进行类</span><span style="font-family: 宋体">初始化的时候，会去调用&nbsp;</span>clinit&nbsp;<span style="font-family: 宋体">方法，一个类仅加载一次。以下三种情况都会尝试去</span> <span style="font-family: 宋体">加载一个类</span>:</p>
+<ol>
+<li class="15">
+<p><span style="color: rgba(153, 51, 0, 1)">new —个类的对象<span style="font-family: &quot;Times New Roman&quot;">（</span>new-instance 指令）</span></p>
+</li>
+<li class="15">
+<p><span style="color: rgba(153, 51, 0, 1)">调用类的静态方法<span style="font-family: &quot;Times New Roman&quot;">（</span>invoke-static 指令）</span></p>
+</li>
+<li class="16">
+<p><span style="color: rgba(153, 51, 0, 1)">获取类的静态域的值<span style="font-family: &quot;Times New Roman&quot;">（</span>sget 指令）</span></p>
+</li>
+</ol>
+<p class="16" align="justify">首先判断这个类有没有被加载过，如果没有加载过，执行的流程 dvniResolve-&nbsp;Class - ＞dvmLinkClass- ＞dvmInitClass，<span style="font-family: 宋体">类的初始化时在</span> dvmlnitClass。dvmlnitClass 这个函数首先会尝试会对父类进行初始化，然后调用本类的 clinit&nbsp;<span style="font-family: 宋体">方</span><span style="font-family: 宋体">法，</span>所以此时静态field得到初始化和静态代码块得到执行。</p>
+<h3 style="background-color: rgba(51, 255, 255, 1)">2.3.3 非静态<strong>field</strong>初始化，非静态代码块</h3>
+<p class="16" align="justify">上面的示例中，能够很明显的看到非静态field<span style="font-family: 宋体">初始化和非静态代码块被编译器翻</span> <span style="font-family: 宋体">译在</span><span style="font-family: &quot;Times New Roman&quot;">＜</span>init＞默认无参构造函数中。非静态field和非静态代码块在init<span style="font-family: 宋体">方法中的先后顺</span> <span style="font-family: 宋体">序也跟两者在源码中出现的顺序一致，所以上述示例中最后&nbsp;</span>i==1。<strong><span style="font-family: 宋体">实际上如果存在有参</span><span style="font-family: 宋体">构造函数，那么每个有参构造函数都会执行一个非静态域的初始化和非静态代码块。</span></strong></p>
+<blockquote>
+<p class="17" align="justify">构造函数会被android编译器自动翻译成<span style="font-family: &quot;Times New Roman&quot;">＜</span>init＞方法&nbsp;</p>
+</blockquote>
+<p class="15" align="justify">前面介绍过clinit方法在类加载初始化的时候被调用，那么&nbsp;<span style="font-family: &quot;Times New Roman&quot;">＜</span>init＞&nbsp;<span style="font-family: 宋体">构造函数方</span> <span style="font-family: 宋体">法肯定是对类对象进行初始化时候被调用的，简单来说&nbsp;</span>new —个对象就会对这个对象进行初始化，并调用这个对象相应的构造函数，看下这行代码 String s = new String ("test")；编译之后的样子。&nbsp;</p>
+<blockquote>
+<p class="16" align="justify"><img src="https://img2020.cnblogs.com/blog/916005/202105/916005-20210506220443794-107583267.png" alt="" width="399" height="43" loading="lazy"></p>
+</blockquote>
+<p class="15" align="justify">首先执行 new-instance&nbsp;<span style="font-family: 宋体">指令，主要为对象分配堆内存，同时如果类如果之前</span><span style="font-family: 宋体">没加载过，尝试加载类。然后执行&nbsp;</span>invoke-direct 指令调用类的 init&nbsp;<span style="font-family: 宋体">构造函数方法</span><span style="font-family: 宋体">执行对象的初始化。</span></p>
+<h3 style="background-color: rgba(51, 255, 255, 1)">2.3.4 热部署解决方案</h3>
+<p class="15" align="justify">由于我们不支持<span style="font-family: &quot;Times New Roman&quot;">＜</span>clinit＞方法的热部署，所以任何静态field<span style="font-family: 宋体">初始化和静态代</span><span style="font-family: 宋体">码块的变更都会被翻译到&nbsp;</span>clinit&nbsp;<span style="font-family: 宋体">方法中，导致最后热部署失败，只能冷启动生效。如</span><span style="font-family: 宋体">上所见，非静态&nbsp;</span>field 和非静态代码块的变更被翻译到<span style="font-family: &quot;Times New Roman&quot;">＜</span>init＞<span style="font-family: 宋体">构造函数中，热部署</span> <span style="font-family: 宋体">模式下只是视为一个普通方法的变更</span>,此时对热部署是没有影响的。</p>
+<h2 style="background-color: rgba(51, 204, 255, 1)">2.4 final static 域编译</h2>
+<p class="16" align="justify">final static 域首先是一个静态域，所以我们自然认为由于会被翻译到 clinit 方法中，所以自然热部署下面也是不能变更。但是测试发现，final static<span style="font-family: 宋体">修饰的基</span> <span style="font-family: 宋体">本类型</span>/String常量类型，匪夷所思的竟然没有被翻译到 clinit 方法中，见以下分析。</p>
+<h3 style="background-color: rgba(51, 255, 255, 1)"><strong>2.4.1 final static</strong>域编译规则</h3>
+<p class="15">final static 静态常量域。看下 final static 域被编译后的样子。</p>
+<p class="15"><img src="https://img2020.cnblogs.com/blog/916005/202105/916005-20210506220714962-551406891.png" alt="" width="373" height="178" loading="lazy"></p>
+<p><span style="font-family: 宋体">看下反编译得到的</span>smali<span style="font-family: 宋体">文件</span>&nbsp;</p>
+<p>&nbsp;<img src="https://img2020.cnblogs.com/blog/916005/202105/916005-20210506222348985-842635143.png" alt="" width="574" height="388" loading="lazy"></p>
+<p><img src="https://img2020.cnblogs.com/blog/916005/202105/916005-20210506222412836-1618318243.png" alt="" width="567" height="154" loading="lazy"></p>
+<p class="15" align="justify">我们发现，final static int 12 = 2 和 final static String s2 = "haha"&nbsp;这两个静态域竟然没在中被初始化。其它的非final静态域均在clinit<span style="font-family: 宋体">函数中</span><span style="font-family: 宋体">得到初始化。这里注意下 "</span>haha"&nbsp;和&nbsp;new String ("heihei")&nbsp;<span style="font-family: 宋体">的区别，前者是字</span><span style="font-family: 宋体">符串常量，后者是引用类型。那这两个</span>final static域(i2和s2)<span style="font-family: 宋体">究竟在何处得到初</span><span style="font-family: 宋体">始化？</span></p>
+<p class="15" align="justify"><span style="font-family: 宋体">事实上，类加载初始化&nbsp;</span>dvmlnitClass&nbsp;在执行&nbsp;clinit&nbsp;<span style="font-family: 宋体">方法之前，首先会先执行</span> initSFieids，这个方法的作用主要就是给static<span style="font-family: 宋体">域赋予默认值。如果是引用类型，</span> <span style="font-family: 宋体">那么默认初始值为</span>NULL。0101&nbsp;Editor工具查看&nbsp;dex&nbsp;文件结构，我们能看到在&nbsp;dex 的类定义区，每个类下面都有这么一段数据，图中&nbsp;encoded_array_item。</p>
+<p class="15" align="justify"><img src="https://img2020.cnblogs.com/blog/916005/202105/916005-20210506222730485-1611581163.png" alt="" width="772" height="313" loading="lazy"></p>
+<p class="17" align="justify">上述代码示例中，那块区域有4个默认初始值，分别是&nbsp;t1 = =NULL, t2==NULL, s1==NULL, s2=="haha", i1==0, i2 = =2。&nbsp;<span style="font-family: 宋体">其中</span> t1/t2/s2/i1&nbsp;<span style="font-family: 宋体">在</span> initSFields&nbsp;中首先赋值了默认初始化值，然后在随后的&nbsp;clinit&nbsp;<span style="font-family: 宋体">中赋值了程序设置的</span><span style="font-family: 宋体">值。而&nbsp;</span>i2/s2&nbsp;在&nbsp;initSFields&nbsp;得到的默认值就是程序中设置的值。</p>
+<p class="15" align="justify"><span style="font-family: 宋体">现在我们知道了</span> static 和 final static 修饰 field 的区别了。简单来说：</p>
+<ul>
+<li>
+<p><span style="color: rgba(153, 51, 0, 1)">final static 修饰的原始<strong>类型和&nbsp;</strong><strong>String&nbsp;</strong><strong>类型域</strong>（非引<strong>用类型</strong><span style="font-family: 宋体">）</span>,在并不会被翻译在 clinit&nbsp;<span style="font-family: 宋体">方法中，</span>而是在类初始化执行 initSFields 方法时号到了初始化赋值。</span></p>
+</li>
+<li>
+<p><span style="color: rgba(153, 51, 0, 1)">final static 修饰的弓<strong>I</strong><strong>用类型，</strong>初始化仍然在 clinit 方法中；</span></p>
+</li>
+</ul>
+<h3 style="background-color: rgba(51, 255, 255, 1)"><strong>2.4.2 final static</strong>域优化原理</h3>
+<p class="15" align="justify">另外一方面，我们经常会看到android<span style="font-family: 宋体">性能优化相关文档中有说过，如果一个</span> field是常量，那么推荐尽量使用static final作为修饰符。<span style="font-family: 宋体">很明显这句话不大</span> <span style="font-family: 宋体">对，得到优化的仅仅是</span>final static原始类型和String<span style="font-family: 宋体">类型域（非引用类型）</span>, 如果是引用类型，实际上不会得到任何优化的。</p>
+<h3 style="background-color: rgba(51, 255, 255, 1)">2.4.3 热部署解决方案</h3>
+<p class="15" align="justify">所有我们可以得到最后的结论：</p>
+<ul>
+<li class="15">
+<p><span style="color: rgba(153, 51, 0, 1)">修改 final static 基本类型或者 String&nbsp;<span style="font-family: 宋体">类型域</span>(非引用类型)域，由于编译期 间引用到基本类型的地方被立即数替换，引用到String<span style="font-family: 宋体">类型</span>(非引用类型) 的地方被常量池索引id替换，所以在热部署模式下，最终所有引用到该 final&nbsp;static 域的方法都会被替换。实际上此时仍然可以走热部署。</span></p>
+</li>
+<li class="15">
+<p><span style="color: rgba(153, 51, 0, 1)">•修改 final static 引用类型域，是不允许的，因为这个 field&nbsp;<span style="font-family: 宋体">的初始化会被翻</span><span style="font-family: 宋体">译到</span>clinit方法中，所以此时没法走热部署。</span></p>
+</li>
+</ul>
+<h2 style="background-color: rgba(51, 204, 255, 1)">2.5 有趣的方法编译</h2>
+<h3 style="background-color: rgba(51, 255, 255, 1)">2.5.1 应用混淆方法编译</h3>
+<p class="15" align="justify"><span style="font-family: 宋体">除了以上的内部类</span>/匿名内部类可能会造成method<span style="font-family: 宋体">新增之后，我们发现项目如</span> <span style="font-family: 宋体">果应用了混淆，由于可能导致方法的内联和裁剪，那么最后也可能导致</span>method<span style="font-family: 宋体">的新</span> <span style="font-family: 宋体">增</span>/减少，以下介绍哪些场景会造成方法的内联和裁剪。</p>
+<h3 style="background-color: rgba(51, 255, 255, 1)">2.5.2 方法内联</h3>
+<p class="15" align="justify">实际上有好几种情况可能导致方法被内联掉。</p>
+<ol>
+<li class="15">
+<p><span style="color: rgba(153, 51, 0, 1)">方法没有被其它任何地方引用到，毫无疑问，该方法会被内联掉</span></p>
+</li>
+<li class="15">
+<p><span style="color: rgba(153, 51, 0, 1)"><span style="font-family: 宋体">方法足够简单，比如一个方法的实现就只有一行，该方法会被内联掉，那么</span> <span style="font-family: 宋体">任何调用该方法的地方都会被该方法的实现替换掉</span></span></p>
+</li>
+<li>
+<p><span style="color: rgba(153, 51, 0, 1)">方法只被一个地方引用到，这个地方会被方法的实现替换掉。</span></p>
+</li>
+</ol>
+<p class="15" align="justify">举个简单的例子进行说明下。</p>
+<p class="15" align="justify"><img src="https://img2020.cnblogs.com/blog/916005/202105/916005-20210506223415305-593218774.png" alt="" width="451" height="165" loading="lazy"></p>
+<p class="15" align="justify">此时假如print方法足够复杂，同时只在 test 方法中被调用，假设 test&nbsp;<span style="font-family: 宋体">方法没</span><span style="font-family: 宋体">被内联，</span>print 方法由于只有一个地方调用此时 print&nbsp;<span style="font-family: 宋体">方法会被内联。</span></p>
+<p>如果恰好将要 patch&nbsp;<span style="font-family: &quot;Times New Roman&quot;">的一</span>方法调用了 print方法，那么print<span style="font-family: &quot;Times New Roman&quot;">被调用了两次</span>, 在新的apk<span style="font-family: &quot;Times New Roman&quot;">中不会被内联，补丁工具检测到新增了</span> print&nbsp;<span style="font-family: &quot;Times New Roman&quot;">方法。那么该补丁只能走冷</span> <span style="font-family: &quot;Times New Roman&quot;">启动方案。</span></p>
+<h3 style="background-color: rgba(51, 255, 255, 1)">2.5.3 方法裁剪</h3>
+<p><img src="https://img2020.cnblogs.com/blog/916005/202105/916005-20210506223624073-1794749502.png" alt="" width="366" height="100" loading="lazy"></p>
+<p class="17">查看下生成的mapping.txt文件</p>
+<blockquote>
+<p class="16" align="justify">com.taobao.hotfix.demo.BaseBug -&gt; com.taobao.hotfix.demo.a:</p>
+<p class="16" align="justify">　　void test$faab20d() -&gt; a</p>
+</blockquote>
+<p class="15" align="justify">此时test方法context参数没被使用，所以test方法的context<span style="font-family: 宋体">参数被裁剪，</span> <span style="font-family: 宋体">混淆任务首先生成</span>test$faab20d()<span style="font-family: 宋体">裁剪过后的无参方法，然后再混淆。所以如果</span> <span style="font-family: 宋体">将要</span>patch该test<span style="font-family: 宋体">方法，同时恰好用到了</span> context参数，那么test方法的context <span style="font-family: 宋体">参数不会被裁剪，那么补丁工具检测到新增了</span> test (context)<span style="font-family: 宋体">方法。那么该补丁只</span> <span style="font-family: 宋体">能走冷启动方案。</span></p>
+<p class="15" align="justify"><span style="font-family: 宋体">怎么让该参数不被裁剪，当然是有办法的，参数引用住，不让编译器在优化的</span> <span style="font-family: 宋体">时候认为这是一个无用的参数就好了，可以采取的方法很多，这里介绍一种最有效</span> <span style="font-family: 宋体">的方法：</span></p>
+<p class="15" align="justify"><span style="font-family: 宋体"><img src="https://img2020.cnblogs.com/blog/916005/202105/916005-20210506223750849-282176538.png" alt="" width="378" height="95" loading="lazy">&nbsp;</span></p>
+<p class="17" align="justify">注意这里不能用基本类型false,必须用包装类Boolean,<span style="font-family: 宋体">因为如果写基本类型</span> <span style="font-family: 宋体">这个</span>if语句也很可能会被优化掉的。</p>
+<h3 style="background-color: rgba(51, 255, 255, 1)">2.5.4 热部署解期案</h3>
+<p class="16" align="justify">实际上只要混淆配置文件加上-dontoptimize&nbsp;<span style="font-family: 宋体">这项就不会去做方法的裁剪</span><span style="font-family: 宋体">和内联。一般情况下项目的混淆配置都会使用到&nbsp;</span>android sdk&nbsp;<span style="font-family: 宋体">默认的混淆配置文件</span> proguard-android-optimize. txt <span style="font-family: 宋体">或者</span> proguard- android. txt, <span style="font-family: 宋体">两者的区</span><span style="font-family: 宋体">别就是后者应用了</span> -dontoptimize 这一项配置而前者没应用。</p>
+<h3 style="background-color: rgba(51, 255, 255, 1)">2.6 switch case 语句编译</h3>
+<p><span style="font-family: &quot;Times New Roman&quot;">由于在实现资源修复方案热部署的过程中</span>要做新旧资源 id 的替换，我们发现竟然存在 switch case 语句中的 id 不会。</p>
+<p class="15">所以有必要来探索下switch case语句编译的特殊性。</p>
+<p><img src="https://img2020.cnblogs.com/blog/916005/202105/916005-20210506224027859-1417741265.png" alt="" width="421" height="503" loading="lazy">&nbsp;</p>
+<p>看下 testContinue/testNotContinue 方法编译出来有何不同。</p>
+<p>&nbsp;<img src="https://img2020.cnblogs.com/blog/916005/202105/916005-20210506224114485-1609700536.png" alt="" width="468" height="158" loading="lazy"></p>
+<p><img src="https://img2020.cnblogs.com/blog/916005/202105/916005-20210506224137188-512263967.png" alt="" width="472" height="582" loading="lazy"></p>
+<div class="Section0">
+<p class="15" align="justify">testNotContinue <span style="font-family: 宋体">方</span><span style="font-family: 宋体">法的</span> switch case <span style="font-family: 宋体">语句被</span><span style="font-family: 宋体">翻译成</span> sparse-switch <span style="font-family: 宋体">指令。</span> <span style="font-family: 宋体">比较下差异&nbsp;</span>testContinue的switch 语句的case项是连<strong><span style="font-family: 宋体">续的几个值比较相近</span><span style="font-family: 宋体">的值</span></strong><strong>1,3,5</strong>。所以被编译期翻译为 packed-switch&nbsp;<span style="font-family: 宋体">指令，可以看到对这几个连</span><span style="font-family: 宋体">续的数中间的差值用&nbsp;</span>:pswitch_0 补齐，:pswitch_0 标签处直接 retum-void。testNotContinue 的 switch 语句的 case 项分别是1,3,10,很明<strong>显不够连续，</strong><span style="font-family: 宋体">所以</span> <span style="font-family: 宋体">被编译期翻译为&nbsp;</span>sparse-switch 指令。怎么才算连续的case<span style="font-family: 宋体">值这个是由编译器来</span><span style="font-family: 宋体">决定的。</span>&nbsp;</p>
+<h3 style="background-color: rgba(51, 255, 255, 1)">2.6.1 热部署解决方案</h3>
+<p class="15" align="justify">—个资源 id 肯定是const final static变量，此时恰好 switch case<span style="font-family: 宋体">语句</span> <span style="font-family: 宋体">被翻译成&nbsp;</span>packed-switch 指令，所以这个时候如果不做任何处理就存在资源id<span style="font-family: 宋体">替换</span> <span style="font-family: 宋体">不完全的情况。解决方案其实很简单暴力，修改</span>smali反编译流程，碰到packed- switch 指令强转为sparse-switch指令，:pswitch_N&nbsp;<span style="font-family: 宋体">等相关标签指令也需</span> <span style="font-family: 宋体">要强转为&nbsp;</span>:sswitch_N 指令。然后做资源id的暴力替换，然后再回编译 smali 为dex。再做类方法变更的检测，所以就需要经过<strong>反编译&nbsp;</strong><strong>-&gt; </strong><strong>资源&nbsp;</strong>id&nbsp;<strong>替换&nbsp;</strong><strong>-&gt; </strong><strong><span style="font-family: 宋体">回</span><span style="font-family: 宋体">编译的</span></strong>过程，这也会使得打补丁变得稍慢一些。</p>
+</div>
+<h2 style="background-color: rgba(51, 204, 255, 1)">2.7 泛型编译</h2>
+<p class="15" align="justify">泛型是 java5 才开始引入的，我们发现泛型的使用，也可能导致 method&nbsp;<span style="font-family: 宋体">的新</span><span style="font-family: 宋体">增，所以是时候深入了解一下泛型的编译过程了。</span></p>
+<p class="16" align="justify">为什么需要泛型？</p>
+<ul>
+<li class="15">
+<p><span style="color: rgba(153, 51, 0, 1)">Java语言中的<strong>泛型基本上完全在编译器中实现，</strong><span style="font-family: 宋体">由编译器执行类型检查和类</span> <span style="font-family: 宋体">型推断，然后生成普通的非泛型的字节码，就是虚拟机完全无感知泛型的存</span><span style="font-family: 宋体">在。这种实现技术称为擦除&nbsp;</span>(erasure)&nbsp;<span style="font-family: 宋体">编译器使用泛型类型信息保证类型安</span> <span style="font-family: 宋体">全，然后在生成字节码之前将其清除。</span></span></p>
+</li>
+<li class="15">
+<p><span style="color: rgba(153, 51, 0, 1)">Java5<span style="font-family: 宋体">才引入泛型，所以扩展虚拟机指令集来支持泛型被认为是无法接受的，</span> <span style="font-family: 宋体">因为这会为&nbsp;</span>Java 厂商升级其JVM<span style="font-family: 宋体">造成难以逾越的障碍。因此采用了可以完</span> <span style="font-family: 宋体">全在编译器中实现的擦除方法。</span></span></p>
+</li>
+</ul>
+<h3 style="background-color: rgba(51, 255, 255, 1)">2.7.1 类型擦除与多态的冲突和解决</h3>
+<div class="Section0">
+<p class="15" align="justify">子类中真正重写基类方法的是编译器自动合成的bridge方法。而类 B&nbsp;<span style="font-family: 宋体">定义</span><span style="font-family: 宋体">的</span>get和set方法上面的 @Override 只不过是假象，bridge<span style="font-family: 宋体">方法的内部实</span> <span style="font-family: 宋体">现去调用我们自己重写的</span>print方法而已。所以，<span style="font-family: 宋体">虚拟机巧妙使用了桥方法的</span><span style="font-family: 宋体">方式，来解决了类型擦除和多态的冲突</span></p>
+<p class="15" align="justify">这里或许也许会有疑问，类B中的字节码中的方法 get () Ljava/lang/Nuniber ；&nbsp;和 get () Ljava/lang/Object；<span style="font-family: 宋体">是同时存在的，这就颠覆了我们的认知，如果是我</span> <span style="font-family: 宋体">们自己编写</span>Java<span style="font-family: 宋体">源代码，这样的代码是无法通过编译器的检查的，方法的重载只能</span> <span style="font-family: 宋体">以方法参数而无法以返回类型别作为函数重载的区分标准，但是虚拟机却是允许这样</span>做的，<span style="font-family: 宋体">因为虚拟机通过参数类型和返回类型共同来确定一个方法，所以编译器为了实</span> <span style="font-family: 宋体">现泛型的多态允许自己做这个看起来</span>“不<span style="font-family: 宋体">合法</span>”的事情，<span style="font-family: 宋体">然后交给虚拟器自己去区别</span> <span style="font-family: 宋体">处理了。</span></p>
+</div>
+<h3 style="background-color: rgba(51, 255, 255, 1)">2.7.2 泛型类型转换</h3>
+<p>同时前面我们还留了一个坑，泛型是可以不需要强制类型转换。</p>
+<p><img src="https://img2020.cnblogs.com/blog/916005/202105/916005-20210506225049753-930258387.png" alt="" width="492" height="178" loading="lazy">&nbsp;</p>
+<p class="16">代码示例中，第一个不需要强制类型转换，但是第二个必须强制类型转换否则编译期报incovertiable types错误。反编译看下smali：</p>
+<p class="16"><img src="https://img2020.cnblogs.com/blog/916005/202105/916005-20210506225122191-1334349367.png" alt="" width="412" height="172" loading="lazy"></p>
+<p class="16" align="justify">字节码文件很意外，两者其实并没有什么区别，实际上编译期间，<span style="font-family: 宋体">编译器发现如</span> <span style="font-family: 宋体">果有一个变量的申明加上了泛型类型的话，编译器自动加上</span>check-cast<span style="font-family: 宋体">类型转换</span>, <span style="font-family: 宋体">而不需要程序员在源码文件中进行强制类型转换，这里不需要并不意味着不会类型转</span><span style="font-family: 宋体">换，可以发现其实只是类型转换编译器自动帮我们完成了而已。</span></p>
+<h3 style="background-color: rgba(51, 255, 255, 1)">2.7.3 热部署解决方案</h3>
+<p class="16" align="justify">前面类型擦除中说过，如果由 B extends A&nbsp;<span style="font-family: 宋体">变成了</span> B extends A&lt;Number&gt;, <span style="font-family: 宋体">那么就可能会新增对应的桥方法。此时新增方法了，只能走冷部署了。这种情况下</span>, 如果要走热部署，应该避免类似上面那种的修复。</p>
+<p class="15" align="justify">另外一方面，实际上泛型方法内部会生成一个 dalvik/annotation/Signa- ture 这个系统注解</p>
+<h2 style="background-color: rgba(51, 204, 255, 1)">2.8 Lambda表达式编译</h2>
+<p class="15" align="justify">Lambda 表达式是 java7&nbsp;<span style="font-family: 宋体">才引入的一种表达式，类似于匿名内部类实际上又与</span> <span style="font-family: 宋体">匿名内部类有很大的区别，我们发现&nbsp;</span>Lambda&nbsp;<span style="font-family: 宋体">表达式的使用也可能导致方法的新增</span>/减少，导致最后走不了热部署模式。所以是时候深入了解一下 Lambda&nbsp;<span style="font-family: 宋体">表达式的编</span> <span style="font-family: 宋体">译过程了。</span></p>
+<h3 style="background-color: rgba(51, 255, 255, 1)"><strong>2.8.1 Lambda</strong>表达式编译规则</h3>
+<p class="15" align="justify">首先简单介绍下 lambda 表达式，lambda 为 Java&nbsp;<span style="font-family: 宋体">添加了缺失的函数式编程</span> <span style="font-family: 宋体">特点，</span>Java现在提供的最接近闭包的概念便是 Lambda 表达式。gradle&nbsp;<span style="font-family: 宋体">就是基于</span> groovy 存在大量闭包。函数式接口具有两个主要特征，<strong><span style="font-family: 宋体">是一个接口，这个接口具有</span><span style="font-family: 宋体">唯一的一个抽象方法，我们将满足这两个特性的接口称为函数式接口</span></strong>。比如 Java&nbsp;<span style="font-family: 宋体">标</span><span style="font-family: 宋体">准库中的&nbsp;</span>java.lang.Runnable 和 java.util.Comparator&nbsp;<span style="font-family: 宋体">都是典型的函数式</span> <span style="font-family: 宋体">接口。跟匿名内部类的区别如下：</span></p>
+<ul>
+<li class="15">
+<p><span style="color: rgba(153, 51, 0, 1)">关键字 this 匿名类的this关键字指向匿名类，而lambda表达式的this<span style="font-family: 宋体">关键</span> <span style="font-family: 宋体">字指向包围</span>lambda表达式的类。</span></p>
+</li>
+<li>
+<p><span style="color: rgba(153, 51, 0, 1)">编译方式，Java编译器将lambda<span style="font-family: &quot;Times New Roman&quot;">表达式编译成类的私有方法，使用了</span> Java7 的 invokedynamic 字节码指令来动态绑定这个方法。Java&nbsp;<span style="font-family: &quot;Times New Roman&quot;">编译器将</span><span style="font-family: &quot;Times New Roman&quot;">匿名内部类编译成外部类</span>&amp;numble的新类。</span></p>
+</li>
+</ul>
+<p class="16" align="justify">dex字节码文件和.class字节码文件对lambda<span style="font-family: 宋体">表达式处理的</span> <span style="font-family: 宋体">异同点。</span></p>
+<ul>
+<li class="16">
+<p><span style="color: rgba(153, 51, 0, 1)">共同点：辐译期间都会为外部类合成一个static<span style="font-family: 宋体">辅助方法，该方法内部逻辑</span> <span style="font-family: 宋体">实现</span>lambda表达式。</span></p>
+</li>
+<li class="15">
+<p><span style="color: rgba(153, 51, 0, 1)">不同点：1 .class字节码中通过 invokedynamic 指令执行lambda表达式。而.dex字节码中执行lambda表达式跟普通方法调用没有任何区别。2 .class<span style="font-family: 宋体">字节</span><span style="font-family: 宋体">码中运行时生成新类。</span>.dex字节码中编译期间生成新类。</span></p>
+</li>
+</ul>
+<h3 style="background-color: rgba(51, 255, 255, 1)">2.8.2 热部署解决方案</h3>
+<p class="17" align="justify">有了以上知识点做基础，同时我们知道我们打补丁是通过反编译为 smali&nbsp;<span style="font-family: 宋体">然后新</span> apk 跟基线 apk 进行差异对比，得到最后的补丁包。所以首先：</p>
+<p class="16" align="justify">新增一个lambda<span style="font-family: 宋体">表达式，会导致外部类新增一个辅助方法，所以此时不支</span> <span style="font-family: 宋体">持走热部署方案，还有另外一方面，可以看下合成类的命名规则&nbsp;</span>Test$$Lamb-da$-void_main_j ava_lang_String<span style="text-decoration: underline">&nbsp;</span>args_LambdaImpl0.smali：外<span style="font-family: 宋体">部类名</span>&nbsp;+ Lambda + Lambda 表达式所在方法的签名 + Lambdalmpl +&nbsp;<span style="font-family: 宋体">出现的顺序号。构成这</span><span style="font-family: 宋体">个合成类。所以此时如果不是在末尾插入了一个新的</span>Lambda&nbsp;<span style="font-family: 宋体">表达式，那么就会导</span> <span style="font-family: 宋体">致跟前面说明匿名内部类一样的问题，会导致类方法比较乱套。减少一个</span>lambda<span style="font-family: 宋体">表</span> <span style="font-family: 宋体">达式热部署情况下也是不允许的</span>,也会导致类方法比较乱套。</p>
+<p class="17" align="justify">那么如果只是修改 lambda&nbsp;<span style="font-family: 宋体">表达式内部的逻辑，此时看起来仅仅相当于修改了一</span> <span style="font-family: 宋体">个方法，所以此时是看起来是允许走热部署的。事实上并非如此。我们忽略了一种情</span> <span style="font-family: 宋体">况，</span>lambda表达式访问外部类非静态 field/method 的场景。</p>
+<p>前面我们知道 .dex 字节码中 lambda&nbsp;<span style="font-family: &quot;Times New Roman&quot;">表达式在编译期间会自动生成新的辅助类。</span> <span style="font-family: &quot;Times New Roman&quot;">注意该辅助类是非静态的，</span><strong><span style="font-family: &quot;Times New Roman&quot;">所以该辅助类如果为了访问 “</span>外部类”&nbsp;</strong><strong>的非静态</strong><strong>field/ method</strong><strong>就必须持有</strong><strong>"</strong><strong>外部类</strong><strong>"</strong><strong><span style="font-family: &quot;Times New Roman&quot;">的引用。如果该辅助类没有访问</span>"外部类”的非静态 </strong><strong>field/method,</strong><strong><span style="font-family: &quot;Times New Roman&quot;">那么就不会持有</span>"外部类"的引用。这里注意这个辅助类和内部类 的区别。我们前面说过如果是非</strong><strong>static</strong><strong>内部类的话一定会持有外部类的引用的！</strong></p>
+<h2 style="background-color: rgba(51, 204, 255, 1)">2.9 访问权限检查对热替换的影响</h2>
+<p class="15" align="justify"><span style="font-family: 宋体">访问权限的问题中有提到权限问题对于底层热替换的影响，下面我们就来</span><span style="font-family: 宋体">深入剖析虚拟机下权限控制可能给我们的热修复方案带来的影响，下面代码示例仅演</span> <span style="font-family: 宋体">示</span>Dalvik虚拟机。</p>
+<h3 style="background-color: rgba(51, 255, 255, 1)"><span style="font-family: 宋体">2.9.1 类加载阶段父类</span>/实现接口访问权限检查</h3>
+<p class="15" align="justify">如果当前类和实<span style="font-family: 宋体">现接口</span> /父类是非 public，<span style="font-family: 宋体">同时负责加载两者的</span> classLoader 不一样的情况下，直接 return false。<span style="font-family: 宋体">所以如果此时不进行任何处理的</span> <span style="font-family: 宋体">话，那么在类加载阶段就报错。我们当前的代码热修复方案是基于新&nbsp;</span>classLoader 加载补丁类，所以在patch的过程中就会报类似如下的错误。</p>
+<p class="15" align="justify"><img src="https://img2020.cnblogs.com/blog/916005/202105/916005-20210506234659388-1533924524.png" alt="" width="316" height="22" loading="lazy"></p>
+<h3 style="background-color: rgba(51, 255, 255, 1)">2.9.2 类校验阶段访问权限检查</h3>
+<p><span style="font-family: &quot;Times New Roman&quot;">如果补</span><span style="font-family: &quot;Times New Roman&quot;">丁类中存在非&nbsp;</span>public&nbsp;<span style="font-family: &quot;Times New Roman&quot;">类的访问</span>/非 public&nbsp;<span style="font-family: &quot;Times New Roman&quot;">方法</span>/域的调用，那么都会导致失败。更为致命的是，在补丁加载阶段是检测不出来的，补丁会被视为正常加载，但是在运行阶 段会直接crash异常退出。</p>
+<h2 style="background-color: rgba(51, 204, 255, 1)">2.10 ＜clinit＞方法</h2>
+<p class="15" align="justify">由于补丁热部署模式下的特殊性一不允许类结构变更以及不允许变更&nbsp;<span style="font-family: &quot;Times New Roman&quot;">＜</span>clinit＞ <span style="font-family: 宋体">方法，所以我们的补丁工具如果发现了这几种限制情况，那么此时只能走冷启动重启</span> <span style="font-family: 宋体">生效，冷启动几乎是无任何限制的，可以做到任何场景的修复。可能有时候在源码层</span> <span style="font-family: 宋体">面上来看并没有新增</span>/减少 method 和 field，但是实际上由于要满足 Java&nbsp;<span style="font-family: 宋体">各种语法</span> <span style="font-family: 宋体">特性的需求，所以编译器会在编译期间为我们自动合成一些&nbsp;</span>method 和 field，<span style="font-family: 宋体">最后</span> <span style="font-family: 宋体">就有可能触发了这几个限制情况。以上列举的情况可能并不完全详细，这些分析也只</span><span style="font-family: 宋体">是一个抛砖引玉的作用，具体情况还需要具体分析，同时一些难以理解的&nbsp;</span>java&nbsp;<span style="font-family: 宋体">语法</span> <span style="font-family: 宋体">特性或许从编译的角度去分析可能就无处遁形了。</span></p>
+<h1 style="background-color: rgba(51, 204, 204, 1)"><strong>3&nbsp;</strong>冷启动类加载原理</h1>
+<p class="17" align="justify"><span style="font-family: 宋体">前面我们提到热部署修复方案有诸多特点（有关热部署修复方案实现。其根本原</span> <span style="font-family: 宋体">理是基于&nbsp;</span>native 层方法的替换，所以当类结构变化时，如新增减少类 method/field <span style="font-family: 宋体">在热部署模式下会受到限制。但冷部署能突破这种约束，可以更好地达到修复目</span><span style="font-family: 宋体">的，再加上冷部署在稳定性上具有的独特优势，因此可以作为热部署的有力补充</span><span style="font-family: 宋体">而存在。</span>&nbsp;</p>
+<h2 style="background-color: rgba(51, 204, 255, 1)">3.1 冷启动实现方案概述</h2>
+<p class="15"><span style="font-family: 宋体">冷启动重启生效，现在一般有以下两种实现方案，同时给出他们各自的优缺点：</span></p>
+<p class="15"><img src="https://img2020.cnblogs.com/blog/916005/202105/916005-20210506235156661-1763476048.png" alt="" width="446" height="251" loading="lazy"></p>
+<p class="17">上面的表格，我们能清晰的看到两个方案的缺点都很明显。这里对 tinker 方案</p>
+<p class="15" align="justify">dex merge&nbsp;<span style="font-family: 宋体">缺陷进行简单说明一下</span>:</p>
+<p class="16" align="justify">dex merge 操作是在 java 层面进行，所有对象的分配都是在 java heap&nbsp;<span style="font-family: 宋体">上</span>, 如果此时进程申请的java heap<span style="font-family: 宋体">对象超过了</span> vm heap&nbsp;<span style="font-family: 宋体">规定的大小，那么进程发生&nbsp;</span>OOM，那么系统 memory killer 可能会杀掉该进程，导致 dex&nbsp;<span style="font-family: 宋体">合成失败。另外一方</span> <span style="font-family: 宋体">面我们知道&nbsp;</span>jni 层面 C++ new/malloc 申请的内存，分配在native heap, native&nbsp;heap 的增长并不受 vm heap 大小的限制，只受限于RAM，如果 RAM&nbsp;<span style="font-family: 宋体">不足那么进</span> <span style="font-family: 宋体">程也会被杀死导致闪退。所以如果只是从&nbsp;</span>dexmerge 方面思考，在jni层面进行dex merge，从而可以避免 OOM 提高 dex 合并的成功率。理论上当然可以，只是jni<span style="font-family: 宋体">层</span> <span style="font-family: 宋体">实现起来比较复杂而已</span></p>
+<h2 style="background-color: rgba(51, 204, 255, 1)">3.2 类校验</h2>
+<p class="16" align="justify">apk 第一次安装的时候，会对原 dex 执行 dexopt，此时假如 apk<span style="font-family: 宋体">只存在一个</span> dex，所以 dvmVerifyClass(clazz) 结果为 true。所以 apk&nbsp;<span style="font-family: 宋体">中所有的类都会被打上</span> class_ispreverifIed 标志，接下来执行dvmOptimizeClass，<span style="font-family: 宋体">类接着被打上</span> CLASS_ISOPTIMIZED 标志。</p>
+<ul>
+<li class="15">
+<p><span style="color: rgba(153, 51, 0, 1)">dvmVerifyClass：<span style="font-family: 宋体">类校验，类校验的目的简单来说就是为了防止类被篡改校</span> <span style="font-family: 宋体">验类的合法性。此时会对类的每个方法进行校验，这里我们只需要知道如果</span> <span style="font-family: 宋体">类的所有方法中直接引用到的类</span>(第一层级关系，不会进行递归搜索)和当前 类都在同一个dex中的话，dvmVerifyClass 就返回 true。</span></p>
+</li>
+<li class="15">
+<p><span style="color: rgba(153, 51, 0, 1)">dvmOptimizeClass：<span style="font-family: 宋体">类优化，简单来说这个过程会把部分指令优化成虚拟机</span> <span style="font-family: 宋体">内咅</span>B指令，比如方法调用指令：invoke-*&nbsp;<span style="font-family: 宋体">指令变成了</span> invoke-*-quick, quick指令会从类的vtable表中直接取，vtable<span style="font-family: 宋体">简单来说就是类的所有方法</span> <span style="font-family: 宋体">的一张大表</span>(包括继承自父类的方法)o因此加快了方法的执行速率。</span></p>
+</li>
+</ul>
+<h2 style="background-color: rgba(51, 204, 255, 1)">3.3 Art下冷启动实现</h2>
+<p class="15" align="justify"><span style="font-family: 宋体">前面说过补丁热部署模式下是一个完整的类，补丁的粒度是类。现在我们的需</span> <span style="font-family: 宋体">求是补丁既能走热部署模式也能走冷启动模式，</span><strong><span style="font-family: 宋体">为了减少补丁包的大小，并没有为</span> <span style="font-family: 宋体">热部署和冷启动分别准备一套补丁，而是同一个热部署模式下的补丁能够降级直接</span> <span style="font-family: 宋体">走冷启动，所以我们不需要做</span></strong>dex merge。但是前面我们知道为了解决Art<span style="font-family: 宋体">下类地</span> <span style="font-family: 宋体">址写死的问题，</span>tinker通过dex merge成一^全新完整的新dex<span style="font-family: 宋体">整个替换掉旧的</span> dexElements数组。事实上我们并不需要这样做，Art<span style="font-family: 宋体">虚拟机下面默认已经支持多</span> dex压缩文件的加载了。</p>
+<p class="16"><strong><span style="font-family: 宋体">需要注意一点</span>:</strong></p>
+<ul>
+<li class="15">
+<p><span style="color: rgba(153, 51, 0, 1)">补丁&nbsp;dex&nbsp;必须命名为&nbsp;classes.dex</span></p>
+</li>
+<li class="15">
+<p><span style="color: rgba(153, 51, 0, 1)">loadDex&nbsp;得到的&nbsp;DexFile&nbsp;完整替换掉&nbsp;dexElements&nbsp;数组而不是插入</span></p>
+</li>
+</ul>
+<h2 style="background-color: rgba(51, 204, 255, 1)">3.4 不得不说的其它点</h2>
+<p class="17" align="justify"><strong>我们知道</strong><strong>DexFile.loadDex</strong><strong>尝试把一个</strong><strong>dex</strong><strong>文件解析并加载到</strong><strong>native</strong><strong><span style="font-family: 宋体">内存</span>, 在加载到</strong><strong>native</strong><strong>内存之前，如果</strong><strong>dex</strong><strong>不存在对应的</strong><strong>odex,</strong><strong>那么</strong><strong>Dalvik</strong><strong><span style="font-family: 宋体">下会执行</span> </strong><span class="15">dexopt, Art&nbsp;<span class="15">会执行&nbsp;<span class="15">dexoat,<span class="15">最后得到的都是一个优化后的<span class="15">odex<strong><span class="15">。</span></strong><strong><span class="15"><span style="font-family: 宋体">实际上最后虚</span> <span style="font-family: 宋体">拟机执行的是这个&nbsp;</span></span></strong><strong><span class="15">odex</span></strong><strong><span class="15">而不是</span></strong><strong><span class="15">dex</span></strong><span class="15">。</span></span></span></span></span></span></p>
+<p class="17" align="justify">现在有这么一个问题，如果dex足够大那么dexopt/dexoat<span style="font-family: 宋体">实际上是很耗时的，</span> <span style="font-family: 宋体">根据上面我们提到的方案，</span>Dalvik下实际上影响比较小，因为loadDex<span style="font-family: 宋体">仅仅是补丁包。</span> <span style="font-family: 宋体">但是</span>Art下影响是非常大的，因为loadDex<span style="font-family: 宋体">是补丁</span> dex和apk中原dex<span style="font-family: 宋体">合并成的一个</span> <span style="font-family: 宋体">完整补丁压缩包，所以</span>dexoat非常耗时。所以如果优化后的odex<span style="font-family: 宋体">文件没生成或者没</span> <span style="font-family: 宋体">生成一个完整的</span>odex文件，那么loadDex<span style="font-family: 宋体">便不能在应用启动的时候进行的，因为会</span> <span style="font-family: 宋体">阻塞</span>loadDex线程，一般是主线程。所以为了解决这个问题，<strong>我们把</strong><strong>loadDex</strong><strong><span style="font-family: 宋体">当做</span> <span style="font-family: 宋体">一个事务来看，如果中途被打断，那么就删除。</span></strong><strong>dex</strong><strong><span style="font-family: 宋体">文件，重启的时候如果发现存在</span> </strong><strong>odex</strong><strong>文件，</strong><strong>loadDex</strong><strong><span style="font-family: 宋体">完之后，反射注入</span>/替换</strong><strong>dexElements</strong><strong>数组，实现</strong><strong>patch</strong><strong><span style="font-family: 宋体">。</span> </strong><strong>如果不存在。</strong><strong>dex</strong><strong>文件，那么重启另一个子线程</strong><strong>loadDex,</strong><strong>重启之后再生效。</strong></p>
+<p class="17" align="justify"><span style="font-family: 宋体">另外一方面为了</span> patch<span style="font-family: 宋体">补丁的安全性，虽然对补丁包进行签名校验，这个时候能</span> <span style="font-family: 宋体">够防止整个补丁包被篡改，但是实际上因为虚拟机执行的是</span>odex而不是dex,<span style="font-family: 宋体">还需</span> <span style="font-family: 宋体">要对</span><strong>odex</strong><strong>文件进行</strong><strong>md5</strong><strong>完整性校验，</strong><span style="font-family: 宋体">如果匹配，则直接加载。不匹配，则重新生成</span> —遍 odex 文件，防止 odex 文件被篡改。&nbsp;</p>
+<div class="Section0">
+<h2 style="background-color: rgba(51, 204, 255, 1)">3.5 完整的方案考虑</h2>
+<p class="17" align="justify">代码修复冷启<span style="font-family: 宋体">动方案由于它的高兼容性，几乎可以修复任何代码修复的场景，但</span> <span style="font-family: 宋体">是注入前被加载的类</span>(比如 Application&nbsp;<span style="font-family: 宋体">类</span>)肯定是不能被修复的。所以我们把它作 为一个兜底的方案，在没法走热部署或者热部署失败的情况，最后都会走代码冷启动 重启生效，所以我们的补丁是同一套的。具体实施方案对 Dalvik 下和 Art&nbsp;<span style="font-family: 宋体">下分别做</span><span style="font-family: 宋体">了处理：</span></p>
+<ul>
+<li class="17">
+<p><span style="color: rgba(153, 51, 0, 1)">Dalvik下采用我们自行研发的全量DEX方案</span></p>
+</li>
+<li class="17">
+<p><span style="color: rgba(153, 51, 0, 1)">Art 下本质上虚拟机已经支持多dex<span style="font-family: 宋体">的加载，我们要做的仅仅是</span><span style="font-family: 宋体">把补丁</span> dex 作为主 dex(classes.dex) 加载而已。</span></p>
+</li>
+</ul>
+</div>
+<h1 style="background-color: rgba(51, 204, 204, 1)"><strong>4&nbsp;</strong>多态对冷启动类加载的影响</h1>
+<p class="17" align="justify">前面我们知道冷启动方案几乎是可以修复任何场景的，但 Dalvik 下 QFix&nbsp;<span style="font-family: 宋体">方案存</span><span style="font-family: 宋体">在很大的限制，下面将深入介绍下目前方案下为什么会有这些限制，同时给出具体的</span> <span style="font-family: 宋体">解决方案。</span></p>
+<h2 style="background-color: rgba(51, 204, 255, 1)">4.1 重新认识多态</h2>
+<p class="17" align="justify"><span style="font-family: 宋体">实现多态的技术一般叫做动态绑定，是指在执行期间判断所引用对象的实际类</span> <span style="font-family: 宋体">型，根据其实际的类型调用其相应的方法。多态一般指的是非静态非&nbsp;</span>private&nbsp;<span style="font-family: 宋体">方法的</span><span style="font-family: 宋体">多态。</span>field 和静态方法不具有多态性。</p>
+<p class="16">子类 vtable 的大小等于子类 virtual&nbsp;<span style="font-family: 宋体">方法数</span>+父类vtable的大小。</p>
+<ul>
+<li class="15">
+<p><span style="color: rgba(153, 51, 0, 1)">整个复制父类 vtable 到子类的 vtable</span></p>
+</li>
+<li class="16">
+<p><span style="color: rgba(153, 51, 0, 1)">遍历子类的 virtual 方法集合，如果方法原型一致，说明是重写父类方法，那么相同索引位置处，子类重写方法覆盖掉 vtable 中父类的方法</span></p>
+</li>
+<li class="16">
+<p><span style="color: rgba(153, 51, 0, 1)">方法原型不一致，那么把该方法添加到vtable的末尾</span></p>
+</li>
+</ul>
+<h2 style="background-color: rgba(51, 204, 255, 1)">4.2 冷启动方案限制</h2>
+<p class="16" align="justify">dex文件第一次加载的时候，会执行dexopt, dexopt 有两个过程：verify+optimize。</p>
+<ul>
+<li>
+<p><span style="color: rgba(153, 51, 0, 1)">dvmVerifyClass:<span style="font-family: 宋体">类校验，类校验的目的简单来说就是为了防止类被篡改校</span> <span style="font-family: 宋体">验类的合法性。此时会对类的每个方法进行校验，这里我们只需要知道如果</span> <span style="font-family: 宋体">类的所有方法中直接引用到的类</span>(第一层级关系，不会进行递归搜索)和当前 类都在同一个dex中的话，dvmVerifyClass就返回true。</span></p>
+</li>
+<li>
+<p><span style="color: rgba(153, 51, 0, 1)">dvmOptimizeClass:<span style="font-family: 宋体">类优化，简单来说这个过程会把部分指令优化成虚拟机</span> <span style="font-family: 宋体">内部指令，比如方法调用指令：</span>invoke-virtual-quick, quick&nbsp;<span style="font-family: 宋体">指令会从类的</span> vtable 表中直接取，vtable&nbsp;<span style="font-family: 宋体">简单来说就是类的所有方法的一张大表</span>(包括继 承自父类的方法)。因此加快了方法的执行速率。</span></p>
+</li>
+</ul>
+<p class="15" align="justify">所以，如果在补丁类中新增新的方法有可能会导致方法调用错乱。</p>
+<h1 style="background-color: rgba(51, 204, 204, 1)"><strong>5 Dalvik</strong>下完整<strong>DEX</strong>方案的新探索</h1>
+<h2 style="background-color: rgba(51, 204, 255, 1)">5.1 一种新的全量Dex方案</h2>
+<p class="15" align="justify">一般来说，合成完整dex，思路就是把原来的 dex 和 patch 里的 dex&nbsp;<span style="font-family: 宋体">重新合并</span> <span style="font-family: 宋体">成一个。</span>然而我们的思路是反过来的。</p>
+<p class="15" align="justify"><span style="font-family: 宋体">我们可以这样考虑，既然补丁中已经有变动的类了，那只要在原先基线包里的</span> dex 里面，去掉补丁中也有的 class。<span style="font-family: 宋体">这样，补丁</span>+去除了补丁类的基线包，不就等于了新app中的所有类了吗？</p>
+<p class="15" align="justify">参照 Android 原生 multi-dex 的实现再来看这个方案，会很好理解。multi-dex <span style="font-family: 宋体">是把&nbsp;</span>apk 里用到的所有类拆分到 classes.dex、classes2 .dex、classes3.dex<span style="font-family: 宋体">、</span>...之中，而每个dex都只包含了部分的类的定义，但单个 dex&nbsp;<span style="font-family: 宋体">也是可以</span><span style="font-family: 宋体">加载的，因为只要把所有&nbsp;</span>dex 都 load 进去，本 dex&nbsp;<span style="font-family: 宋体">中不存在的类就可以在运行期间</span> <span style="font-family: 宋体">在其他的</span>dex中找到。</p>
+<p class="15" align="justify">因此同理，在基线包 dex 里面在去掉了补丁中 class&nbsp;<span style="font-family: 宋体">后，原先需要发生变更的</span><span style="font-family: 宋体">旧的</span>class<span style="font-family: 宋体">就被消除了，</span>基线包dex里就只包含不变的class。而这些不变的class 要用到补丁中的新class<span style="font-family: 宋体">时会自动地找到补丁</span>dex，补丁包中的新class<span style="font-family: 宋体">在需要用到</span> <span style="font-family: 宋体">不变的&nbsp;</span>class 时也会找到基线包dex的class。<span style="font-family: 宋体">这样的话，基线包里面不使用补丁类</span><span style="font-family: 宋体">的&nbsp;</span>class仍旧可以按原来的逻辑做odex,<span style="font-family: 宋体">最大地保证了</span> dexopt的效果。</p>
+<p class="15"><span style="font-family: 宋体">这么一来，我们不再需要像传统合成的思路那样判断类的增加和修改情况，而且</span><span style="font-family: 宋体">也不需要处理合成时方法数超过的情况，对于</span>dex的结构也不用进行破坏性重构。</p>
+<p class="15">现在，合成完整 dex 的问题就简化为了一如何在基线包dex<span style="font-family: 宋体">里面去掉补丁包</span> <span style="font-family: 宋体">中包含的所有类。接下来我们看一下在&nbsp;</span>dex 中去除指定类的具体实现。</p>
+<p class="15" align="justify">需要注意的是，我们并不是要把某个Class的所有信息都从dex<span style="font-family: 宋体">移除，因为如</span> <span style="font-family: 宋体">果这么做，可能会导致</span>dex的各个部分都发生变化，从而需要大量调整offset，<span style="font-family: 宋体">这</span><span style="font-family: 宋体">样就变得就费时费力了。我们要做的，仅仅是让在解析这个&nbsp;</span>dex&nbsp;<span style="font-family: 宋体">的时候找不到这个</span> Class 的定义就行了。<strong>因此，只需要移除定义的入口，对于&nbsp;</strong><strong>class&nbsp;</strong><strong><span style="font-family: 宋体">的具体内容不进</span> <span style="font-family: 宋体">行删除，这样可以最大可能地减少&nbsp;</span></strong><strong>offset&nbsp;</strong><strong>的修改。</strong></p>
+<p class="15" align="justify"><strong>我们只是去除了类的定义，而对于类的方法实体以及其他</strong><strong>dex</strong><strong><span style="font-family: 宋体">信息不做移除</span>, 虽然这样会把这个被移除类的无用信息残留在</strong><strong>dex</strong><strong><span style="font-family: 宋体">文件中，但这些信息占不了太多空</span> <span style="font-family: 宋体">间，并且对&nbsp;</span></strong><strong>dex&nbsp;</strong><strong>的处理速度是提升很大的，这种移除类操作的方式就变得十分轻快。</strong></p>
+<h2 style="background-color: rgba(51, 204, 255, 1)">5.2 对于 Application 的处理</h2>
+<p class="15" align="justify"><strong>由此，我们实现了完整的</strong><strong>dex</strong><strong>合成。但仍然有个问题，这个问题所有完整&nbsp;</strong><strong>dex </strong><strong>替换方案都会遇到，那就是对于&nbsp;</strong><strong>Application&nbsp;</strong><strong>的处理。</strong></p>
+<p class="15" align="justify"><strong>众所周知，</strong><strong>Application&nbsp;</strong><strong>是整个&nbsp;</strong><strong>app&nbsp;</strong><strong>的入口，因此，在进入到替换的完整&nbsp;</strong><strong>dex </strong><strong>之前，一定会通过</strong><strong>Application</strong><strong>的代码，因此，</strong><strong>Application</strong><strong><span style="font-family: 宋体">必然是加载在原来的老</span> </strong><strong>dex</strong><strong>里面的。只有在补丁加载后使用的类，会在新的完整</strong><strong>dex</strong><strong>里面找到。</strong></p>
+<p><strong>因此，在加载补丁后，如果&nbsp;</strong><strong>Application&nbsp;</strong><strong>类使用其他在新</strong><strong>dex</strong><strong><span style="font-family: &quot;Times New Roman&quot;">里的类，由于不在</span> <span style="font-family: &quot;Times New Roman&quot;">同一个</span></strong><strong>dex</strong><strong><span style="font-family: &quot;Times New Roman&quot;">戛</span> <span style="font-family: &quot;Times New Roman&quot;">如果</span></strong><strong>Application</strong><strong><span style="font-family: &quot;Times New Roman&quot;">被打上了</span> </strong><strong>pre</strong><strong>-</strong><strong>verified</strong><strong>标志，这时就会抛出异常</strong></p>
+<p class="15" align="justify">在 Application&nbsp;<span style="font-family: 宋体">类初始化的时候。此时补丁还</span> <span style="font-family: 宋体">没进行加载，所以就会提前加载到原始</span>dex<span style="font-family: 宋体">中的类。接下来当补丁加载完毕后，这些</span> <span style="font-family: 宋体">已经加载的类如果用到了新&nbsp;</span>dex 中的类，并且又是 pre-verified 时就会报错。</p>
+<p class="15" align="justify">这里最大的问题在于，我们无法把补丁加载提前到 dvmOptResolveClass&nbsp;<span style="font-family: 宋体">之</span><span style="font-family: 宋体">前，因为在一个&nbsp;</span>app&nbsp;<span style="font-family: 宋体">的生命周期里，没有可能到达比入口</span> Application&nbsp;<span style="font-family: 宋体">初始化更早的</span> <span style="font-family: 宋体">时期了。</span></p>
+<p class="15" align="justify">而这个问题常见于多dex情形，当存在多dex时，无法保证 Application&nbsp;<span style="font-family: 宋体">的用</span><span style="font-family: 宋体">到的类和它处于同个&nbsp;</span>dex 中。如果只有一个 dex，—般就不会有这个问题。</p>
+<p class="15" align="justify">多dex情况下要想解决这个问题，有两种办法：</p>
+<ul>
+<li class="15">
+<p><span style="color: rgba(153, 51, 0, 1)">第一种办法，让Application用到的所有非系统类都和Application<span style="font-family: 宋体">位</span> <span style="font-family: 宋体">于同一个</span>dex里，这就可以保证pre-verified<span style="font-family: 宋体">标志被打上，避免进入</span> dvmOptResolveClass，而在补丁加载完之后，我们再清除 pre-verified 标志，使得接下来使用其他类也不会报错。</span></p>
+</li>
+<li class="15">
+<p><span style="color: rgba(153, 51, 0, 1)">第二种办法，把Application<span style="font-family: 宋体">里面除了热修复框架代码以外的其他代码都剥</span><span style="font-family: 宋体">离开，单独提出放到一个其他类里面，这样使得</span>Application<span style="font-family: 宋体">不会直接用到</span> <span style="font-family: 宋体">过多非系统类，这样，保证这个单独拿出来的类和&nbsp;</span>Application&nbsp;<span style="font-family: 宋体">处于同一个</span> dex的几率还是比较大的。如果想要更保险，Application<span style="font-family: 宋体">可以采用反射方式</span> <span style="font-family: 宋体">访问这个单独类，这样就彻底扌巴</span>Application和其他类隔绝开了。</span></p>
+</li>
+</ul>
+<p class="15" align="justify">第一种方法实现较为简单，因为 Android 官方 multi-dex&nbsp;<span style="font-family: 宋体">机制会自动将</span> Application 用到的类都打包到主 dex 中，因此只要把热修复初始化放在 attachBaseContext&nbsp;<span style="font-family: 宋体">的最前面，大多都没问题。而第二种方法稍加繁琐，是在代码架构层面进</span><span style="font-family: 宋体">行重新设计，不过可以一劳永逸地解决问题。</span>&nbsp;</p>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2021-05-08 22:50</span>&nbsp;
+<a href="https://www.cnblogs.com/huansky/">huansky</a>&nbsp;
+阅读(<span id="post_view_count">58</span>)&nbsp;
+评论(<span id="post_comment_count">0</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14736412" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(14736412);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/10.3.1/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 274049, cb_blogApp = 'huansky', cb_blogUserGuid = 'd3324e07-1bec-e511-9fc1-ac853d9f53cc';
+    var cb_entryId = 14736412, cb_entryCreatedDate = '2021-05-08 22:50', cb_postType = 1;
+    updatePostStats(
+        [cb_entryId],
+        function(id, count) { $("#post_view_count").text(count) },
+        function(id, count) { $("#post_comment_count").text(count) })
+    zoomManager.apply("#cnblogs_post_body img:not(.code_img_closed):not(.code_img_opened)");
+</script>
+<a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <div id="cnblogs_c1" class="under-post-card">
+        <div id='div-gpt-ad-1592365906576-0' style='width: 300px; height: 250px;'></div>
+    </div>
+    <div id="under_post_card1"></div>
+    <div id="cnblogs_c2" class="under-post-card">
+        <div id='div-gpt-ad-1592366332455-0' style='width: 468px; height: 60px;'></div>
+    </div>
+    <div id="under_post_card2"></div>
+    <div id="HistoryToday" class="under-post-card"></div>
+    <script type="text/javascript">
+       var commentManager = new blogCommentManager();
+       commentManager.renderComments(0);
+       fixPostBody();
+       deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);       deliverT2();
+       deliverC1C2();
+       loadNewsAndKb();
+       loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);       LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+       GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+       loadOptUnderPost();
+       GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+	<div id="sideBar">
+		<div id="sideBarMain">
+			<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+<div id="sidebar_c3"></div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2021 huansky
+<br /><span id="poweredby">Powered by .NET 5.0 on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8L-rpLgFVEJMgssCVvNUAjuQeT1sfqxfAmWp6iJIGhPeHVPG__prpqPzAl4MM3XWqH2bz0MDfuS0lKXXT41sW0jE_zciRytso7yX-PUvLsZwVQAWNOuTf9oHM9-i-AVvUspYdXYyA3bb-zPCvvTBDqA" />
+</body>
+</html>

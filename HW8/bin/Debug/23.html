@@ -1,0 +1,446 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="never" />
+    <meta name="description" content="一个操作 “时间上的先发生” 是否就代表这个操作会是“先行发生” 呢？一个操作 “先行发生” 是否就能推导出这个操作必定是“时间上的先发生”呢？" />
+    <meta property="og:description" content="一个操作 “时间上的先发生” 是否就代表这个操作会是“先行发生” 呢？一个操作 “先行发生” 是否就能推导出这个操作必定是“时间上的先发生”呢？" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>JMM 最最最核心的概念：Happens-before 原则 - 飞天小牛肉 - 博客园</title>
+    <link id="favicon" rel="shortcut icon" href="//common.cnblogs.com/favicon.svg" type="image/svg+xml" />
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=zS6-e1bxywlu3kpHvpr1J6MySwya3ztFtEnS7RYQ0Fk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/simplememory/bundle-simplememory.min.css?v=uknaX_hejnSu-njQgx4Hj1R0JiPLwUhFPUlwWNmWyB4" />
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/SimpleMemory/bundle-SimpleMemory-mobile.min.css" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/cswiki/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/cswiki/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/cswiki/wlwmanifest.xml" />
+    <script>
+        var currentBlogId = 664726;
+        var currentBlogApp = 'cswiki';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var isBlogOwner = false;
+        var skinName = 'SimpleMemory';
+        var visitorUserId = '';
+    </script>
+        <script>
+            var currentPostDateAdded = '2021-05-09 11:36';
+        </script>
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=2Mic1VLeHXarpdzASbXqFMIMVLEBiWXNO5yiTHUcmhw"></script>
+    
+    
+    
+</head>
+<body class="has-navbar has-bannerbar">
+    <a name="top"></a>
+        <a target="_blank" href="https://www.aliyun.com/activity/daily/bestoffer?userCode=swh7dvlt" onclick="ga('send', 'event', 'Link', 'click', 'aliyun-cps-blog-bannerbar-pc')">
+            <div class="bannerbar aliyun forpc" style="background-size: contain;background-image: url(https://img2020.cnblogs.com/blog/35695/202104/35695-20210428221933214-737067094.jpg)">
+            </div>
+        </a>
+        <div id="bannerbar" class="bannerbar-mobile formobile">
+            <a href="https://www.aliyun.com/activity/daily/bestoffer?userCode=swh7dvlt" target="_blank" onclick="ga('send', 'event', 'Link', 'click', 'aliyun-cps-blog-bannerbar-mobile')">
+                <img src="https://img2020.cnblogs.com/blog/35695/202104/35695-20210428213541700-642740375.jpg" alt="" />
+            </a>
+        </div>
+    <div id="top_nav" class="navbar forpc">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding"><a href="https://www.cnblogs.com/" title="开发者的网上家园"><img src="/images/logo.svg?v=R9M0WmLAIPVydmdzE2keuvnjl-bPR7_35oHqtiBzGsM" alt="博客园Logo" /></a></li>
+                <li><a href="/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-sitehome')">首页</a></li>
+                <li><a href="https://news.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-news')">新闻</a></li>
+                <li><a href="https://q.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-q')">博问</a></li>
+                <li><a id="nav_brandzone" href="https://brands.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-brands')">专区</a></li>
+                <li><a href="https://ing.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-ing')">闪存</a></li>
+                <li><a href="https://edu.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-edu')">班级</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search" action="https://zzk.cnblogs.com/s" method="get">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="text" tabindex="3" />
+                        <button type="submit" id="zzk_search_button">
+                            <img src="/images/aggsite/search.svg" alt="搜索" />
+                        </button>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔">
+                        <img id="new_post_icon" class="navbar-icon" src="/images/aggsite/newpost.svg" alt="写随笔" />
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx" alt="我的博客" title="我的博客">
+                        <img id="myblog_icon" class="navbar-icon" src="/images/aggsite/myblog.svg" alt="我的博客" />
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息">
+                        <img id="msg_icon" class="navbar-icon" src="/images/aggsite/message.svg?v=J0WS2P2iPgaIVgXxcAhliw4AFZIpaTWxtdoNAv9eiCA" alt="短消息" />
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/">
+                            <img id="user_icon" class="navbar-avatar" src="/images/aggsite/avatar-default.svg" alt="用户头像" />
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <img id="navbar_lite_mode_on" src="/images/lite-mode-check.svg" class="hide" /><span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup/">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    
+    <!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/cswiki/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/cswiki/">飞天小牛肉</a>
+</h1>
+<h2></h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/cswiki/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/%E9%A3%9E%E5%A4%A9%E5%B0%8F%E7%89%9B%E8%82%89">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/cswiki/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			<div id="blog_stats_place_holder"><script>loadBlogStats();</script></div>
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/cswiki/p/14747524.html">
+    <span>JMM 最最最核心的概念：Happens-before 原则</span>
+    
+
+
+
+</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                    <div id="cnblogs_post_description" style="display: none">
+        一个操作 “时间上的先发生” 是否就代表这个操作会是“先行发生” 呢？一个操作 “先行发生” 是否就能推导出这个操作必定是“时间上的先发生”呢？
+    </div>
+<div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+<p>关于 Happens-before，《Java 并发编程的艺术》书中是这样介绍的：</p>
+<blockquote>
+<p>Happens-before 是 JMM 最核心的概念。对应 Java 程序员来说，理解 Happens-before 是理解 JMM 的关键。</p>
+</blockquote>
+<p>《深入理解 Java 虚拟机 - 第 3 版》书中是这样介绍的：</p>
+<blockquote>
+<p>Happens-before 是 JMM 的灵魂，它是判断数据是否存在竞争，线程是否安全的非常有用的手段。</p>
+</blockquote>
+<p>我想，这两句话就已经足够表明 Happens-before 原则的重要性。</p>
+<p>那为什么 Happens-before 被不约而同的称为 JMM 的核心和灵魂呢？</p>
+<p>生来如此。</p>
+<h2 id="jmm-设计者的难题与完美的解决方案">JMM 设计者的难题与完美的解决方案</h2>
+<p>上篇文章<a href="https://mp.weixin.qq.com/s/2hKZ-iNhSkUiUmxeVPHXCw" target="_blank">「跬步千里」详解 Java 内存模型与原子性、可见性、有序性</a> 我们学习了 JMM 及其三大性质，事实上，从 JMM 设计者的角度来看，可见性和有序性其实是互相矛盾的两点：</p>
+<ul>
+<li>一方面，对于程序员来说，我们希望内存模型易于理解、易于编程，为此 JMM 的设计者要为程序员提供足够强的内存可见性保证，专业术语称之为 “<strong>强内存模型</strong>”。</li>
+<li>而另一方面，编译器和处理器则希望内存模型对它们的束缚越少越好，这样它们就可以做尽可能多的优化（比如重排序）来提高性能，因此 JMM 的设计者对编译器和处理器的限制要尽可能地放松，专业术语称之为 “<strong>弱内存模型</strong>”。</li>
+</ul>
+<p>对于这个问题，从 JDK 5 开始，也就是在 JSR-133 内存模型中，终于给出了一套完美的解决方案，那就是 <strong>Happens-before</strong> 原则，Happens-before 直译为 “先行发生”，《JSR-133：Java Memory Model and Thread Specification》对 Happens-before 关系的定义如下：</p>
+<blockquote>
+<p>1）如果一个操作 Happens-before 另一个操作，那么第一个操作的执行结果将对第二个操作可见，而且第一个操作的执行顺序排在第二个操作之前。</p>
+<p>2）两个操作之间存在 Happens-before 关系，并不意味着 Java 平台的具体实现必须要按照 Happens-before 关系指定的顺序来执行。如果重排序之后的执行结果，与按 Happens-before 关系来执行的结果一致，那么这种重排序并不非法（也就是说，JMM 允许这种重排序）</p>
+</blockquote>
+<p>并不难理解，第 1 条定义是 JMM 对程序员强内存模型的承诺。从程序员的角度来说，可以这样理解 Happens-before 关系：如果 A Happens-before B，那么 JMM 将向程序员保证 — A 操作的结果将对 B 可见，且 A 的执行顺序排在 B 之前。注意，这只是 Java内存模型向程序员做出的保证！</p>
+<p>需要注意的是，不同于 as-if-serial 语义只能作用在单线程，这里提到的两个操作 A 和 B 既可以是在一个线程之内，也可以是在不同线程之间。也就是说，Happens-before 提供<strong>跨线程的内存可见性保证</strong>。</p>
+<p>针对这个第 1 条定义，我来举个例子：</p>
+<pre><code class="language-java">// 以下操作在线程 A 中执行
+i = 1; // a
+
+// 以下操作在线程 B 中执行
+j = i; // b
+
+// 以下操作在线程 C 中执行
+i = 2; // c
+</code></pre>
+<p>假设线程 A 中的操作 a Happens-before 线程 B 的操作 b，那我们就可以确定操作 b 执行后，变量 j 的值一定是等于 1。</p>
+<p>得出这个结论的依据有两个：一是根据 Happens-before 原则，a 操作的结果对 b 可见，即 “i=1” 的结果可以被观察到；二是线程 C 还没运行，线程 A 操作结束之后没有其他线程会修改变量 i 的值。</p>
+<p>现在再来考虑线程 C，我们依然保持 a Happens-before b ，而 c 出现在 a 和 b 的操作之间，但是 c 与 b 没有 Happens-before 关系，也就是说 b 并不一定能看到 c 的操作结果。那么 b 操作的结果也就是 j 的值就不确定了，可能是 1 也可能是 2，那这段代码就是线程不安全的。</p>
+<br>
+<p>再来看 Happens-before 的第 2 条定义，这是 JMM 对编译器和处理器弱内存模型的保证，在给予充分的可操作空间下，对编译器和处理器的重排序进行一定的约束。也就是说，JMM 其实是在遵循一个基本原则：<strong>只要不改变程序的执行结果（指的是单线程程序和正确同步的多线程程序），编译器和处理器怎么优化都行</strong>。</p>
+<p>JMM 这么做的原因是：程序员对于这两个操作是否真的被重排序并不关心，程序员关心的是执行结果不能被改变。</p>
+<p>文字可能不是很好理解，我们举个例子，来解释下第 2 条定义：虽然两个操作之间存在 Happens-before 关系，但不意味着 Java 平台的具体实现必须要按照 Happens-before 关系指定的顺序来执行。</p>
+<pre><code class="language-java">int a = 1; 		// A
+int b = 2;		// B
+int c = a + b;	// C
+</code></pre>
+<p>根据 Happens-before 规则（下文会讲），上述代码存在 3 个 Happens-before 关系：</p>
+<p>1）A Happens-before B</p>
+<p>2）B Happens-before C</p>
+<p>3）A Happens-before C</p>
+<p>可以看出来，在 3 个 Happens-before 关系中，第 2 个和第 3 个是必需的，但第 1 个是不必要的。</p>
+<p>也就是说，虽然 A Happens-before B，但是 A 和 B 之间的重排序完全不会改变程序的执行结果，所以 JMM 是允许编译器和处理器执行这种重排序的。</p>
+<p>看下面这张 JMM 的设计图更直观：</p>
+<p><img src="https://gitee.com/veal98/images/raw/master/img/20210508173921.png" alt="图片来源《Java 并发编程的艺术》" loading="lazy"></p>
+<p>其实，可以这么简单的理解，为了避免 Java 程序员为了理解 JMM 提供的内存可见性保证而去学习复杂的重排序规则以及这些规则的具体实现方法，JMM 就出了这么一个简单易懂的 Happens-before 原则，<strong>一个 Happens-before 规则就对应于一个或多个编译器和处理器的重排序规则</strong>，这样，我们只需要弄明白 Happens-before 就行了。</p>
+<p><img src="https://gitee.com/veal98/images/raw/master/img/20210508171155.png" alt="图片来源《Java 并发编程的艺术》" loading="lazy"></p>
+<h2 id="8-条-happens-before-规则">8 条 Happens-before 规则</h2>
+<p>《JSR-133:Java Memory Model and Thread Specification》定义了如下 Happens-before 规则， 这些就是 JMM 中“天然的” Happens-before 关系，这些 Happens-before 关系无须任何同步器协助就已经存在，可以在编码中直接使用。如果两个操作之间的关系不在此列，并且无法从下列规则推导出来，则它们就没有顺序性保障，JVM 可以对它们随意地进行重排序：</p>
+<blockquote>
+<p>1）<strong>程序次序规则</strong>（Program Order Rule）：在一个线程内，按照控制流顺序，书写在前面的操作先行发生（Happens-before）于书写在后面的操作。注意，这里说的是控制流顺序而不是程序代码顺序，因为要考虑分支、循环等结构。</p>
+</blockquote>
+<p>这个很好理解，符合我们的逻辑思维。比如我们上面举的例子：</p>
+<pre><code class="language-java">int a = 1; 		// A
+int b = 2;		// B
+int c = a + b;	// C
+</code></pre>
+<p>根据程序次序规则，上述代码存在 3 个 Happens-before 关系：</p>
+<ul>
+<li>A Happens-before B</li>
+<li>B Happens-before C</li>
+<li>A Happens-before C</li>
+</ul>
+<blockquote>
+<p>2）<strong>管程锁定规则</strong>（Monitor Lock Rule）：一个 unlock 操作先行发生于后面对同一个锁的 lock 操作。这里必须强调的是 “同一个锁”，而 “后面” 是指时间上的先后。</p>
+</blockquote>
+<p>这个规则其实就是针对 synchronized 的。JVM 并没有把 <code>lock</code> 和 <code>unlock</code> 操作直接开放给用户使用，但是却提供了更高层次的字节码指令 <code>monitorenter</code> 和 <code>monitorexit</code> 来隐式地使用这两个操作。这两个字节码指令反映到 Java 代码中就是同步块 — <code>synchronized</code>。</p>
+<p>举个例子：</p>
+<pre><code class="language-java">synchronized (this) { // 此处自动加锁
+	if (x &lt; 1) {
+        x = 1;
+    }      
+} // 此处自动解锁
+</code></pre>
+<p>根据管程锁定规则，假设 x 的初始值是 10，线程 A 执行完代码块后 x 的值会变成 1，执行完自动释放锁，线程 B 进入代码块时，能够看到线程 A 对 x 的写操作，也就是线程 B 能够看到 x == 1。</p>
+<blockquote>
+<p>3）<strong>volatile 变量规则</strong>（Volatile Variable Rule）：对一个 volatile 变量的写操作先行发生于后面对这个变量的读操作，这里的 “后面” 同样是指时间上的先后。</p>
+</blockquote>
+<p>这个规则就是 JDK 1.5 版本对 volatile 语义的增强，其意义之重大，靠着这个规则搞定可见性易如反掌。</p>
+<p>举个例子：</p>
+<p><img src="https://gitee.com/veal98/images/raw/master/img/20210508204833.png" alt="" loading="lazy"></p>
+<p>假设线程 A 执行 writer() 方法之后，线程 B 执行 reader() 方法。</p>
+<p>根据根据程序次序规则：1 Happens-before 2；3 Happens-before 4。</p>
+<p>根据 volatile 变量规则：2 Happens-before 3。</p>
+<p>根据传递性规则：1 Happens-before 3；1 Happens-before 4。</p>
+<p>也就是说，如果线程 B 读到了 “flag==true” 或者 “int i = a” 那么线程 A 设置的“a=42”对线程 B 是可见的。</p>
+<p>看下图：</p>
+<p><img src="https://gitee.com/veal98/images/raw/master/img/20210508205815.png" alt="" loading="lazy"></p>
+<blockquote>
+<p>4）<strong>线程启动规则</strong>（Thread Start Rule）：Thread 对象的 start() 方法先行发生于此线程的每一个动作。</p>
+</blockquote>
+<p>比如说主线程 A 启动子线程 B 后，子线程 B 能够看到主线程在启动子线程 B 前的所有操作。</p>
+<blockquote>
+<p>5）<strong>线程终止规则</strong>（Thread Termination Rule）：线程中的所有操作都先行发生于对此线程的终止检测，我们可以通过 Thread 对象的 join() 方法是否结束、Thread 对象的 isAlive() 的返回值等手段检测线程是否已经终止执行。</p>
+</blockquote>
+<blockquote>
+<p>6）<strong>线程中断规则</strong>（Thread Interruption Rule）：对线程 interrupt() 方法的调用先行发生于被中断线程的代码检测到中断事件的发生，可以通过 Thread 对象的 interrupted() 方法检测到是否有中断发生。</p>
+</blockquote>
+<blockquote>
+<p>7）<strong>对象终结规则</strong>（Finalizer Rule）：一个对象的初始化完成（构造函数执行结束）先行发生于它的 finalize() 方法的开始。</p>
+</blockquote>
+<blockquote>
+<p>8）<strong>传递性</strong>（Transitivity）：如果操作 A 先行发生于操作 B，操作 B 先行发生于操作 C，那就可以得出操作 A 先行发生于操作 C 的结论。</p>
+</blockquote>
+<h2 id="时间上的先发生-与-先行发生">“时间上的先发生” 与 “先行发生”</h2>
+<p>上述 8 种规则中，还不断提到了时间上的先后，那么，“时间上的先发生” 与 “先行发生（Happens-before）” 到底有啥区别？</p>
+<p><strong>一个操作 “时间上的先发生” 是否就代表这个操作会是“先行发生” 呢？一个操作 “先行发生” 是否就能推导出这个操作必定是“时间上的先发生”呢？</strong></p>
+<p>很遗憾，这两个推论都是不成立的。</p>
+<p>举两个例子论证一下：</p>
+<pre><code class="language-java">private int value = 0;
+
+// 线程 A 调用
+pubilc void setValue(int value){    
+    this.value = value;
+}
+
+// 线程 B 调用
+public int getValue(){
+    return value;
+}
+</code></pre>
+<p>假设存在线程 A 和 B，线程 A 先（时间上的先后）调用了 setValue(1)，然后线程 B 调用了同一个对象的 getValue() ，那么线程 B 收到的返回值是什么？</p>
+<p>我们根据上述 Happens-before 的 8 大规则依次分析一下：</p>
+<p>由于两个方法分别由线程 A 和 B 调用，不在同一个线程中，所以程序次序规则在这里不适用；</p>
+<p>由于没有 <code>synchronized</code> 同步块，自然就不会发生 lock 和 unlock 操作，所以管程锁定规则在这里不适用；</p>
+<p>同样的，<code>volatile</code> 变量规则，线程启动、终止、中断规则和对象终结规则也和这里完全没有关系。</p>
+<p>因为没有一个适用的 Happens-before 规则，所以第 8 条规则传递性也无从谈起。</p>
+<p>因此我们可以判定，尽管线程 A 在操作时间上来看是先于线程 B 的，但是并不能说 A Happens-before B，也就是 A 线程操作的结果 B 不一定能看到。所以，这段代码是线程不安全的。</p>
+<p>想要修复这个问题也很简单？既然不满足 Happens-before 原则，那我修改下让它满足不就行了。比如说把 Getter/Setter 方法都用 <code>synchronized</code> 修饰，这样就可以套用管程锁定规则；再比如把 value 定义为 <code>volatile</code> 变量，这样就可以套用 volatile 变量规则等。</p>
+<p>这个例子，就论证了<strong>一个操作 “时间上的先发生” 不代表这个操作会是 “先行发生（Happens-before）”</strong>。</p>
+<p>再来看一个例子：</p>
+<pre><code class="language-java">// 以下操作在同一个线程中执行
+int i = 1;
+int j = 2;
+</code></pre>
+<p>假设这段代码中的两条赋值语句在同一个线程之中，那么根据程序次序规则，“int i = 1” 的操作先行发生（Happens-before）于 “int j = 2”，但是，还记得 Happens-before 的第 2 条定义吗？还记得上文说过 JMM 实际上是遵守这样的一条原则：只要不改变程序的执行结果（指的是单线程程序和正确同步的多线程程序），编译器和处理器怎么优化都行。</p>
+<p>所以，“int j=2” 这句代码完全可能优先被处理器执行，因为这并不影响程序的最终运行结果。</p>
+<p>那么，这个例子，就论证了<strong>一个操作 “先行发生（Happens-before）” 不代表这个操作一定是“时间上的先发生”</strong>。</p>
+<p>这样，综上两例，我们可以得出这样一个结论：Happens-before 原则与时间先后顺序之间基本没有因果关系，所以我们在衡量并发安全问题的时候，尽量不要受时间顺序的干扰，一切必须以 Happens-before 原则为准。</p>
+<h2 id="happens-before-与-as-if-serial">Happens-before 与 as-if-serial</h2>
+<p>综上，我觉得其实读懂了下面这句话也就读懂了 Happens-before 了，这句话上文也出现过几次：JMM 其实是在遵循一个基本原则，即只要不改变程序的执行结果（指的是单线程程序和正确同步的多线程程序），编译器和处理器怎么优化都行。</p>
+<p>再回顾下 as-if-serial 语义：不管怎么重排序，单线程环境下程序的执行结果不能被改变。</p>
+<p>各位发现没有？本质上来说 Happens-before 关系和 as-if-serial 语义是一回事，<strong>都是为了在不改变程序执行结果的前提下，尽可能地提高程序执行的并行度</strong>。只不过后者只能作用在单线程，而前者可以作用在正确同步的多线程环境下：</p>
+<ul>
+<li>as-if-serial 语义保证单线程内程序的执行结果不被改变，Happens-before 关系保证正确同步的多线程程序的执行结果不被改变。</li>
+<li>as-if-serial 语义给编写单线程程序的程序员创造了一个幻境：单线程程序是按程序的顺序来执行的。Happens-before 关系给编写正确同步的多线程程序的程序员创造了一个幻境：正确同步的多线程程序是按 Happens-before 指定的顺序来执行的。</li>
+</ul>
+<h2 id="references">References</h2>
+<ul>
+<li>《Java 并发编程的艺术》</li>
+<li>《深入理解 Java 虚拟机 - 第 3 版》</li>
+</ul>
+<h2 id="-关注公众号--飞天小牛肉，即时获取更新">🎉 关注公众号 | 飞天小牛肉，即时获取更新</h2>
+<ul>
+<li>博主东南大学硕士在读，携程 Java 后台开发暑期实习生，利用课余时间运营一个<a href="https://gitee.com/veal98/images/raw/master/img/20210415195747.png" target="_blank"><strong>公众号『 飞天小牛肉 』</strong></a>，2020/12/29 日开通，专注分享计算机基础（数据结构 + 算法 + 计算机网络 + 数据库 + 操作系统 + Linux）、Java 技术栈等相关原创技术好文。本公众号的目的就是<strong>让大家可以快速掌握重点知识，有的放矢</strong>。关注公众号第一时间获取文章更新，成长的路上我们一起进步</li>
+<li>并推荐个人维护的开源教程类项目： <a href="https://gitee.com/veal98/CS-Wiki" target="_blank">CS-Wiki（Gitee 推荐项目，现已累计 1.6k+ star）</a>, 致力打造完善的后端知识体系，在技术的路上少走弯路，欢迎各位小伙伴前来交流学习 ~ 😊</li>
+<li>如果各位小伙伴春招秋招没有拿得出手的项目的话，可以参考我写的一个项目<a href="https://gitee.com/veal98/Echo" target="_blank">「开源社区系统 Echo」Gitee 官方推荐项目，目前已累计 700+ star</a>，基于 SpringBoot + MyBatis + MySQL + Redis + Kafka + Elasticsearch + Spring Security + ... 并提供详细的开发文档和配套教程。公众号后台回复 Echo 可以获取配套教程，目前尚在更新中。</li>
+</ul>
+
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2021-05-09 11:36</span>&nbsp;
+<a href="https://www.cnblogs.com/cswiki/">飞天小牛肉</a>&nbsp;
+阅读(<span id="post_view_count">0</span>)&nbsp;
+评论(<span id="post_comment_count">0</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14747524" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(14747524);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/10.3.1/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 664726, cb_blogApp = 'cswiki', cb_blogUserGuid = '66b8ef31-661e-43ce-89c1-08d8c9ac4245';
+    var cb_entryId = 14747524, cb_entryCreatedDate = '2021-05-09 11:36', cb_postType = 1;
+    updatePostStats(
+        [cb_entryId],
+        function(id, count) { $("#post_view_count").text(count) },
+        function(id, count) { $("#post_comment_count").text(count) })
+    zoomManager.apply("#cnblogs_post_body img:not(.code_img_closed):not(.code_img_opened)");
+</script>
+<a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <div id="cnblogs_c1" class="under-post-card">
+        <div id='div-gpt-ad-1592365906576-0' style='width: 300px; height: 250px;'></div>
+    </div>
+    <div id="under_post_card1"></div>
+    <div id="cnblogs_c2" class="under-post-card">
+        <div id='div-gpt-ad-1592366332455-0' style='width: 468px; height: 60px;'></div>
+    </div>
+    <div id="under_post_card2"></div>
+    <div id="HistoryToday" class="under-post-card"></div>
+    <script type="text/javascript">
+       var commentManager = new blogCommentManager();
+       commentManager.renderComments(0);
+       fixPostBody();
+       deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);       deliverT2();
+       deliverC1C2();
+       loadNewsAndKb();
+       loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);       LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+       GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+       loadOptUnderPost();
+       GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+	<div id="sideBar">
+		<div id="sideBarMain">
+			<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+<div id="sidebar_c3"></div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2021 飞天小牛肉
+<br /><span id="poweredby">Powered by .NET 5.0 on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8L-rpLgFVEJMgssCVvNUAjsYtR2_HFdIyJWn0icPV_bqxMYCaD7_oZK0FqtYlVe8O88UFjSc9lid1Y5yRvq_t1C3vYNST7trRkHU0GAY0BtnmbtUjpvf3uPKI43QodW-rY9_yTnA0DibV-ylAyFafDY" />
+</body>
+</html>

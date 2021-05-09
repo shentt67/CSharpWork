@@ -1,0 +1,726 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="never" />
+    <meta name="description" content="Spring Framework自动装配setAutowireMode和Mybatis案例的源码探究" />
+    <meta property="og:description" content="Spring Framework自动装配setAutowireMode和Mybatis案例的源码探究" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Spring Framework自动装配setAutowireMode和Mybatis案例的源码探究 - 码猿手 - 博客园</title>
+    <link id="favicon" rel="shortcut icon" href="//common.cnblogs.com/favicon.svg" type="image/svg+xml" />
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=zS6-e1bxywlu3kpHvpr1J6MySwya3ztFtEnS7RYQ0Fk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/buildtowin/bundle-buildtowin.min.css?v=Tgl1d--mRuaeqinLMFZ2zu1KEazOmNWHLTJIcXu4SXU" />
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/huangrenhui/custom.css?v=gedtPrJ75PkDHFP4SWDuw94khZA=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/buildtowin/bundle-buildtowin-mobile.min.css?v=iPf_XHQsJ-ofZZ2RiaeMCHG0JEaMNLa9yhkUGK3xTSQ" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/huangrenhui/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/huangrenhui/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/huangrenhui/wlwmanifest.xml" />
+    <script>
+        var currentBlogId = 427735;
+        var currentBlogApp = 'huangrenhui';
+        var cb_enable_mathjax = true;
+        var isLogined = false;
+        var isBlogOwner = false;
+        var skinName = 'BuildtoWin';
+        var visitorUserId = '';
+    </script>
+        <script>
+            var currentPostDateAdded = '2021-05-09 12:25';
+        </script>
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=2Mic1VLeHXarpdzASbXqFMIMVLEBiWXNO5yiTHUcmhw"></script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']], processClass: 'math', processEscapes: true },
+        TeX: {
+        equationNumbers: { autoNumber: ['AMS'], useLabelIds: true },
+        extensions: ['extpfeil.js', 'mediawiki-texvc.js'],
+        Macros: {bm: "\\boldsymbol"}
+        },
+        'HTML-CSS': { linebreaks: { automatic: true } },
+        SVG: { linebreaks: { automatic: true } }
+        });
+    </script>
+    <script src="https://mathjax.cnblogs.com/2_7_5/MathJax.js?config=TeX-AMS-MML_HTMLorMML&amp;v=20200504"></script>
+    
+</head>
+<body class="no-navbar">
+    <a name="top"></a>
+        <div id="bannerbar" class="bannerbar-mobile formobile">
+            <a href="https://www.aliyun.com/activity/daily/bestoffer?userCode=swh7dvlt" target="_blank" onclick="ga('send', 'event', 'Link', 'click', 'aliyun-cps-blog-bannerbar-mobile')">
+                <img src="https://img2020.cnblogs.com/blog/35695/202104/35695-20210428213541700-642740375.jpg" alt="" />
+            </a>
+        </div>
+    <div id="top_nav" class="navbar forpc navbar-custom">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding"><a href="https://www.cnblogs.com/" title="开发者的网上家园"><img src="/images/logo.svg?v=R9M0WmLAIPVydmdzE2keuvnjl-bPR7_35oHqtiBzGsM" alt="博客园Logo" /></a></li>
+                <li><a href="/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-sitehome')">首页</a></li>
+                <li><a href="https://news.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-news')">新闻</a></li>
+                <li><a href="https://q.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-q')">博问</a></li>
+                <li><a id="nav_brandzone" href="https://brands.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-brands')">专区</a></li>
+                <li><a href="https://ing.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-ing')">闪存</a></li>
+                <li><a href="https://edu.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-edu')">班级</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search" action="https://zzk.cnblogs.com/s" method="get">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="text" tabindex="3" />
+                        <button type="submit" id="zzk_search_button">
+                            <img src="/images/aggsite/search.svg" alt="搜索" />
+                        </button>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔">
+                        <img id="new_post_icon" class="navbar-icon" src="/images/aggsite/newpost.svg" alt="写随笔" />
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx" alt="我的博客" title="我的博客">
+                        <img id="myblog_icon" class="navbar-icon" src="/images/aggsite/myblog.svg" alt="我的博客" />
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息">
+                        <img id="msg_icon" class="navbar-icon" src="/images/aggsite/message.svg?v=J0WS2P2iPgaIVgXxcAhliw4AFZIpaTWxtdoNAv9eiCA" alt="短消息" />
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/">
+                            <img id="user_icon" class="navbar-avatar" src="/images/aggsite/avatar-default.svg" alt="用户头像" />
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <img id="navbar_lite_mode_on" src="/images/lite-mode-check.svg" class="hide" /><span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup/">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div id="page_begin_html">
+        <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<body>
+<!-- 鼠标点击特效 -->
+ <style type="text/css">
+       
+        * {
+            cursor: url('https://www.cnblogs.com/images/cnblogs_com/huangrenhui/1802813/o_200709083633o_5997836b66d58.png'), auto;
+        }
+
+    </style>
+<script src="https://blog-static.cnblogs.com/files/huangrenhui/cursor-effects.js" defer="" defer></script>
+<!-- 鼠标点击特效end -->
+<!--添加立方体-->
+<a name="top"></a>
+<!--PageBeginHtml Block Begin-->
+<!-- 正方体中包含html代码 博客园无法上传文件，需要直接写代码-->
+<!--旋转正方体 start-->
+<div class="wrap">
+    <!--包裹所有元素的容器-->
+    <div class="cube">
+        <!--前面图片 -->
+        <div class="out_front">
+            <img src="https://images.cnblogs.com/cnblogs_com/lzw123-/1273451/t_c5.jpg" class="pic">
+        </div>
+        <!--后面图片 -->
+        <div class="out_back">
+            <img src="https://images.cnblogs.com/cnblogs_com/lzw123-/1273451/t_0.jpg" class="pic">
+        </div>
+        <!--左面图片 -->
+        <div class="out_left">
+            <img src="https://images.cnblogs.com/cnblogs_com/lzw123-/1273451/t_3.jpg" class="pic">
+        </div>
+        <!--右面图片 -->
+        <div class="out_right">
+            <img src="https://images.cnblogs.com/cnblogs_com/lzw123-/1273451/t_11.jpg" class="pic">
+        </div>
+        <!--上面图片 -->
+        <div class="out_top">
+            <img src="https://images.cnblogs.com/cnblogs_com/lzw123-/1273451/t_4.jpg" class="pic">
+        </div>
+        <!--下面图片 -->
+        <div class="out_bottom">
+            <img src="https://images.cnblogs.com/cnblogs_com/lzw123-/1266753/t_s6.jpg" class="pic">
+        </div>
+
+        <!--小正方体 -->
+        <span class="in_front">
+                <img src="https://images.cnblogs.com/cnblogs_com/lzw123-/1273451/t_01.jpg" class="in_pic">
+            </span>
+        <span class="in_back">
+                 <img src="https://images.cnblogs.com/cnblogs_com/lzw123-/1273451/t_02.jpg" class="in_pic">
+            </span>
+        <span class="in_left">
+                <img src="https://images.cnblogs.com/cnblogs_com/lzw123-/1273451/t_03.jpg" class="in_pic">
+            </span>
+        <span class="in_right">
+                <img src="https://images.cnblogs.com/cnblogs_com/lzw123-/1273451/t_04.jpg" class="in_pic">
+            </span>
+        <span class="in_top">
+                <img src="https://images.cnblogs.com/cnblogs_com/lzw123-/1273451/t_05.jpg" class="in_pic">
+            </span>
+        <span class="in_bottom">
+                <img src="https://images.cnblogs.com/cnblogs_com/lzw123-/1273451/t_06.jpg" class="in_pic">
+            </span>
+    </div>
+</div>
+
+<style>
+    /*最外层容器样式*/
+    .wrap {
+        z-index:9999;/*置于最上层*/
+        position: absolute;
+        right: 200px;
+        top: 100px;
+        width: 100px;
+        height: 100px;
+
+    }
+
+    /*包裹所有容器样式*/
+    .cube {
+        width: 50px;
+        height: 50px;
+        margin: 0 auto;
+        transform-style: preserve-3d;
+        transform: rotateX(-30deg) rotateY(-80deg);
+        animation: rotate linear 20s infinite;
+    }
+
+    @-webkit-keyframes rotate {
+        from {
+            transform: rotateX(0deg) rotateY(0deg);
+        }
+        to {
+            transform: rotateX(360deg) rotateY(360deg);
+        }
+    }
+
+    .cube div {
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        opacity: 0.8;
+        transition: all .4s;
+    }
+
+    /*定义所有图片样式*/
+    .pic {
+        width: 200px;
+        height: 200px;
+    }
+
+    .cube .out_front {
+        transform: rotateY(0deg) translateZ(100px);
+    }
+
+    .cube .out_back {
+        transform: translateZ(-100px) rotateY(180deg);
+    }
+
+    .cube .out_left {
+        transform: rotateY(-90deg) translateZ(100px);
+    }
+
+    .cube .out_right {
+        transform: rotateY(90deg) translateZ(100px);
+    }
+
+    .cube .out_top {
+        transform: rotateX(90deg) translateZ(100px);
+    }
+
+    .cube .out_bottom {
+        transform: rotateX(-90deg) translateZ(100px);
+    }
+
+    /*定义小正方体样式*/
+    .cube span {
+        display: block;
+        width: 100px;
+        height: 100px;
+        position: absolute;
+        top: 50px;
+        left: 50px;
+    }
+
+    .cube .in_pic {
+        width: 100px;
+        height: 100px;
+    }
+
+    .cube .in_front {
+        transform: rotateY(0deg) translateZ(50px);
+    }
+
+    .cube .in_back {
+        transform: translateZ(-50px) rotateY(180deg);
+    }
+
+    .cube .in_left {
+        transform: rotateY(-90deg) translateZ(50px);
+    }
+
+    .cube .in_right {
+        transform: rotateY(90deg) translateZ(50px);
+    }
+
+    .cube .in_top {
+        transform: rotateX(90deg) translateZ(50px);
+    }
+
+    .cube .in_bottom {
+        transform: rotateX(-90deg) translateZ(50px);
+    }
+
+    /*鼠标移入后样式*/
+    .cube:hover .out_front {
+        transform: rotateY(0deg) translateZ(200px);
+    }
+
+    .cube:hover .out_back {
+        transform: translateZ(-200px) rotateY(180deg);
+    }
+
+    .cube:hover .out_left {
+        transform: rotateY(-90deg) translateZ(200px);
+    }
+
+    .cube:hover .out_right {
+        transform: rotateY(90deg) translateZ(200px);
+    }
+
+    .cube:hover .out_top {
+        transform: rotateX(90deg) translateZ(200px);
+    }
+
+    .cube:hover .out_bottom {
+        transform: rotateX(-90deg) translateZ(200px);
+    }
+</style>
+
+<!-- 
+
+<script type="text/javascript" src="https://blog-static.cnblogs.com/files/longronglang/backlines.js" defer="" defer></script>-->
+<canvas id="c_n7" width="1920" height="318" style="position: fixed; top: 0px; left: 0px; z-index: -1; opacity: 0.5;"></canvas>
+ 
+</body>
+</html>
+    </div>
+    <!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/huangrenhui/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/huangrenhui/">码猿手</a>
+</h1>
+<h2></h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/huangrenhui/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/%E7%A0%81%E7%8C%BF%E6%89%8B">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/huangrenhui/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			<div id="blog_stats_place_holder"><script>loadBlogStats();</script></div>
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/huangrenhui/p/14723551.html">
+    <span>Spring Framework自动装配setAutowireMode和Mybatis案例的源码探究</span>
+    
+
+
+
+</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                    <div id="cnblogs_post_description" style="display: none">
+        Spring Framework自动装配setAutowireMode和Mybatis案例的源码探究
+    </div>
+<div id="cnblogs_post_body" class="blogpost-body blogpost-body-html">
+<p><span style="font-size: 15px">　　由<a href="https://www.cnblogs.com/huangrenhui/p/13995905.html" target="_blank">前文</a>可得知，&nbsp;Spring Framework的自动装配有两种方式：xml配置和注解配置；</span></p>
+<p><span style="font-size: 15px">　　自动装配的类型有：</span></p>
+<p><span style="font-size: 15px">　　（1）xml配置中的byType根据类型查找（@Autowired注解是默认根据类型查找，类型查找不到会使用名称查找）；</span></p>
+<p><span style="font-size: 15px">　　（2）xml配置中的byName根据名称查找，它是xml配置中根据setter方法来查找（@Resource注解也是根据名称查找，但它是根据属性名称来查找，跟setter方法无关，所以setter方法可以不用写，可以使用type指定类）；</span></p>
+<p><span style="font-size: 15px">　　如果没有上面的在xml中进行配置和使用了@Autowired、@Resource等注解，那如何判断一个类中的属性要不要自动装配和会不会自动装配？</span></p>
+<p><span style="font-size: 15px">　　如果不会自动装配，除了使用上面的xml配置和注解方式外，还有其他方式可以导致属性自动装配吗？</span></p>
+<p><span style="font-size: 15px">　　自动装配有类型限制吗？比如哪些类型无法自动装配？</span></p>
+<p><span style="font-size: 15px">　　以下面的案例进行探讨：</span></p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 0, 0, 1)">@Component
+</span><span style="color: rgba(0, 0, 255, 1)">public</span> <span style="color: rgba(0, 0, 255, 1)">class</span><span style="color: rgba(0, 0, 0, 1)"> Userclazz {
+}
+
+@Component
+</span><span style="color: rgba(0, 0, 255, 1)">public</span> <span style="color: rgba(0, 0, 255, 1)">class</span><span style="color: rgba(0, 0, 0, 1)"> UserService {
+
+    </span><span style="color: rgba(0, 0, 255, 1)">private</span><span style="color: rgba(0, 0, 0, 1)"> Userclazz userclazz;
+
+    </span><span style="color: rgba(0, 0, 255, 1)">public</span><span style="color: rgba(0, 0, 0, 1)"> Userclazz getUserclazz() {
+        </span><span style="color: rgba(0, 0, 255, 1)">return</span><span style="color: rgba(0, 0, 0, 1)"> userclazz;
+    }
+
+    </span><span style="color: rgba(0, 0, 255, 1)">public</span> <span style="color: rgba(0, 0, 255, 1)">void</span><span style="color: rgba(0, 0, 0, 1)"> setUserclazz(Userclazz userclazz) {
+        </span><span style="color: rgba(0, 0, 255, 1)">this</span>.userclazz =<span style="color: rgba(0, 0, 0, 1)"> userclazz;
+    }
+}</span></pre>
+</div>
+<p><span style="font-size: 15px">&nbsp;　　测试：</span></p>
+<div class="cnblogs_code">
+<pre>BeanFactory beanFactory  = <span style="color: rgba(0, 0, 255, 1)">new</span> AnnotationConfigApplicationContext(Config.<span style="color: rgba(0, 0, 255, 1)">class</span><span style="color: rgba(0, 0, 0, 1)">);
+System.out.println(beanFactory.getBean(UserService.</span><span style="color: rgba(0, 0, 255, 1)">class</span><span style="color: rgba(0, 0, 0, 1)">).getUserclazz());
+</span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)">=====结果======</span>
+<span style="color: rgba(255, 0, 0, 1)">null</span></pre>
+</div>
+<p><span style="font-size: 15px">　　&nbsp;从上面可以看到，上面的案例中无法进行自动装配，如果我们利用 ImportBeanDefinitionRegistrar 接口的特性来修改BeanDefition，如下所示，则可以解决自动装配的问题：</span></p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 0, 255, 1)">public</span> <span style="color: rgba(0, 0, 255, 1)">class</span> <span style="color: rgba(255, 0, 0, 1)">MyImportBeanDefinitionRegistrar</span> <span style="color: rgba(0, 0, 255, 1)">implements</span><span style="color: rgba(0, 0, 0, 1)"> ImportBeanDefinitionRegistrar {
+    @Override
+    </span><span style="color: rgba(0, 0, 255, 1)">public</span> <span style="color: rgba(0, 0, 255, 1)">void</span><span style="color: rgba(0, 0, 0, 1)"> registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
+        GenericBeanDefinition definition</span>= (GenericBeanDefinition) registry.getBeanDefinition("userService"<span style="color: rgba(0, 0, 0, 1)">);
+        <span style="color: rgba(255, 0, 0, 1)">definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);</span>
+        registry.registerBeanDefinition(</span>"userService"<span style="color: rgba(0, 0, 0, 1)">,definition);
+    }
+}</span></pre>
+</div>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 0, 0, 1)">@Configuration
+@ComponentScan(</span>"com.hrh"<span style="color: rgba(0, 0, 0, 1)">)
+<span style="color: rgba(255, 0, 0, 1)">@Import(MyImportBeanDefinitionRegistrar.</span></span><span style="color: rgba(255, 0, 0, 1)">class)
+</span><span style="color: rgba(0, 0, 255, 1)">public</span> <span style="color: rgba(0, 0, 255, 1)">class</span> MyBatisConfig {}</pre>
+</div>
+<p><span style="font-size: 15px">　　从上面可以看到，使用了&nbsp;definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE); 这行代码可以导入变量自动装配，根据类型的自动注入 setAutowireMode 有3种模型：</span></p>
+<p><span class="cke_widget_wrapper cke_widget_inline cke_widget_image cke_image_nocaption cke_widget_selected" data-cke-widget-wrapper="1" data-cke-filter="off" data-cke-display-name="图像" data-cke-widget-id="0"><img src="https://img-blog.csdnimg.cn/img_convert/214e043df1e5f6c6b0317a528be55625.png" alt="" class="cke_widget_element" data-cke-saved-src="https://img-blog.csdnimg.cn/img_convert/214e043df1e5f6c6b0317a528be55625.png" data-cke-widget-data="{&amp;quot;hasCaption&amp;quot;:false,&amp;quot;src&amp;quot;:&amp;quot;https://img-blog.csdnimg.cn/img_convert/214e043df1e5f6c6b0317a528be55625.png&amp;quot;,&amp;quot;alt&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;width&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;height&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;lock&amp;quot;:true,&amp;quot;align&amp;quot;:&amp;quot;none&amp;quot;,&amp;quot;classes&amp;quot;:[]}" data-cke-widget-upcasted="1" data-cke-widget-keep-attr="0" data-widget="image"><span class="cke_reset cke_widget_drag_handler_container"><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" width="15" height="15" class="cke_reset cke_widget_drag_handler" title="点击并拖拽以移动" data-cke-widget-drag-handler="1"><span class="cke_image_resizer" title="点击并拖拽以改变尺寸">​</span></span></span></p>
+<p><span style="font-size: 15px">　　1）<strong>AUTOWIRE_NO</strong>：Spring Framework 默认，不自动装配，但会对加了@Autowired 注解的属性进行自动装配；</span></p>
+<p><span style="font-size: 15px">　　2）<strong>AUTOWIRE_BY_TYPE</strong>：不需要加任何注解，会根据类型进行自动装配，它是根据当前属性的 setter 方法来进行自动装配，如果当前属性有 setter 方法，会进行自动装配，如果没有则不会进行自动装配；从下图可以看出，Spring 容器在初始化时发现 UserService 有 setter 方法会调用，所以如果有属性会自动装配；【<strong><span style="color: rgba(255, 0, 0, 1)">AUTOWIRE_BY_TYPE跟setter方法有关，跟属性没关</span></strong>】</span></p>
+<p><span class="cke_widget_wrapper cke_widget_inline cke_widget_image cke_image_nocaption cke_widget_selected" data-cke-widget-wrapper="1" data-cke-filter="off" data-cke-display-name="图像" data-cke-widget-id="0"><span class="cke_reset cke_widget_drag_handler_container"><span class="cke_image_resizer" title="点击并拖拽以改变尺寸"><img src="https://img2020.cnblogs.com/blog/1363696/202105/1363696-20210508204612947-429550134.png" alt="" loading="lazy"></span></span></span></p>
+<p><span style="font-size: 15px">&nbsp;　　3）<strong>AUTOWIRE_BY_NAME</strong>：根据名称进行自动装配，也是根据当前属性的 setter 方法来进行自动装配；</span></p>
+<p><span style="font-size: 15px">&nbsp;　　前文讲到的 @MapperScan 注解进行扫描包解析将每个 Mapper 接口转换成对应的 MapperFactoryBean，那它是使用上面的哪种类型呢？从下面的代码可以看出它也是使用 <strong>AUTOWIRE_BY_TYPE</strong> 的：</span></p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)">下面是扫描解析包路径的主要逻辑：</span>
+<span style="color: rgba(0, 0, 255, 1)">public</span> <span style="color: rgba(0, 0, 255, 1)">class</span> ClassPathMapperScanner <span style="color: rgba(0, 0, 255, 1)">extends</span><span style="color: rgba(0, 0, 0, 1)"> ClassPathBeanDefinitionScanner {
+
+  </span><span style="color: rgba(0, 128, 0, 1)">/**</span><span style="color: rgba(0, 128, 0, 1)">
+   * Calls the parent search that will search and register all the candidates.
+   * Then the registered objects are post processed to set them as
+   * MapperFactoryBeans
+   </span><span style="color: rgba(0, 128, 0, 1)">*/</span><span style="color: rgba(0, 0, 0, 1)">
+  @Override
+  </span><span style="color: rgba(0, 0, 255, 1)">public</span> Set&lt;BeanDefinitionHolder&gt;<span style="color: rgba(0, 0, 0, 1)"> doScan(String... basePackages) {
+    </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)">将每个Mapper解析成BeanDefinitionHolder存放到set集合中</span>
+    Set&lt;BeanDefinitionHolder&gt; beanDefinitions = <span style="color: rgba(0, 0, 255, 1)">super</span><span style="color: rgba(0, 0, 0, 1)">.<span style="color: rgba(255, 0, 0, 1)">doScan</span>(basePackages);
+
+    </span><span style="color: rgba(0, 0, 255, 1)">if</span><span style="color: rgba(0, 0, 0, 1)"> (beanDefinitions.isEmpty()) {
+      logger.warn(</span>"No MyBatis mapper was found in '" + Arrays.toString(basePackages) + "' package. Please check your configuration."<span style="color: rgba(0, 0, 0, 1)">);
+    } </span><span style="color: rgba(0, 0, 255, 1)">else</span><span style="color: rgba(0, 0, 0, 1)"> {
+      </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)">对BeanDefinitionHolder集合进行处理</span>
+<span style="color: rgba(0, 0, 0, 1)"><span style="color: rgba(255, 0, 0, 1)">      processBeanDefinitions</span>(beanDefinitions);
+    }
+
+    </span><span style="color: rgba(0, 0, 255, 1)">return</span><span style="color: rgba(0, 0, 0, 1)"> beanDefinitions;
+  }
+
+  </span><span style="color: rgba(0, 0, 255, 1)">private</span> <span style="color: rgba(0, 0, 255, 1)">void</span> processBeanDefinitions(Set&lt;BeanDefinitionHolder&gt;<span style="color: rgba(0, 0, 0, 1)"> beanDefinitions) {
+    GenericBeanDefinition definition;
+    </span><span style="color: rgba(0, 0, 255, 1)">for</span><span style="color: rgba(0, 0, 0, 1)"> (BeanDefinitionHolder holder : beanDefinitions) {
+      definition </span>=<span style="color: rgba(0, 0, 0, 1)"> (GenericBeanDefinition) holder.getBeanDefinition();
+
+      </span><span style="color: rgba(0, 0, 255, 1)">if</span><span style="color: rgba(0, 0, 0, 1)"> (logger.isDebugEnabled()) {
+        logger.debug(</span>"Creating MapperFactoryBean with name '" +<span style="color: rgba(0, 0, 0, 1)"> holder.getBeanName() 
+          </span>+ "' and '" + definition.getBeanClassName() + "' mapperInterface"<span style="color: rgba(0, 0, 0, 1)">);
+      }
+
+      </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> the mapper interface is the original class of the bean
+      </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> but, the actual class of the bean is MapperFactoryBean
+      </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)">给每个BeanDefition提供一个有参构造方法，在后面Mapper接口进行实例化的JDK代理时可以根据这个class返回对应的代理对象；</span>
+      <span style="color: rgba(255, 0, 0, 1)">definition.getConstructorArgumentValues().addGenericArgumentValue(definition.getBeanClassName());</span> <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> issue #59
+      </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)">Mapper接口转换成MapperFactoryBean</span>
+     <span style="color: rgba(255, 0, 0, 1)"> definition.setBeanClass(this</span><span style="color: rgba(0, 0, 0, 1)"><span style="color: rgba(255, 0, 0, 1)">.mapperFactoryBean.getClass());</span>
+
+      definition.getPropertyValues().add(</span>"addToConfig", <span style="color: rgba(0, 0, 255, 1)">this</span><span style="color: rgba(0, 0, 0, 1)">.addToConfig);
+
+      </span><span style="color: rgba(0, 0, 255, 1)">boolean</span> explicitFactoryUsed = <span style="color: rgba(0, 0, 255, 1)">false</span><span style="color: rgba(0, 0, 0, 1)">;
+      </span><span style="color: rgba(0, 0, 255, 1)">if</span> (StringUtils.hasText(<span style="color: rgba(0, 0, 255, 1)">this</span><span style="color: rgba(0, 0, 0, 1)">.sqlSessionFactoryBeanName)) {
+        definition.getPropertyValues().add(</span>"sqlSessionFactory", <span style="color: rgba(0, 0, 255, 1)">new</span> RuntimeBeanReference(<span style="color: rgba(0, 0, 255, 1)">this</span><span style="color: rgba(0, 0, 0, 1)">.sqlSessionFactoryBeanName));
+        explicitFactoryUsed </span>= <span style="color: rgba(0, 0, 255, 1)">true</span><span style="color: rgba(0, 0, 0, 1)">;
+      } </span><span style="color: rgba(0, 0, 255, 1)">else</span> <span style="color: rgba(0, 0, 255, 1)">if</span> (<span style="color: rgba(0, 0, 255, 1)">this</span>.sqlSessionFactory != <span style="color: rgba(0, 0, 255, 1)">null</span><span style="color: rgba(0, 0, 0, 1)">) {
+        definition.getPropertyValues().add(</span>"sqlSessionFactory", <span style="color: rgba(0, 0, 255, 1)">this</span><span style="color: rgba(0, 0, 0, 1)">.sqlSessionFactory);
+        explicitFactoryUsed </span>= <span style="color: rgba(0, 0, 255, 1)">true</span><span style="color: rgba(0, 0, 0, 1)">;
+      }
+
+      </span><span style="color: rgba(0, 0, 255, 1)">if</span> (StringUtils.hasText(<span style="color: rgba(0, 0, 255, 1)">this</span><span style="color: rgba(0, 0, 0, 1)">.sqlSessionTemplateBeanName)) {
+        </span><span style="color: rgba(0, 0, 255, 1)">if</span><span style="color: rgba(0, 0, 0, 1)"> (explicitFactoryUsed) {
+          logger.warn(</span>"Cannot use both: sqlSessionTemplate and sqlSessionFactory together. sqlSessionFactory is ignored."<span style="color: rgba(0, 0, 0, 1)">);
+        }
+        definition.getPropertyValues().add(</span>"sqlSessionTemplate", <span style="color: rgba(0, 0, 255, 1)">new</span> RuntimeBeanReference(<span style="color: rgba(0, 0, 255, 1)">this</span><span style="color: rgba(0, 0, 0, 1)">.sqlSessionTemplateBeanName));
+        explicitFactoryUsed </span>= <span style="color: rgba(0, 0, 255, 1)">true</span><span style="color: rgba(0, 0, 0, 1)">;
+      } </span><span style="color: rgba(0, 0, 255, 1)">else</span> <span style="color: rgba(0, 0, 255, 1)">if</span> (<span style="color: rgba(0, 0, 255, 1)">this</span>.sqlSessionTemplate != <span style="color: rgba(0, 0, 255, 1)">null</span><span style="color: rgba(0, 0, 0, 1)">) {
+        </span><span style="color: rgba(0, 0, 255, 1)">if</span><span style="color: rgba(0, 0, 0, 1)"> (explicitFactoryUsed) {
+          logger.warn(</span>"Cannot use both: sqlSessionTemplate and sqlSessionFactory together. sqlSessionFactory is ignored."<span style="color: rgba(0, 0, 0, 1)">);
+        }
+        definition.getPropertyValues().add(</span>"sqlSessionTemplate", <span style="color: rgba(0, 0, 255, 1)">this</span><span style="color: rgba(0, 0, 0, 1)">.sqlSessionTemplate);
+        explicitFactoryUsed </span>= <span style="color: rgba(0, 0, 255, 1)">true</span><span style="color: rgba(0, 0, 0, 1)">;
+      }
+
+      </span><span style="color: rgba(0, 0, 255, 1)">if</span> (!<span style="color: rgba(0, 0, 0, 1)">explicitFactoryUsed) {
+        </span><span style="color: rgba(0, 0, 255, 1)">if</span><span style="color: rgba(0, 0, 0, 1)"> (logger.isDebugEnabled()) {
+          logger.debug(</span>"Enabling autowire by type for MapperFactoryBean with name '" + holder.getBeanName() + "'."<span style="color: rgba(0, 0, 0, 1)">);
+        }
+        <span style="color: rgba(255, 0, 0, 1)">definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);</span>
+      }
+    }
+  }
+}</span></pre>
+</div>
+<p><span style="font-size: 15px">&nbsp;　　对于“自动装配有类型限制吗？比如哪些类型无法自动装配？”的问题，以 MapperFactoryBean 为例来进行探讨：</span></p>
+<p><img src="https://img2020.cnblogs.com/blog/1363696/202105/1363696-20210508210406285-772840814.png" alt="" loading="lazy"></p>
+<p><img src="https://img2020.cnblogs.com/blog/1363696/202105/1363696-20210508210813132-1571223828.png" alt="" loading="lazy"></p>
+<p><img src="https://img2020.cnblogs.com/blog/1363696/202105/1363696-20210508211528351-67033778.png" alt="" loading="lazy"></p>
+<p><img src="https://img2020.cnblogs.com/blog/1363696/202105/1363696-20210508210907716-1549804103.png" alt="" loading="lazy"></p>
+<p><span style="font-size: 15px">　　从上面可以看到 MapperFactoryBean 的属性有 mapperInterface、addToConfig，对应的 setter 方法有 setAddToConfig，所以属性 addToConfig 可能会进行自动装配【为什么说可能呢？因为自动装配可能存在类型限制，有些类型可能无法进行自动装配】； 它的父类 SqlSessionDaoSupport 有属性 sqlSession 和 externalSqlSession，对应的 setter 方法有&nbsp;setSqlSessionFactory、setSqlSessionTemplate，所以 sqlSession 和 externalSqlSession 可能会进行自动装配，结合前文&nbsp;<a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/huangrenhui/p/14702549.html">Mybatis一级缓存和结合Spring Framework后失效的源码探究</a>&nbsp;就可以知道，sqlSession 一定会进行自动装配，由此才会进行 <strong>new SqlSessionTemplate</strong>，后面才会有 <strong>SqlSessionTemplate </strong>对象的调用，至于 SqlSessionFactory 如何来的，其实我们在配置类中就已经实例化了，所以会直接从配置类中拿，SqlSessionFactoryBean 是一个 FactoryBean，所以获取时从 getObject 方法获取，而该方法返回的就是一个 SqlSessionFactory；</span></p>
+<p><span style="font-size: 15px"><img src="https://img2020.cnblogs.com/blog/1363696/202105/1363696-20210508212755173-2053532019.png" alt="" loading="lazy"></span></p>
+<p><img src="https://img2020.cnblogs.com/blog/1363696/202105/1363696-20210508212910447-2049164954.png" alt="" loading="lazy"></p>
+<p><span style="font-size: 15px">　　那么为什么不直接使用 @Autowired 注解呢，其实是为了解耦，如果加了该注解，就永远需要依赖 Spring Framework 来进行编译，如果不用注解，可以利用 ImportBeanDefinitionRegistrar 接口特性和&nbsp;setAutowireMode 的3种模型 来实现自动装配。</span></p>
+<p>&nbsp;<span style="font-size: 15px">　　从前文<a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/huangrenhui/p/14715884.html">Mybatis的初始化和结合Spring Framework后初始化的源码探究</a>可以得知当UserService在实例化过程中发现有属性变量，会对属性变量进行实例化，所以需要在 AbstractAutowireCapableBeanFactory#populateBean 方法处打断点查看上面的哪些属性会进行自动装配：</span></p>
+<p><span style="font-size: 15px"><img src="https://img2020.cnblogs.com/blog/1363696/202105/1363696-20210508215446761-281903288.png" alt="" loading="lazy"></span></p>
+<p><span style="font-size: 15px">　　从上图可以看出最开始它有一个 addToConfig 变量，但这个变量不是上面提到的 MapperFactoryBean 的 addToConfig 属性变量，而是 @MapperScan 扫描时注入的：</span></p>
+<p><span style="font-size: 15px"><img src="https://img2020.cnblogs.com/blog/1363696/202105/1363696-20210508215801927-283542143.png" alt="" loading="lazy"></span></p>
+<p><span style="font-size: 15px">　　当上面的 AbstractAutowireCapableBeanFactory#populateBean 方法继续执行后发现 pvs 发生了改变，属性变成了两个，从而可以判断&nbsp;<strong>autowireByType </strong>方法就是获取类的属性：</span></p>
+<p><span style="font-size: 15px"><img src="https://img2020.cnblogs.com/blog/1363696/202105/1363696-20210508220548560-2014957841.png" alt="" loading="lazy"></span></p>
+<p><span style="font-size: 15px">　　接下来查看 <strong>autowireByType </strong>方法，从下面可以看出，它拿出了两个属性 sqlSessionFactory&nbsp; 和 sqlSessionTemplate【因为 SqlSessionDaoSupport 的 setter 方法有&nbsp;setSqlSessionFactory、setSqlSessionTemplate】，为什么没有拿出 addToConfig 属性变量呢？因为前面已经拿出包含了：</span></p>
+<p><img src="https://img2020.cnblogs.com/blog/1363696/202105/1363696-20210508221026291-311089614.png" alt="" loading="lazy"></p>
+<p>　　<span style="font-size: 15px">所以接下来查看AbstractAutowireCapableBeanFactory#unsatisfiedNonSimpleProperties 方法是如何筛选过滤只剩下两个的：从下面看出 pds（属性描述器）拿出了所有的属性，有9个，第一个是 addToConfig，是MapperFactoryBean 的属性 addToConfig，第二个是 class ，是因为每个类的父类都是 Object 类，而 Object 类中有一个 getClass 方法，由此可以得知 pds（属性描述器）会对类中所有的 readMethod（getXXX方法）和 writeMethod（setXXX方法）都拿出来，其中对 singleton 做了优化成 isSingleton（对Boolean类型的属性）</span></p>
+<p><img src="https://img2020.cnblogs.com/blog/1363696/202105/1363696-20210508221440240-1668601019.png" alt="" loading="lazy"></p>
+<p><span style="font-size: 15px">　　下面是展开每个属性所获取的对应位置：</span></p>
+<p><img src="https://img2020.cnblogs.com/blog/1363696/202105/1363696-20210508222405229-1471157279.png" alt="" loading="lazy"></p>
+<p><img src="https://img2020.cnblogs.com/blog/1363696/202105/1363696-20210508222446398-468365177.png" alt="" loading="lazy"></p>
+<p><img src="https://img2020.cnblogs.com/blog/1363696/202105/1363696-20210508222747704-481996914.png" alt="" loading="lazy"></p>
+<p><img src="https://img2020.cnblogs.com/blog/1363696/202105/1363696-20210508222811183-949820800.png" alt="" loading="lazy"></p>
+<p><img src="https://img2020.cnblogs.com/blog/1363696/202105/1363696-20210508222820400-566972015.png" alt="" loading="lazy"></p>
+<p>&nbsp;<img src="https://img2020.cnblogs.com/blog/1363696/202105/1363696-20210508222930510-1674852965.png" alt="" loading="lazy"></p>
+<p>&nbsp;<img src="https://img2020.cnblogs.com/blog/1363696/202105/1363696-20210508222832836-343168356.png" alt="" loading="lazy"></p>
+<p>&nbsp;<img src="https://img2020.cnblogs.com/blog/1363696/202105/1363696-20210508222841862-1038803727.png" alt="" loading="lazy"></p>
+<p>&nbsp;<img src="https://img2020.cnblogs.com/blog/1363696/202105/1363696-20210508222845404-525001820.png" alt="" loading="lazy"></p>
+<p><span style="font-size: 15px">　　查看属性过滤的详细代码：<strong>pd.getWriteMethod() != null</strong>&nbsp;从中可以看到如果 writeMethod 是空的会过滤掉，所以上面的属性 class、object、objectType、singleton 都过滤掉了【所以对应了前面的&nbsp;<strong>AUTOWIRE_BY_TYPE </strong>模型只关心<strong> setter方法</strong>】；isExcludedFromDependencyCheck 设置一些接口不进行自动装配（前面没有进行设置，所以可以忽略）；<strong>pvs.contains</strong>&nbsp;由于前面 pvs 已经包含了&nbsp;addToConfig ，所以 MapperFactoryBean 的属性 addToConfig 不会自动装配；BeanUtils.isSimpleProperty 是对一些简单类型进行过滤</span></p>
+<div class="cnblogs_code">
+<pre>    <span style="color: rgba(0, 0, 255, 1)">protected</span><span style="color: rgba(0, 0, 0, 1)"> String[] unsatisfiedNonSimpleProperties(AbstractBeanDefinition mbd, BeanWrapper bw) {
+        Set</span>&lt;String&gt; result = <span style="color: rgba(0, 0, 255, 1)">new</span> TreeSet&lt;String&gt;<span style="color: rgba(0, 0, 0, 1)">();
+        PropertyValues pvs </span>=<span style="color: rgba(0, 0, 0, 1)"> mbd.getPropertyValues();
+        </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)">获取所有属性</span>
+        PropertyDescriptor[] pds =<span style="color: rgba(0, 0, 0, 1)"> bw.getPropertyDescriptors();
+        </span><span style="color: rgba(0, 0, 255, 1)">for</span><span style="color: rgba(0, 0, 0, 1)"> (PropertyDescriptor pd : pds) {
+            </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)">进行属性过滤</span>
+            <span style="color: rgba(0, 0, 255, 1)">if</span> (<span style="color: rgba(255, 0, 0, 1)">pd.getWriteMethod() != null</span> &amp;&amp; <span style="color: rgba(255, 0, 0, 1)">!isExcludedFromDependencyCheck(pd)</span> &amp;&amp; <span style="color: rgba(255, 0, 0, 1)">!pvs.contains(pd.getName())</span> &amp;&amp;
+                    !<span style="color: rgba(0, 0, 0, 1)">BeanUtils.isSimpleProperty(pd.getPropertyType())) {
+                result.add(pd.getName());
+            }
+        }
+        </span><span style="color: rgba(0, 0, 255, 1)">return</span><span style="color: rgba(0, 0, 0, 1)"> StringUtils.toStringArray(result);
+    }</span></pre>
+</div>
+<p><span style="font-size: 15px">　　下面是 BeanUtils.isSimpleProperty 的过滤规则：从下面的 isSimpleValueType 可以看出对于 char字符串、number、date、Class 类型等的进行过滤，由此可以得出 MapperFactoryBean 的属性 mapperInterface 被过滤掉不会自动装配，所以最后只剩下 sqlSessionFactory&nbsp; 和 sqlSessionTemplate 两个会自动装配，即 SqlSessionDaoSupport 的属性 sqlSession 和 externalSqlSession 会自动装配；</span></p>
+<div class="cnblogs_code">
+<pre>    <span style="color: rgba(0, 0, 255, 1)">public</span> <span style="color: rgba(0, 0, 255, 1)">static</span> <span style="color: rgba(0, 0, 255, 1)">boolean</span> isSimpleProperty(Class&lt;?&gt;<span style="color: rgba(0, 0, 0, 1)"> clazz) {
+        Assert.notNull(clazz, </span>"Class must not be null"<span style="color: rgba(0, 0, 0, 1)">);
+        </span><span style="color: rgba(0, 0, 255, 1)">return</span> isSimpleValueType(clazz) || (clazz.isArray() &amp;&amp;<span style="color: rgba(0, 0, 0, 1)"> isSimpleValueType(clazz.getComponentType()));
+    }</span></pre>
+</div>
+<div class="cnblogs_code">
+<pre>    <span style="color: rgba(0, 0, 255, 1)">public</span> <span style="color: rgba(0, 0, 255, 1)">static</span> <span style="color: rgba(0, 0, 255, 1)">boolean</span> isSimpleValueType(Class&lt;?&gt;<span style="color: rgba(0, 0, 0, 1)"> clazz) {
+        </span><span style="color: rgba(0, 0, 255, 1)">return</span> (ClassUtils.isPrimitiveOrWrapper(clazz) ||<span style="color: rgba(0, 0, 0, 1)">
+                Enum.</span><span style="color: rgba(0, 0, 255, 1)">class</span>.isAssignableFrom(clazz) ||<span style="color: rgba(0, 0, 0, 1)">
+                CharSequence.</span><span style="color: rgba(0, 0, 255, 1)">class</span>.isAssignableFrom(clazz) ||<span style="color: rgba(0, 0, 0, 1)">
+                Number.</span><span style="color: rgba(0, 0, 255, 1)">class</span>.isAssignableFrom(clazz) ||<span style="color: rgba(0, 0, 0, 1)">
+                Date.</span><span style="color: rgba(0, 0, 255, 1)">class</span>.isAssignableFrom(clazz) ||<span style="color: rgba(0, 0, 0, 1)">
+                URI.</span><span style="color: rgba(0, 0, 255, 1)">class</span> == clazz || URL.<span style="color: rgba(0, 0, 255, 1)">class</span> == clazz ||<span style="color: rgba(0, 0, 0, 1)">
+                Locale.</span><span style="color: rgba(0, 0, 255, 1)">class</span> == clazz || Class.<span style="color: rgba(0, 0, 255, 1)">class</span> ==<span style="color: rgba(0, 0, 0, 1)"> clazz);
+    }</span></pre>
+</div>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2021-05-09 12:25</span>&nbsp;
+<a href="https://www.cnblogs.com/huangrenhui/">码猿手</a>&nbsp;
+阅读(<span id="post_view_count">0</span>)&nbsp;
+评论(<span id="post_comment_count">0</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14723551" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(14723551);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/10.3.1/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 427735, cb_blogApp = 'huangrenhui', cb_blogUserGuid = 'fd44a137-e2e1-4e7a-b2e4-08d5866282ce';
+    var cb_entryId = 14723551, cb_entryCreatedDate = '2021-05-09 12:25', cb_postType = 1;
+    updatePostStats(
+        [cb_entryId],
+        function(id, count) { $("#post_view_count").text(count) },
+        function(id, count) { $("#post_comment_count").text(count) })
+    zoomManager.apply("#cnblogs_post_body img:not(.code_img_closed):not(.code_img_opened)");
+</script>
+<a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <div id="cnblogs_c1" class="under-post-card">
+        <div id='div-gpt-ad-1592365906576-0' style='width: 300px; height: 250px;'></div>
+    </div>
+    <div id="under_post_card1"></div>
+    <div id="cnblogs_c2" class="under-post-card">
+        <div id='div-gpt-ad-1592366332455-0' style='width: 468px; height: 60px;'></div>
+    </div>
+    <div id="under_post_card2"></div>
+    <div id="HistoryToday" class="under-post-card"></div>
+    <script type="text/javascript">
+       var commentManager = new blogCommentManager();
+       commentManager.renderComments(0);
+       fixPostBody();
+       deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);       deliverT2();
+       deliverC1C2();
+       loadNewsAndKb();
+       loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);       LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+       GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+       loadOptUnderPost();
+       GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+	<div id="sideBar">
+		<div id="sideBarMain">
+			<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+<div id="sidebar_c3"></div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2021 码猿手
+<br /><span id="poweredby">Powered by .NET 5.0 on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    <div id="page_end_html">
+        <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    
+    <title>Live2D</title>
+     
+    <link rel="stylesheet" type="text/css" href="https://files.cnblogs.com/files/huangrenhui/waifu.css"/>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+    <link rel="stylesheet" type="text/css" href="https://files.cnblogs.com/files/huangrenhui/waifu.css">
+    <div class="waifu" id="waifu">
+        <div class="waifu-tips" style="opacity: 1;"></div>
+        <canvas id="live2d" width="280" height="250" class="live2d"></canvas>
+        <div class="waifu-tool">
+            <span class="fui-home"></span>
+            <span class="fui-chat"></span>
+            <span class="fui-eye"></span>
+            <span class="fui-user"></span>
+            <span class="fui-photo"></span>
+            <span class="fui-info-circle"></span>
+            <span class="fui-cross"></span>
+        </div>
+    </div>
+    <script src="https://files.cnblogs.com/files/huangrenhui/live2d.js"></script>
+    <script src="https://files.cnblogs.com/files/huangrenhui/waifu-tips.js"></script>
+    <script type="text/javascript">initModel()</script>
+</body>
+</html>
+<link rel="stylesheet" type="text/css" href="https://files.cnblogs.com/files/yjlblog/flat-ui.min.css"/>
+
+    </div>
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8L-rpLgFVEJMgssCVvNUAjsQqcSRbPINH__29IWHE8So5JjO7i396Ut2MEaRuZNfNlOWTNTBre-uDAC8s4kE-epL772a1XbOU0bZJnI0SNVPa99JpDjo56PCaRq3Kxx3dNyZPDnr4zopKdrJstBm8aU" />
+</body>
+</html>

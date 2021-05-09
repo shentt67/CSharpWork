@@ -1,0 +1,306 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="never" />
+    <meta name="description" content="网上搜索gloox环境搭建并跑demo都没有详细的图文教程（毕竟无脑直观，节省时间）在此做个记录并分享 本篇文章的参考&amp;#160;感谢 操作系统：win10gloox版本：1.0.24使用Visual" />
+    <meta property="og:description" content="网上搜索gloox环境搭建并跑demo都没有详细的图文教程（毕竟无脑直观，节省时间）在此做个记录并分享 本篇文章的参考&amp;#160;感谢 操作系统：win10gloox版本：1.0.24使用Visual" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>gloox环境搭建并运行example（小白教程，有图版本） - 唯爱编程 - 博客园</title>
+    <link id="favicon" rel="shortcut icon" href="//common.cnblogs.com/favicon.svg" type="image/svg+xml" />
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=zS6-e1bxywlu3kpHvpr1J6MySwya3ztFtEnS7RYQ0Fk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/imetro/bundle-imetro.min.css?v=GrIRT_0_o8nIVMcJ3tk4a5qGy_BHZcH0zcKJuZjwNcI" />
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/imetro/bundle-imetro-mobile.min.css?v=y3TtHeZMWJqA3RqhdU02N5r_A086WB872wP23r3v7aQ" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/cndeveloper/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/cndeveloper/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/cndeveloper/wlwmanifest.xml" />
+    <script>
+        var currentBlogId = 466031;
+        var currentBlogApp = 'cndeveloper';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var isBlogOwner = false;
+        var skinName = 'iMetro';
+        var visitorUserId = '';
+    </script>
+        <script>
+            var currentPostDateAdded = '2021-05-09 09:45';
+        </script>
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=2Mic1VLeHXarpdzASbXqFMIMVLEBiWXNO5yiTHUcmhw"></script>
+    
+    
+    
+</head>
+<body class="has-navbar has-bannerbar">
+    <a name="top"></a>
+        <a target="_blank" href="https://www.aliyun.com/activity/daily/bestoffer?userCode=swh7dvlt" onclick="ga('send', 'event', 'Link', 'click', 'aliyun-cps-blog-bannerbar-pc')">
+            <div class="bannerbar aliyun forpc" style="background-size: contain;background-image: url(https://img2020.cnblogs.com/blog/35695/202104/35695-20210428221933214-737067094.jpg)">
+            </div>
+        </a>
+        <div id="bannerbar" class="bannerbar-mobile formobile">
+            <a href="https://www.aliyun.com/activity/daily/bestoffer?userCode=swh7dvlt" target="_blank" onclick="ga('send', 'event', 'Link', 'click', 'aliyun-cps-blog-bannerbar-mobile')">
+                <img src="https://img2020.cnblogs.com/blog/35695/202104/35695-20210428213541700-642740375.jpg" alt="" />
+            </a>
+        </div>
+    <div id="top_nav" class="navbar forpc">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding"><a href="https://www.cnblogs.com/" title="开发者的网上家园"><img src="/images/logo.svg?v=R9M0WmLAIPVydmdzE2keuvnjl-bPR7_35oHqtiBzGsM" alt="博客园Logo" /></a></li>
+                <li><a href="/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-sitehome')">首页</a></li>
+                <li><a href="https://news.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-news')">新闻</a></li>
+                <li><a href="https://q.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-q')">博问</a></li>
+                <li><a id="nav_brandzone" href="https://brands.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-brands')">专区</a></li>
+                <li><a href="https://ing.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-ing')">闪存</a></li>
+                <li><a href="https://edu.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-edu')">班级</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search" action="https://zzk.cnblogs.com/s" method="get">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="text" tabindex="3" />
+                        <button type="submit" id="zzk_search_button">
+                            <img src="/images/aggsite/search.svg" alt="搜索" />
+                        </button>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔">
+                        <img id="new_post_icon" class="navbar-icon" src="/images/aggsite/newpost.svg" alt="写随笔" />
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx" alt="我的博客" title="我的博客">
+                        <img id="myblog_icon" class="navbar-icon" src="/images/aggsite/myblog.svg" alt="我的博客" />
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息">
+                        <img id="msg_icon" class="navbar-icon" src="/images/aggsite/message.svg?v=J0WS2P2iPgaIVgXxcAhliw4AFZIpaTWxtdoNAv9eiCA" alt="短消息" />
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/">
+                            <img id="user_icon" class="navbar-avatar" src="/images/aggsite/avatar-default.svg" alt="用户头像" />
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <img id="navbar_lite_mode_on" src="/images/lite-mode-check.svg" class="hide" /><span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup/">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    
+    <!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/cndeveloper/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/cndeveloper/">唯爱编程</a>
+</h1>
+<h2></h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/cndeveloper/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/%E5%94%AF%E7%88%B1%E7%BC%96%E7%A8%8B">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/cndeveloper/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			<div id="blog_stats_place_holder"><script>loadBlogStats();</script></div>
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/cndeveloper/p/14747241.html">
+    <span>gloox环境搭建并运行example（小白教程，有图版本）</span>
+    
+
+
+
+</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                <div id="cnblogs_post_body" class="blogpost-body blogpost-body-html">
+<p>网上搜索<a title="http://www.exyb.cn/news/show-337.html" href="http://www.exyb.cn/news/show-337.html" target="_blank">gloox环境搭建</a>并跑demo都没有详细的<strong>图文教程（毕竟无脑直观，节省时间）</strong><br>在此做个记录并分享</p>
+<p>本篇文章的参考&nbsp;<strong>感谢</strong></p>
+<p>操作系统：win10<br>gloox版本：1.0.24<br>使用Visual Studio 2013</p>
+<h2><a id="glooxlibglooxdll_9"></a>一·生成gloox.lib文件和gloox.dll文件</h2>
+<p>1.下载gloox1.0.24<br><img src="https://img-blog.csdnimg.cn/20210509012451763.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTY1NTU1OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" data-bd-imgshare-binded="1"><br>2.解压</p>
+<p>3.用VS2013启动<a title="http://www.exyb.cn/news/show-337.html" href="http://www.exyb.cn/news/show-337.html" target="_blank">gloox</a>.vcproj文件</p>
+<p><img src="https://img-blog.csdnimg.cn/20210509013514949.png" alt="在这里插入图片描述" data-bd-imgshare-binded="1"><br><img src="https://img-blog.csdnimg.cn/20210509013613350.png" alt="在这里插入图片描述" data-bd-imgshare-binded="1"><br>不确定打开那个文件，右击属性查看下文件格式，确保打开的是.vcproj文件。</p>
+<p>跳出以下提示，点击确定即可<br><img src="https://img-blog.csdnimg.cn/20210509013802633.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTY1NTU1OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" data-bd-imgshare-binded="1"><br>会跳出个迁移报告，不用理会</p>
+<p>4.右键<a title="http://www.exyb.cn/news/show-337.html" href="http://www.exyb.cn/news/show-337.html" target="_blank">gloox</a>项目，添加-&gt;现有项<br><img src="https://img-blog.csdnimg.cn/20210509014638693.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTY1NTU1OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" data-bd-imgshare-binded="1"><br>在gloox1.0.24的src目录下，里面有iodata.h和iodata.cpp。<br><img src="https://img-blog.csdnimg.cn/20210509014843605.png" alt="在这里插入图片描述" data-bd-imgshare-binded="1"><br>添加后，确保以下两个目录中，有iodata.h和iodata.cpp。<br><img src="https://img-blog.csdnimg.cn/20210509015031411.png" alt="在这里插入图片描述" data-bd-imgshare-binded="1"></p>
+<p>5.生成解决方案得到gloox-1.0.lib和gloox-1.0.dll文件，<strong>并记住路径准确的文件名（接下来有使用，文件名输入错误会报错）</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20210509015228592.png" alt="在这里插入图片描述" data-bd-imgshare-binded="1"><br>初次生成<strong>比较久</strong>，我这里是已经生成过了。<br><img src="https://img-blog.csdnimg.cn/20210509015334171.png" alt="在这里插入图片描述" data-bd-imgshare-binded="1"><br>看到成功即可</p>
+<p><strong>文件名输入错误报错</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20210509023924390.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTY1NTU1OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" data-bd-imgshare-binded="1"></p>
+<h1><a id="_message_example_44"></a>二· 运行message_example</h1>
+<p>1.新建win32控制台工程<br><img src="https://img-blog.csdnimg.cn/20210509015540744.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTY1NTU1OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" data-bd-imgshare-binded="1"><br>点击确定和下一步后，选择空项目，其他默认<br><img src="https://img-blog.csdnimg.cn/20210509015635801.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTY1NTU1OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" data-bd-imgshare-binded="1"></p>
+<p>2.右键工程–&gt;属性–&gt;链接器–&gt;常规–&gt;附加库目录 填写gloox.lib所在的目录<br><img src="https://img-blog.csdnimg.cn/2021050901583490.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTY1NTU1OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" data-bd-imgshare-binded="1"><br>点击并编辑<br><img src="https://img-blog.csdnimg.cn/20210509015902230.png" alt="在这里插入图片描述" data-bd-imgshare-binded="1"><br>弹出窗口，点击文件夹图标<br><img src="https://img-blog.csdnimg.cn/20210509015940519.png" alt="在这里插入图片描述" data-bd-imgshare-binded="1"><br>添加生成解决方案得到gloox.lib和dll文件的路径，点击确定即可<br><img src="https://img-blog.csdnimg.cn/20210509020155115.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTY1NTU1OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" data-bd-imgshare-binded="1"><br>3.链接器–&gt;输入–&gt;附加依赖项 填写gloox-1.0.lib;<br><img src="https://img-blog.csdnimg.cn/20210509020241429.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTY1NTU1OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" data-bd-imgshare-binded="1"><br><img src="https://img-blog.csdnimg.cn/20210509020448248.png" alt="在这里插入图片描述" data-bd-imgshare-binded="1"><br><img src="https://img-blog.csdnimg.cn/20210509020642643.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTY1NTU1OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" data-bd-imgshare-binded="1"><br>最后别忘记<strong>点击应用</strong></p>
+<p>4.右键工程并新建筛选器gloox<br><img src="https://img-blog.csdnimg.cn/20210509020924738.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTY1NTU1OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" data-bd-imgshare-binded="1"><br><strong>在工程所在文件夹</strong>中新建目录gloox，(和如图所示的两个文件在同一个文件夹中）<br><img src="https://img-blog.csdnimg.cn/20210509021237905.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTY1NTU1OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" data-bd-imgshare-binded="1"></p>
+<p>将官网下载的gloox1.0.24文件夹中的src目录下除examples和tests之外的文件拷贝过来<br><img src="https://img-blog.csdnimg.cn/20210509021418141.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTY1NTU1OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" data-bd-imgshare-binded="1"><br><img src="https://img-blog.csdnimg.cn/20210509021534103.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTY1NTU1OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" data-bd-imgshare-binded="1"></p>
+<p>再将这个文件夹中的所有文件，拷贝到筛选器gloox下<br><img src="https://img-blog.csdnimg.cn/20210509021658758.png" alt="在这里插入图片描述" data-bd-imgshare-binded="1"><br><img src="https://img-blog.csdnimg.cn/2021050902173544.png" alt="在这里插入图片描述" data-bd-imgshare-binded="1"></p>
+<p>将gloox1.0.24/src/examples/ 中的message_example.cpp拷贝，放在和gloox同级的位置<br><img src="https://img-blog.csdnimg.cn/20210509022009580.png" alt="在这里插入图片描述" data-bd-imgshare-binded="1"><br>然后再次粘贴到工程源文件<br><img src="https://img-blog.csdnimg.cn/20210509022200835.png" alt="在这里插入图片描述" data-bd-imgshare-binded="1"><br>将src同级目录下config.h.win文件拷贝，放在和gloox同级的位置<br><img src="https://img-blog.csdnimg.cn/20210509022344781.png" alt="在这里插入图片描述" data-bd-imgshare-binded="1"><br><img src="https://img-blog.csdnimg.cn/20210509022357485.png" alt="在这里插入图片描述" data-bd-imgshare-binded="1"></p>
+<p>5.右键属性-&gt;配置属性-&gt;常规-&gt;字符集-&gt;改为使用多字节字符集（不改也能运行其实）</p>
+<p>6.双击<br><img src="https://img-blog.csdnimg.cn/20210509022506396.png" alt="在这里插入图片描述" data-bd-imgshare-binded="1"><br>7.将#include “…/client.h"等包含头文件的路径中“…/”改为"gloox/”<br><img src="https://img-blog.csdnimg.cn/20210509022526921.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTY1NTU1OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" data-bd-imgshare-binded="1"></p>
+<p>8…添加lib库：（可选）</p>
+<p>#pragma comment(lib,“ws2_32.lib”)</p>
+<p>#pragma comment(lib,“Secur32.lib”)</p>
+<p>#pragma comment(lib,“Dnsapi.lib”)</p>
+<p>#pragma comment(lib,“Crypt32.lib”)</p>
+<p>9.运行（第一次可能比较慢）出现如下报错<br><img src="https://img-blog.csdnimg.cn/20210509022713604.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTY1NTU1OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" data-bd-imgshare-binded="1"><br>9.右击项目，属性-&gt;配置属性-&gt;C/C+±&gt;常规-&gt;SDL检查，改成否。<br><img src="https://img-blog.csdnimg.cn/20210509023024218.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTY1NTU1OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" data-bd-imgshare-binded="1"><br>10.再次编译运行，一闪而过，在main函数中加入system(“pause”)语句，运行！！！<br><img src="https://img-blog.csdnimg.cn/20210509023433724.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTY1NTU1OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" data-bd-imgshare-binded="1"><br>出现Connected即可</p>
+<p><strong>以上文件位置一定要放对！！！&lt;----这么简单的问题既然是深坑</strong></p>
+<p>TLS握手失败！！！，可能是服务器未搭建，毕竟是小白，<br>以上若有误，欢迎指教。</p>
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2021-05-09 09:45</span>&nbsp;
+<a href="https://www.cnblogs.com/cndeveloper/">唯爱编程</a>&nbsp;
+阅读(<span id="post_view_count">0</span>)&nbsp;
+评论(<span id="post_comment_count">0</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14747241" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(14747241);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/10.3.1/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 466031, cb_blogApp = 'cndeveloper', cb_blogUserGuid = 'f911bdcd-9f62-4887-62ab-08d62cf3ee69';
+    var cb_entryId = 14747241, cb_entryCreatedDate = '2021-05-09 09:45', cb_postType = 1;
+    updatePostStats(
+        [cb_entryId],
+        function(id, count) { $("#post_view_count").text(count) },
+        function(id, count) { $("#post_comment_count").text(count) })
+    zoomManager.apply("#cnblogs_post_body img:not(.code_img_closed):not(.code_img_opened)");
+</script>
+<a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <div id="cnblogs_c1" class="under-post-card">
+        <div id='div-gpt-ad-1592365906576-0' style='width: 300px; height: 250px;'></div>
+    </div>
+    <div id="under_post_card1"></div>
+    <div id="cnblogs_c2" class="under-post-card">
+        <div id='div-gpt-ad-1592366332455-0' style='width: 468px; height: 60px;'></div>
+    </div>
+    <div id="under_post_card2"></div>
+    <div id="HistoryToday" class="under-post-card"></div>
+    <script type="text/javascript">
+       var commentManager = new blogCommentManager();
+       commentManager.renderComments(0);
+       fixPostBody();
+       deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);       deliverT2();
+       deliverC1C2();
+       loadNewsAndKb();
+       loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);       LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+       GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+       loadOptUnderPost();
+       GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+	<div id="sideBar">
+		<div id="sideBarMain">
+			<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+<div id="sidebar_c3"></div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2021 唯爱编程
+<br /><span id="poweredby">Powered by .NET 5.0 on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8L-rpLgFVEJMgssCVvNUAjscx_q9hUXOeXBY4drvFrheMuFP1RiH4AM2kYiphI19FwdLy3YCNvzrRs6Gqp967XPAS54hrItV8V0yKYdl0PV2BS6ejKOrGP66yvhC15Z3VD5Jnwfh55zk7JuKQ87boYs" />
+</body>
+</html>

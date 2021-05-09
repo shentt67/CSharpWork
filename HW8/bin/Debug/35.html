@@ -1,0 +1,1352 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin-when-crossorigin" />
+    <meta name="description" content="快速上手多人游戏服务器开发。后续会基于 Google Agones，更新相关 K8S 运维、大规模快速扩展专用游戏服务器的文章。拥抱☁️原生&amp;#129303; Cloud-Native！ 系列 Col" />
+    <meta property="og:description" content="快速上手多人游戏服务器开发。后续会基于 Google Agones，更新相关 K8S 运维、大规模快速扩展专用游戏服务器的文章。拥抱☁️原生&amp;#129303; Cloud-Native！ 系列 Col" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>ColyseusJS 轻量级多人游戏服务器开发框架 - 中文手册（中） - 为少 - 博客园</title>
+    <link id="favicon" rel="shortcut icon" href="//common.cnblogs.com/favicon.svg" type="image/svg+xml" />
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=zS6-e1bxywlu3kpHvpr1J6MySwya3ztFtEnS7RYQ0Fk" />
+    
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/hacker-linner/custom.css?v=YjqZdzqZxdymgwB2B5GtIm5ENRE=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/custom/bundle-custom-mobile.min.css?v=OayYBbtUbH4FYkn_bTL4VVf4DsEOiTHSWhbl11KyY6Y" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/hacker-linner/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/hacker-linner/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/hacker-linner/wlwmanifest.xml" />
+    <script>
+        var currentBlogId = 623498;
+        var currentBlogApp = 'hacker-linner';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var isBlogOwner = false;
+        var skinName = 'Custom';
+        var visitorUserId = '';
+    </script>
+        <script>
+            var currentPostDateAdded = '2021-05-09 09:00';
+        </script>
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=2Mic1VLeHXarpdzASbXqFMIMVLEBiWXNO5yiTHUcmhw"></script>
+    
+    
+    
+</head>
+<body class="no-navbar">
+    <a name="top"></a>
+        <div id="bannerbar" class="bannerbar-mobile formobile">
+            <a href="https://www.aliyun.com/activity/daily/bestoffer?userCode=swh7dvlt" target="_blank" onclick="ga('send', 'event', 'Link', 'click', 'aliyun-cps-blog-bannerbar-mobile')">
+                <img src="https://img2020.cnblogs.com/blog/35695/202104/35695-20210428213541700-642740375.jpg" alt="" />
+            </a>
+        </div>
+    <div id="top_nav" class="navbar forpc navbar-custom">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding"><a href="https://www.cnblogs.com/" title="开发者的网上家园"><img src="/images/logo.svg?v=R9M0WmLAIPVydmdzE2keuvnjl-bPR7_35oHqtiBzGsM" alt="博客园Logo" /></a></li>
+                <li><a href="/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-sitehome')">首页</a></li>
+                <li><a href="https://news.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-news')">新闻</a></li>
+                <li><a href="https://q.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-q')">博问</a></li>
+                <li><a id="nav_brandzone" href="https://brands.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-brands')">专区</a></li>
+                <li><a href="https://ing.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-ing')">闪存</a></li>
+                <li><a href="https://edu.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-edu')">班级</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search" action="https://zzk.cnblogs.com/s" method="get">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="text" tabindex="3" />
+                        <button type="submit" id="zzk_search_button">
+                            <img src="/images/aggsite/search.svg" alt="搜索" />
+                        </button>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔">
+                        <img id="new_post_icon" class="navbar-icon" src="/images/aggsite/newpost.svg" alt="写随笔" />
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx" alt="我的博客" title="我的博客">
+                        <img id="myblog_icon" class="navbar-icon" src="/images/aggsite/myblog.svg" alt="我的博客" />
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息">
+                        <img id="msg_icon" class="navbar-icon" src="/images/aggsite/message.svg?v=J0WS2P2iPgaIVgXxcAhliw4AFZIpaTWxtdoNAv9eiCA" alt="短消息" />
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/">
+                            <img id="user_icon" class="navbar-avatar" src="/images/aggsite/avatar-default.svg" alt="用户头像" />
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <img id="navbar_lite_mode_on" src="/images/lite-mode-check.svg" class="hide" /><span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup/">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    
+    <!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/hacker-linner/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/hacker-linner/">为少</a>
+</h1>
+<h2></h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/hacker-linner/">
+首页</a>
+</li>
+<li>
+
+
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/%E4%B8%BA%E5%B0%91">
+联系</a></li>
+<li>
+
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			<div id="blog_stats_place_holder"><script>loadBlogStats();</script></div>
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/hacker-linner/p/14747175.html">
+    <span>ColyseusJS 轻量级多人游戏服务器开发框架 - 中文手册（中）</span>
+    
+
+
+
+</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                <div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+<p><img src="https://img2020.cnblogs.com/blog/436453/202105/436453-20210508143100393-1186438709.png" alt="" loading="lazy"></p>
+<p>快速上手多人游戏服务器开发。后续会基于 <code>Google Agones</code>，更新相关 <code>K8S</code> 运维、大规模快速扩展专用游戏服务器的文章。拥抱☁️原生🤗 Cloud-Native！</p>
+<h2 id="系列">系列</h2>
+<p><a href="https://mp.weixin.qq.com/s/0uFarF9ExVA5CQYI05CfFw" target="_blank">ColyseusJS 轻量级多人游戏服务器开发框架 - 中文手册（上）</a></p>
+<h1 id="web-socket-server">Web-Socket Server</h1>
+<h2 id="server">Server</h2>
+<p><a href="#server"><code>Server</code></a> 负责提供 WebSocket server 来实现服务器和客户端之间的通信。</p>
+<h3 id="constructor-options"><code>constructor (options)</code></h3>
+<h4 id="optionsserver"><code>options.server</code></h4>
+<p>要绑定 WebSocket Server 的 HTTP server。你也可以在你的服务器上使用 <a href="https://www.npmjs.com/package/express" target="_blank"><code>express</code></a>。</p>
+<pre><code class="language-typescript">// Colyseus + Express
+import { Server } from "colyseus";
+import { createServer } from "http";
+import express from "express";
+const port = Number(process.env.port) || 3000;
+
+const app = express();
+app.use(express.json());
+
+const gameServer = new Server({
+  server: createServer(app)
+});
+
+gameServer.listen(port);
+</code></pre>
+<pre><code class="language-typescript">// Colyseus (barebones)
+import { Server } from "colyseus";
+const port = process.env.port || 3000;
+
+const gameServer = new Server();
+gameServer.listen(port);
+</code></pre>
+<h4 id="optionspinginterval"><code>options.pingInterval</code></h4>
+<p>服务器 <code>"ping"</code> 客户端的毫秒数。默认值: <code>3000</code></p>
+<p>如果客户端在 <code>pingMaxRetries</code> 重试后不能响应，则将强制断开连接。</p>
+<h4 id="optionspingmaxretries"><code>options.pingMaxRetries</code></h4>
+<p>没有响应的最大允许 <code>ping</code> 数。默认值: <code>2</code>。</p>
+<h4 id="optionsverifyclient"><code>options.verifyClient</code></h4>
+<p>这个方法发生在 <code>WebSocket</code> 握手之前。如果 <code>verifyClient</code> 没有设置，那么握手会被自动接受。</p>
+<ul>
+<li>
+<p><code>info</code> (Object)</p>
+<ul>
+<li><code>origin</code> (String) 客户端指定的 <code>Origin header</code> 中的值。</li>
+<li><code>req</code> (http.IncomingMessage) 客户端 <code>HTTP GET</code> 请求。</li>
+<li><code>secure</code> (Boolean) <code>true</code>，如果 <code>req.connection.authorized</code> 或 <code>req.connection.encrypted</code> 被设置。</li>
+</ul>
+</li>
+<li>
+<p><code>next</code> (Function) 用户必须在检查 <code>info</code> 字段后调用该回调。此回调中的参数为：</p>
+<ul>
+<li><code>result</code> (Boolean) 是否接受握手。</li>
+<li><code>code</code> (Number) 当 <code>result</code> 为 <code>false</code> 时，该字段决定发送给客户端的 HTTP 错误状态码。</li>
+<li><code>name</code> (String) 当 <code>result</code> 为 <code>false</code> 时，该字段决定 HTTP 原因短语。</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-typescript">import { Server } from "colyseus";
+
+const gameServer = new Server({
+  // ...
+
+  verifyClient: function (info, next) {
+    // validate 'info'
+    //
+    // - next(false) will reject the websocket handshake
+    // - next(true) will accept the websocket handshake
+  }
+});
+</code></pre>
+<h4 id="optionspresence"><code>options.presence</code></h4>
+<p>当通过多个进程/机器扩展 <code>Colyseus</code> 时，您需要提供一个状态服务器。</p>
+<pre><code class="language-typescript">import { Server, RedisPresence } from "colyseus";
+
+const gameServer = new Server({
+  // ...
+  presence: new RedisPresence()
+});
+</code></pre>
+<p>当前可用的状态服务器是：</p>
+<ul>
+<li><code>RedisPresence</code> (在单个服务器和多个服务器上扩展)</li>
+</ul>
+<h4 id="optionsgracefullyshutdown"><code>options.gracefullyShutdown</code></h4>
+<p>自动注册 <code>shutdown routine</code>。默认为 <code>true</code>。如果禁用，则应在关闭进程中手动调用 <code>gracefullyShutdown()</code> 方法。</p>
+<h3 id="define-name-string-handler-room-options-any"><code>define (name: string, handler: Room, options?: any)</code></h3>
+<p>定义一个新的 <code>room handler</code>。</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>name: string</code> - <code>room</code> 的公共名称。当从客户端加入 <code>room</code> 时，您将使用这个名称。</li>
+<li><code>handler: Room</code> - 引用 <code>Room</code> handler 类。</li>
+<li><code>options?: any</code> - <code>room</code> 初始化的自定义选项。</li>
+</ul>
+<pre><code class="language-typescript">// Define "chat" room
+gameServer.define("chat", ChatRoom);
+
+// Define "battle" room
+gameServer.define("battle", BattleRoom);
+
+// Define "battle" room with custom options
+gameServer.define("battle_woods", BattleRoom, { map: "woods" });
+</code></pre>
+<p>"多次定义同一个 room handler"：</p>
+<ul>
+<li>您可以使用不同的 <code>options</code> 多次定义同一个 <code>room handler</code>。当调用 <code>Room#onCreate()</code> 时，<code>options</code> 将包含您在 <code>Server#define()</code> 中指定的合并值 + 创建房间时提供的选项。</li>
+</ul>
+<hr>
+<h4 id="matchmaking-过滤器-filterbyoptions">Matchmaking 过滤器: <code>filterBy(options)</code></h4>
+<p><strong>参数</strong></p>
+<ul>
+<li><code>options: string[]</code> - 选项名称的列表</li>
+</ul>
+<p>当一个房间由 <code>create()</code> 或 <code>joinOrCreate()</code> 方法创建时，只有 <code>filterBy()</code> 方法定义的 <code>options</code> 将被存储在内部，并用于在 <code>join()</code> 或 <code>joinOrCreate()</code> 调用中过滤出相关 <code>rooms</code>。</p>
+<p><strong>示例：</strong> 允许不同的“游戏模式”。</p>
+<pre><code class="language-typescript">gameServer
+  .define("battle", BattleRoom)
+  .filterBy(['mode']);
+</code></pre>
+<p>无论何时创建房间，<code>mode</code> 选项都将在内部存储。</p>
+<pre><code class="language-typescript">client.joinOrCreate("battle", { mode: "duo" }).then(room =&gt; {/* ... */});
+</code></pre>
+<p>您可以在 <code>onCreate()</code> 和/或 <code>onJoin()</code> 中处理提供的选项，以在 <code>room</code> 实现中实现请求的功能。</p>
+<pre><code class="language-typescript">class BattleRoom extends Room {
+  onCreate(options) {
+    if (options.mode === "duo") {
+      // do something!
+    }
+  }
+  onJoin(client, options) {
+    if (options.mode === "duo") {
+      // put this player into a team!
+    }
+  }
+}
+</code></pre>
+<p><strong>示例：</strong> 通过内置的 <code>maxClients</code> 进行过滤</p>
+<p><code>maxClients</code> 是一个用于 <code>matchmaking</code> 的内部变量，也可以用于过滤。</p>
+<pre><code class="language-typescript">gameServer
+  .define("battle", BattleRoom)
+  .filterBy(['maxClients']);
+</code></pre>
+<p>然后客户端可以要求加入一个能够容纳一定数量玩家的房间。</p>
+<pre><code class="language-typescript">client.joinOrCreate("battle", { maxClients: 10 }).then(room =&gt; {/* ... */});
+client.joinOrCreate("battle", { maxClients: 20 }).then(room =&gt; {/* ... */});
+</code></pre>
+<hr>
+<h4 id="matchmaking-优先级-sortbyoptions">Matchmaking 优先级: <code>sortBy(options)</code></h4>
+<p>您还可以根据创建时加入房间的信息为加入房间赋予不同的优先级。</p>
+<p><code>options</code> 参数是一个键值对象，在左侧包含字段名称，在右侧包含排序方向。排序方向可以是以下值之一：<code>-1</code>， <code>"desc"</code>，<code>"descending"</code>，<code>1</code>，<code>"asc"</code> 或 <code>"ascending"</code>。</p>
+<p><strong>示例：</strong> 按内置的 <code>clients</code> 排序</p>
+<p><code>clients</code> 是为 <code>matchmaking</code> 而存储的内部变量，其中包含当前已连接客户端的数量。在以下示例中，连接最多客户端的房间将具有优先权。使用 <code>-1</code>，<code>"desc"</code> 或 <code>"descending"</code> 降序排列：</p>
+<pre><code class="language-typescript">gameServer
+  .define("battle", BattleRoom)
+  .sortBy({ clients: -1 });
+</code></pre>
+<p>要按最少数量的玩家进行排序，您可以做相反的事情。将 <code>1</code>，<code>"asc"</code> 或 <code>"ascending"</code> 用于升序：</p>
+<pre><code class="language-typescript">gameServer
+  .define("battle", BattleRoom)
+  .sortBy({ clients: 1 });
+</code></pre>
+<hr>
+<h4 id="启用大厅的实时-room-列表">启用大厅的实时 room 列表</h4>
+<p>为了允许 <code>LobbyRoom</code> 接收来自特定房间类型的更新，您应该在启用实时列表的情况下对其进行定义：</p>
+<pre><code class="language-typescript">gameServer
+  .define("battle", BattleRoom)
+  .enableRealtimeListing();
+</code></pre>
+<hr>
+<h4 id="监听-room-实例事件">监听 room 实例事件</h4>
+<p><code>define</code> 方法将返回已注册的 <code>handler</code> 实例，您可以从 <code>room</code> 实例范围之外监听 <code>match-making</code> 事件。如：</p>
+<ul>
+<li><code>"create"</code> - 当 <code>room</code> 被创建时</li>
+<li><code>"dispose"</code> - 当 <code>room</code> 被销毁时</li>
+<li><code>"join"</code> - 当客户端加入一个 <code>room</code> 时</li>
+<li><code>"leave"</code> - 当客户端离开一个 <code>room</code> 时</li>
+<li><code>"lock"</code> - 当 <code>room</code> 已经被锁定时</li>
+<li><code>"unlock"</code> - 当 <code>room</code> 已经被解锁时</li>
+</ul>
+<p><strong>Usage:</strong></p>
+<pre><code class="language-typescript">gameServer
+  .define("chat", ChatRoom)
+  .on("create", (room) =&gt; console.log("room created:", room.roomId))
+  .on("dispose", (room) =&gt; console.log("room disposed:", room.roomId))
+  .on("join", (room, client) =&gt; console.log(client.id, "joined", room.roomId))
+  .on("leave", (room, client) =&gt; console.log(client.id, "left", room.roomId));
+</code></pre>
+<p>不鼓励通过这些事件来操纵房间的 <code>state</code>。而是在您的 <code>room handler</code> 中使用 <code>abstract methods</code></p>
+<h3 id="simulatelatency-milliseconds-number"><code>simulateLatency (milliseconds: number)</code></h3>
+<p>这是一种便捷的方法，适用于您希望本地测试<code>"laggy(滞后)"</code>客户端的行为而不必将服务器部署到远程云的情况。</p>
+<pre><code class="language-typescript">// Make sure to never call the `simulateLatency()` method in production.
+if (process.env.NODE_ENV !== "production") {
+
+  // simulate 200ms latency between server and client.
+  gameServer.simulateLatency(200);
+}
+</code></pre>
+<h3 id="attach-options-any"><code>attach (options: any)</code></h3>
+<blockquote>
+<p>你通常不需要调用它。只有在你有非常明确的理由时才使用它。</p>
+</blockquote>
+<p>连接或创建 WebSocket server。</p>
+<ul>
+<li><code>options.server</code>：用于绑定 WebSocket 服务器的 HTTP 服务器。</li>
+<li><code>options.ws</code>：现有的可重用 WebSocket 服务器。</li>
+</ul>
+<p><code>Express</code></p>
+<pre><code class="language-javascript">import express from "express";
+import { Server } from "colyseus";
+
+const app = new express();
+const gameServer = new Server();
+
+gameServer.attach({ server: app });
+</code></pre>
+<p><code>http.createServer</code></p>
+<pre><code class="language-javascript">import http from "http";
+import { Server } from "colyseus";
+
+const httpServer = http.createServer();
+const gameServer = new Server();
+
+gameServer.attach({ server: httpServer });
+</code></pre>
+<p><code>WebSocket.Server</code></p>
+<pre><code class="language-javascript">import http from "http";
+import express from "express";
+import ws from "ws";
+import { Server } from "colyseus";
+
+const app = express();
+const server = http.createServer(app);
+const wss = new WebSocket.Server({
+    // your custom WebSocket.Server setup.
+});
+
+const gameServer = new Server();
+gameServer.attach({ ws: wss });
+</code></pre>
+<h3 id="listen-port-number"><code>listen (port: number)</code></h3>
+<p>将 WebSocket 服务器绑定到指定端口。</p>
+<h3 id="onshutdown-callback-function"><code>onShutdown (callback: Function)</code></h3>
+<p>注册一个应该在进程关闭之前调用的回调。详见 <code>graceful shutdown</code></p>
+<h3 id="gracefullyshutdown-exit-boolean"><code>gracefullyShutdown (exit: boolean)</code></h3>
+<p>关闭所有房间并清理缓存数据。当清理完成时，返回一个 <code>promise</code>。</p>
+<p>除非 <code>Server</code> 构造函数中提供了 <code>gracefullyShutdown: false</code>，否则该方法将被自动调用。</p>
+<h1 id="room-api-server-side">Room API (Server-side)</h1>
+<p>考虑到您已经设置了服务器，现在是时候注册 <code>room handlers</code> 并开始接受用户的连接了。</p>
+<p>您将定义 <code>room handlers</code>，以创建从 <code>Room</code> 扩展的类。</p>
+<pre><code class="language-typescript">import http from "http";
+import { Room, Client } from "colyseus";
+
+export class MyRoom extends Room {
+    // When room is initialized
+    onCreate (options: any) { }
+
+    // Authorize client based on provided options before WebSocket handshake is complete
+    onAuth (client: Client, options: any, request: http.IncomingMessage) { }
+
+    // When client successfully join the room
+    onJoin (client: Client, options: any, auth: any) { }
+
+    // When a client leaves the room
+    onLeave (client: Client, consented: boolean) { }
+
+    // Cleanup callback, called after there are no more clients in the room. (see `autoDispose`)
+    onDispose () { }
+}
+</code></pre>
+<h2 id="room-lifecycle">Room lifecycle</h2>
+<p>这些方法对应于房间(<code>room</code>)的生命周期。</p>
+<h3 id="oncreate-options"><code>onCreate (options)</code></h3>
+<p>房间初始化后被调用一次。您可以在注册房间处理程序时指定自定义初始化选项。</p>
+<p><code>options</code> 将包含您在 <code>Server#define()</code> 上指定的合并值 + <code>client.joinOrCreate()</code> 或 <code>client.create()</code> 所提供的选项。</p>
+<h3 id="onauth-client-options-request"><code>onAuth (client, options, request)</code></h3>
+<p><code>onAuth()</code> 方法将在 <code>onJoin()</code> 之前执行。它可以用来验证加入房间的客户端的真实性。</p>
+<ul>
+<li>如果 <code>onAuth()</code> 返回一个真值，<code>onJoin()</code> 将被调用，并将返回值作为第三个参数。</li>
+<li>如果 <code>onAuth()</code> 返回一个假值，客户端将立即被拒绝，导致客户端 <code>matchmaking</code> 函数调用失败。</li>
+<li>您还可以抛出 <code>ServerError</code> 来公开要在客户端处理的自定义错误。</li>
+</ul>
+<p>如果不实现，它总是返回 <code>true</code> - 允许任何客户端连接。</p>
+<p>"获取玩家的 IP 地址"：您可以使用 <code>request</code> 变量来检索用户的 IP 地址、http 头等等。例如：<code>request.headers['x-forwarded-for'] || request.connection.remoteAddress</code></p>
+<p><strong>实现示例</strong></p>
+<p><code>async / await</code></p>
+<pre><code class="language-typescript">import { Room, ServerError } from "colyseus";
+
+class MyRoom extends Room {
+  async onAuth (client, options, request) {
+    /**
+     * Alternatively, you can use `async` / `await`,
+     * which will return a `Promise` under the hood.
+     */
+    const userData = await validateToken(options.accessToken);
+    if (userData) {
+        return userData;
+
+    } else {
+        throw new ServerError(400, "bad access token");
+    }
+  }
+}
+</code></pre>
+<p><code>Synchronous</code></p>
+<pre><code class="language-typescript">import { Room } from "colyseus";
+
+class MyRoom extends Room {
+  onAuth (client, options, request): boolean {
+    /**
+     * You can immediatelly return a `boolean` value.
+     */
+     if (options.password === "secret") {
+       return true;
+
+     } else {
+       throw new ServerError(400, "bad access token");
+     }
+  }
+}
+</code></pre>
+<p><code>Promises</code></p>
+<pre><code class="language-typescript">import { Room } from "colyseus";
+
+class MyRoom extends Room {
+  onAuth (client, options, request): Promise&lt;any&gt; {
+    /**
+     * You can return a `Promise`, and perform some asynchronous task to validate the client.
+     */
+    return new Promise((resolve, reject) =&gt; {
+      validateToken(options.accessToken, (err, userData) =&gt; {
+        if (!err) {
+          resolve(userData);
+        } else {
+          reject(new ServerError(400, "bad access token"));
+        }
+      });
+    });
+  }
+}
+</code></pre>
+<p><strong>客户端示例</strong></p>
+<p>在客户端，您可以使用您选择的某些身份验证服务（例如 <code>Facebook</code> ）中的 <code>token</code>，来调用 <code>matchmaking</code> 方法（<code>join</code>，<code>joinOrCreate</code> 等）：</p>
+<pre><code class="language-javascript">client.joinOrCreate("world", {
+  accessToken: yourFacebookAccessToken
+
+}).then((room) =&gt; {
+  // success
+
+}).catch((err) =&gt; {
+  // handle error...
+  err.code // 400
+  err.message // "bad access token"
+});
+</code></pre>
+<h3 id="onjoin-client-options-auth"><code>onJoin (client, options, auth?)</code></h3>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>client</code>: <code>客户端</code>实例。</li>
+<li><code>options</code>: 合并在 <code>Server#define()</code> 上指定的值和在 <code>client.join()</code> 上提供的选项。</li>
+<li><code>auth</code>: (可选) <code>auth</code> 数据返回 <code>onAuth</code> 方法。</li>
+</ul>
+<p>当客户端成功加入房间时，在 <code>requestJoin</code> 和 <code>onAuth</code> 成功后调用。</p>
+<h3 id="onleave-client-consented"><code>onLeave (client, consented)</code></h3>
+<p>当客户端离开房间时被调用。如果断开连接是由客户端发起的，则 <code>consented</code> 参数将为 <code>true</code>，否则为 <code>false</code>。</p>
+<p>你可以将这个函数定义为 <code>async</code>。参阅 <code>graceful shutdown</code></p>
+<p><code>Synchronous</code></p>
+<pre><code class="language-typescript">onLeave(client, consented) {
+    if (this.state.players.has(client.sessionId)) {
+        this.state.players.delete(client.sessionId);
+    }
+}
+</code></pre>
+<p><code>Asynchronous</code></p>
+<pre><code class="language-typescript">async onLeave(client, consented) {
+    const player = this.state.players.get(client.sessionId);
+    await persistUserOnDatabase(player);
+}
+</code></pre>
+<h3 id="ondispose-"><code>onDispose ()</code></h3>
+<p>在房间被销毁之前调用 <code>onDispose()</code> 方法，以下情况会发生：</p>
+<ul>
+<li>房间里没有更多的客户端，并且 <code>autoDispose</code> 被设置为 <code>true</code>(默认)</li>
+<li>你手动调用 <code>.disconnect()</code></li>
+</ul>
+<p>您可以定义 <code>async onDispose()</code> 异步方法，以将一些数据持久化在数据库中。实际上，这是在比赛结束后将玩家数据保留在数据库中的好地方。</p>
+<h3 id="示例-room">示例 room</h3>
+<p>这个例子演示了一个实现 <code>onCreate</code>，<code>onJoin</code> 和 <code>onMessage</code> 方法的 <code>room</code>。</p>
+<pre><code class="language-typescript">import { Room, Client } from "colyseus";
+import { Schema, MapSchema, type } from "@colyseus/schema";
+
+// An abstract player object, demonstrating a potential 2D world position
+export class Player extends Schema {
+  @type("number")
+  x: number = 0.11;
+
+  @type("number")
+  y: number = 2.22;
+}
+
+// Our custom game state, an ArraySchema of type Player only at the moment
+export class State extends Schema {
+  @type({ map: Player })
+  players = new MapSchema&lt;Player&gt;();
+}
+
+export class GameRoom extends Room&lt;State&gt; {
+  // Colyseus will invoke when creating the room instance
+  onCreate(options: any) {
+    // initialize empty room state
+    this.setState(new State());
+
+    // Called every time this room receives a "move" message
+    this.onMessage("move", (client, data) =&gt; {
+      const player = this.state.players.get(client.sessionId);
+      player.x += data.x;
+      player.y += data.y;
+      console.log(client.sessionId + " at, x: " + player.x, "y: " + player.y);
+    });
+  }
+
+  // Called every time a client joins
+  onJoin(client: Client, options: any) {
+    this.state.players.set(client.sessionId, new Player());
+  }
+}
+</code></pre>
+<h2 id="public-methods">Public methods</h2>
+<p>Room handlers 有这些方法可用。</p>
+<h3 id="onmessage-type-callback"><code>onMessage (type, callback)</code></h3>
+<p>注册一个回调来处理客户端发送的消息类型。</p>
+<p><code>type</code> 参数可以是 <code>string</code> 或 <code>number</code>。</p>
+<p><strong>特定消息类型的回调</strong></p>
+<pre><code class="language-typescript">onCreate () {
+    this.onMessage("action", (client, message) =&gt; {
+        console.log(client.sessionId, "sent 'action' message: ", message);
+    });
+}
+</code></pre>
+<p><strong>回调所有消息</strong></p>
+<p>您可以注册一个回调来处理所有其他类型的消息。</p>
+<pre><code class="language-typescript">onCreate () {
+    this.onMessage("action", (client, message) =&gt; {
+        //
+        // Triggers when 'action' message is sent.
+        //
+    });
+
+    this.onMessage("*", (client, type, message) =&gt; {
+        //
+        // Triggers when any other type of message is sent,
+        // excluding "action", which has its own specific handler defined above.
+        //
+        console.log(client.sessionId, "sent", type, message);
+    });
+}
+</code></pre>
+<h3 id="setstate-object"><code>setState (object)</code></h3>
+<p>设置新的 <code>room state</code> 实例。关于 <code>state object</code> 的更多细节，请参见 <code>State Handling</code>。强烈建议使用新的 <code>Schema Serializer</code> 来处理您的 <code>state</code>。</p>
+<p>不要在 <code>room state</code> 下调用此方法进行更新。每次调用二进制补丁算法(<code>binary patch algorithm</code>)时都会重新设置。</p>
+<p>你通常只会在 <code>room handler</code> 的 <code>onCreate()</code> 期间调用这个方法一次。</p>
+<h3 id="setsimulationinterval-callback-milliseconds166"><code>setSimulationInterval (callback[, milliseconds=16.6])</code></h3>
+<p>（可选）设置可以更改游戏状态的模拟间隔。模拟间隔是您的游戏循环。默认模拟间隔：16.6ms (60fps)</p>
+<pre><code class="language-typescript">onCreate () {
+    this.setSimulationInterval((deltaTime) =&gt; this.update(deltaTime));
+}
+
+update (deltaTime) {
+    // implement your physics or world updates here!
+    // this is a good place to update the room state
+}
+</code></pre>
+<h3 id="setpatchrate-milliseconds"><code>setPatchRate (milliseconds)</code></h3>
+<p>设置向所有客户端发送补丁状态的频率。默认是 <code>50ms</code> (20fps)</p>
+<h3 id="setprivate-bool"><code>setPrivate (bool)</code></h3>
+<p>将房间列表设置为私有(如果提供了 <code>false</code> 则恢复为公开)。</p>
+<p><code>Private rooms</code> 没有在 <code>getAvailableRooms()</code> 方法中列出。</p>
+<h3 id="setmetadata-metadata"><code>setMetadata (metadata)</code></h3>
+<p>设置元数据(<code>metadata</code>)到这个房间。每个房间实例都可以附加元数据 — 附加元数据的唯一目的是从客户端获取可用房间列表时将一个房间与另一个房间区分开来，使用 <code>client.getAvailableRooms()</code>，通过它的 <code>roomId</code> 连接到它。</p>
+<pre><code class="language-typescript">// server-side
+this.setMetadata({ friendlyFire: true });
+</code></pre>
+<p>现在一个房间有了附加的元数据，例如，客户端可以检查哪个房间有 <code>friendlyFire</code>，并通过它的 <code>roomId</code> 直接连接到它：</p>
+<pre><code class="language-javascript">// client-side
+client.getAvailableRooms("battle").then(rooms =&gt; {
+  for (var i=0; i&lt;rooms.length; i++) {
+    if (room.metadata &amp;&amp; room.metadata.friendlyFire) {
+      //
+      // join the room with `friendlyFire` by id:
+      //
+      var room = client.join(room.roomId);
+      return;
+    }
+  }
+});
+</code></pre>
+<h3 id="setseatreservationtime-seconds"><code>setSeatReservationTime (seconds)</code></h3>
+<p>设置一个房间可以等待客户端有效加入房间的秒数。你应该考虑你的 <code>onAuth()</code> 将不得不等待多长时间来设置一个不同的座位预订时间。缺省值是 <code>15</code> 秒。</p>
+<p>如果想要全局更改座位预订时间，可以设置 <code>COLYSEUS_SEAT_RESERVATION_TIME</code> 环境变量。</p>
+<h3 id="send-client-message"><code>send (client, message)</code></h3>
+<p><code>this.send()</code> 已经被弃用。请使用 <code>client.send()</code> 代替</p>
+<h3 id="broadcast-type-message-options"><code>broadcast (type, message, options?)</code></h3>
+<p>向所有连接的客户端发送消息。</p>
+<p>可用的选项有：</p>
+<ul>
+<li><strong><code>except</code></strong>: 一个 <code>Client</code> 实例不向其发送消息</li>
+<li><strong><code>afterNextPatch</code></strong>: 等到下一个补丁广播消息</li>
+</ul>
+<h4 id="广播示例">广播示例</h4>
+<p>向所有客户端广播消息：</p>
+<pre><code class="language-typescript">onCreate() {
+    this.onMessage("action", (client, message) =&gt; {
+        // broadcast a message to all clients
+        this.broadcast("action-taken", "an action has been taken!");
+    });
+}
+</code></pre>
+<p>向除发送者外的所有客户端广播消息。</p>
+<pre><code class="language-typescript">onCreate() {
+    this.onMessage("fire", (client, message) =&gt; {
+        // sends "fire" event to every client, except the one who triggered it.
+        this.broadcast("fire", message, { except: client });
+    });
+}
+</code></pre>
+<p>只有在 <code>state</code> 发生变化后，才广播消息给所有客户端:</p>
+<pre><code class="language-typescript">onCreate() {
+    this.onMessage("destroy", (client, message) =&gt; {
+        // perform changes in your state!
+        this.state.destroySomething();
+
+        // this message will arrive only after new state has been applied
+        this.broadcast("destroy", "something has been destroyed", { afterNextPatch: true });
+    });
+}
+</code></pre>
+<p>广播一个 <code>schema-encoded</code> 的消息：</p>
+<pre><code class="language-typescript">class MyMessage extends Schema {
+  @type("string") message: string;
+}
+
+// ...
+onCreate() {
+    this.onMessage("action", (client, message) =&gt; {
+        const data = new MyMessage();
+        data.message = "an action has been taken!";
+        this.broadcast(data);
+    });
+}
+</code></pre>
+<h3 id="lock-"><code>lock ()</code></h3>
+<p>锁定房间将把它从可供新客户连接的可用房间池中移除。</p>
+<h3 id="unlock-"><code>unlock ()</code></h3>
+<p>解锁房间将其返回到可用房间池中，以供新客户端连接。</p>
+<h3 id="allowreconnection-client-seconds"><code>allowReconnection (client, seconds?)</code></h3>
+<p>允许指定的客户端 <code>reconnect</code> 到房间。必须在 <code>onLeave()</code> 方法中使用。</p>
+<p>如果提供 <strong><code>seconds</code></strong>，则在提供的秒数后将取消重新连接。</p>
+<pre><code class="language-typescript">async onLeave (client: Client, consented: boolean) {
+  // flag client as inactive for other users
+  this.state.players[client.sessionId].connected = false;
+
+  try {
+    if (consented) {
+        throw new Error("consented leave");
+    }
+
+    // allow disconnected client to reconnect into this room until 20 seconds
+    await this.allowReconnection(client, 20);
+
+    // client returned! let's re-activate it.
+    this.state.players[client.sessionId].connected = true;
+
+  } catch (e) {
+
+    // 20 seconds expired. let's remove the client.
+    delete this.state.players[client.sessionId];
+  }
+}
+</code></pre>
+<p>或者，您可以不提供 <strong><code>seconds</code></strong> 的数量来自动拒绝重新连接，而使用自己的逻辑拒绝它。</p>
+<pre><code class="language-typescript">async onLeave (client: Client, consented: boolean) {
+  // flag client as inactive for other users
+  this.state.players[client.sessionId].connected = false;
+
+  try {
+    if (consented) {
+        throw new Error("consented leave");
+    }
+
+    // get reconnection token
+    const reconnection = this.allowReconnection(client);
+
+    //
+    // here is the custom logic for rejecting the reconnection.
+    // for demonstration purposes of the API, an interval is created
+    // rejecting the reconnection if the player has missed 2 rounds,
+    // (assuming he's playing a turn-based game)
+    //
+    // in a real scenario, you would store the `reconnection` in
+    // your Player instance, for example, and perform this check during your
+    // game loop logic
+    //
+    const currentRound = this.state.currentRound;
+    const interval = setInterval(() =&gt; {
+      if ((this.state.currentRound - currentRound) &gt; 2) {
+        // manually reject the client reconnection
+        reconnection.reject();
+        clearInterval(interval);
+      }
+    }, 1000);
+
+    // allow disconnected client to reconnect
+    await reconnection;
+
+    // client returned! let's re-activate it.
+    this.state.players[client.sessionId].connected = true;
+
+  } catch (e) {
+
+    // 20 seconds expired. let's remove the client.
+    delete this.state.players[client.sessionId];
+  }
+}
+</code></pre>
+<h3 id="disconnect-"><code>disconnect ()</code></h3>
+<p>断开所有客户端，然后销毁。</p>
+<h3 id="broadcastpatch-"><code>broadcastPatch ()</code></h3>
+<p>"你可能不需要这个！"：该方法由框架自动调用。</p>
+<p>该方法将检查 <code>state</code> 中是否发生了突变，并将它们广播给所有连接的客户端。</p>
+<p>如果你想控制什么时候广播补丁，你可以通过禁用默认的补丁间隔来做到这一点：</p>
+<pre><code class="language-typescript">onCreate() {
+    // disable automatic patches
+    this.setPatchRate(null);
+
+    // ensure clock timers are enabled
+    this.setSimulationInterval(() =&gt; {/* */});
+
+    this.clock.setInterval(() =&gt; {
+        // only broadcast patches if your custom conditions are met.
+        if (yourCondition) {
+            this.broadcastPatch();
+        }
+    }, 2000);
+}
+</code></pre>
+<h2 id="public-properties">Public properties</h2>
+<h3 id="roomid-string"><code>roomId: string</code></h3>
+<p>一个唯一的，自动生成的，<code>9</code> 个字符长的 <code>room id</code>。</p>
+<p>您可以在 <code>onCreate()</code> 期间替换 <code>this.roomId</code>。您需要确保 <code>roomId</code> 是唯一的。</p>
+<h3 id="roomname-string"><code>roomName: string</code></h3>
+<p>您为 <code>gameServer.define()</code> 的第一个参数提供的 <code>room</code> 名称。</p>
+<h3 id="state-t"><code>state: T</code></h3>
+<p>您提供给 <code>setState()</code> 的 <code>state</code> 实例</p>
+<h3 id="clients-client"><code>clients: Client[]</code></h3>
+<p>已连接的客户端 <code>array</code>。参见 <code>Web-Socket Client</code>。</p>
+<h3 id="maxclients-number"><code>maxClients: number</code></h3>
+<p>允许连接到房间的最大客户端数。当房间达到这个限制时，就会自动锁定。除非您通过 <code>lock()</code> 方法明确锁定了房间，否则一旦客户端断开连接，该房间将被解锁。</p>
+<h3 id="patchrate-number"><code>patchRate: number</code></h3>
+<p>将房间状态发送到连接的客户端的频率（以毫秒为单位）。默认值为 <code>50</code>ms（20fps）</p>
+<h3 id="autodispose-boolean"><code>autoDispose: boolean</code></h3>
+<p>当最后一个客户端断开连接时，自动销毁房间。默认为 <code>true</code></p>
+<h3 id="locked-boolean-read-only"><code>locked: boolean</code> (read-only)</h3>
+<p>在以下情况下，此属性将更改：</p>
+<ul>
+<li>已达到允许的最大客户端数量（<code>maxClients</code>）</li>
+<li>您使用 <code>lock()</code> 或 <code>unlock()</code> 手动锁定或解锁了房间</li>
+</ul>
+<h3 id="clock-clocktimer"><code>clock: ClockTimer</code></h3>
+<p>一个 <a href="https://github.com/gamestdio/timer#api" target="_blank"><code>ClockTimer</code></a> 实例，用于 <code>timing events</code>。</p>
+<h3 id="presence-presence"><code>presence: Presence</code></h3>
+<p><code>presence</code> 实例。查看 <code>Presence API</code> 了解更多信息。</p>
+<h1 id="web-socket-client">Web-Socket Client</h1>
+<p><code>client</code> 实例存在于：</p>
+<ul>
+<li><code>Room#clients</code></li>
+<li><code>Room#onJoin()</code></li>
+<li><code>Room#onLeave()</code></li>
+<li><code>Room#onMessage()</code></li>
+</ul>
+<p>这是来自 <a href="https://www.npmjs.com/package/ws" target="_blank"><code>ws</code></a> 包的原始 <code>WebSocket</code> 连接。有更多可用的方法，但不鼓励与 Colyseus 一起使用。</p>
+<h2 id="properties">Properties</h2>
+<h3 id="sessionid-string"><code>sessionId: string</code></h3>
+<p>每个会话唯一的 id。</p>
+<p>在客户端，你可以在 <code>room</code> 实例中找到 <code>sessionId</code></p>
+<h3 id="auth-any"><code>auth: any</code></h3>
+<p>在 <code>onAuth()</code> 期间返回的自定义数据。</p>
+<h2 id="methods">Methods</h2>
+<h3 id="sendtype-message"><code>send(type, message)</code></h3>
+<p>发送一种 <code>message</code> 类型的消息到客户端。消息是用 <code>MsgPack</code> 编码的，可以保存任何 <code>JSON-seriazeable</code> 的数据结构。</p>
+<p><code>type</code> 可以是 <code>string</code> 或 <code>number</code>。</p>
+<p><strong>发送消息：</strong></p>
+<pre><code class="language-typescript">//
+// sending message with a string type ("powerup")
+//
+client.send("powerup", { kind: "ammo" });
+
+//
+// sending message with a number type (1)
+//
+client.send(1, { kind: "ammo"});
+</code></pre>
+
+<h3 id="leavecode-number"><code>leave(code?: number)</code></h3>
+<p>强制断开 <code>client</code> 与 <code>room</code> 的连接。</p>
+<p>这将在客户端触发 <code>room.onLeave</code> 事件。</p>
+<h3 id="errorcode-message"><code>error(code, message)</code></h3>
+<p>将带有 <code>code</code> 和 <code>message</code> 的 <code>error</code> 发送给客户端。客户端可以在 <code>onError</code> 上处理它。</p>
+<p>对于 <a href="https://www.w3.org/TR/2011/WD-html5-20110525/timers.html" target="_blank">timing events</a>，建议从您的 <code>Room</code> 实例中使用 <code>this.clock</code> 方法。</p>
+<p>所有的间隔和超时注册在 <code>this.clock</code>。<br>
+当 <code>Room</code> 被清除时，会自动清除。</p>
+<p>内置的 <a href="https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout" target="_blank"><code>setTimeout</code></a> 和<br>
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setInterval" target="_blank"><code>setInterval</code></a> 方法依赖于 CPU 负载，这可能会延迟到意想不到的执行时间。</p>
+<h2 id="clock">Clock</h2>
+<p><code>clock</code> 是一种有用的机制，用于对有状态模拟之外的事件进行计时。一个例子可以是：当玩家收集道具时，你可能会计时。您可以 <code>clock.setTimeout</code> 创建一个新的可收集对象。使用 <code>clock.</code> 的一个优点。您不需要关注 <code>room</code> 更新和增量，而可以独立于房间状态关注事件计时。</p>
+<h3 id="public-methods-1">Public methods</h3>
+<p><em>注意：<code>time</code> 参数的单位是毫秒</em></p>
+<h4 id="clocksetintervalcallback-time-args-delayed"><code>clock.setInterval(callback, time, ...args): Delayed</code></h4>
+<p><code>setInterval()</code> 方法重复调用一个函数或执行一个代码片段，每次调用之间有固定的时间延迟。<br>
+它返回标识间隔的 <code>Delayed</code> 实例，因此您可以稍后对它进行操作。</p>
+<h4 id="clocksettimeoutcallback-time-args-delayed"><code>clock.setTimeout(callback, time, ...args): Delayed</code></h4>
+<p><code>setTimeout()</code> 方法设置一个 <code>timer</code>，在 <code>timer</code> 过期后执行一个函数或指定的代码段。它返回标识间隔的 <code>Delayed</code> 实例，因此您可以稍后对它进行操作。</p>
+<p><strong>示例</strong></p>
+<p>这个 <code>MVP</code> 示例显示了一个 <code>Room</code>：<code>setInterval()</code>，<code>setTimeout</code> 和清除以前存储的类型 <code>Delayed</code> 的实例； 以及显示 Room's clock 实例中的 <code>currentTime</code>。在1秒钟的'Time now ' + <code>this.clock.currentTime</code> 被<code>console.log</code> 之后，然后10秒钟之后，我们清除间隔：<code>this.delayedInterval.clear();</code>。</p>
+<pre><code class="language-typescript">// Import Delayed
+import { Room, Client, Delayed } from "colyseus";
+
+export class MyRoom extends Room {
+    // For this example
+    public delayedInterval!: Delayed;
+
+    // When room is initialized
+    onCreate(options: any) {
+        // start the clock ticking
+        this.clock.start();
+
+        // Set an interval and store a reference to it
+        // so that we may clear it later
+        this.delayedInterval = this.clock.setInterval(() =&gt; {
+            console.log("Time now " + this.clock.currentTime);
+        }, 1000);
+
+        // After 10 seconds clear the timeout;
+        // this will *stop and destroy* the timeout completely
+        this.clock.setTimeout(() =&gt; {
+            this.delayedInterval.clear();
+        }, 10_000);
+    }
+}
+</code></pre>
+<h4 id="clockclear"><code>clock.clear()</code></h4>
+<p>清除 <code>clock.setInterval()</code> 和 <code>clock.setTimeout()</code> 中注册的所有间隔和超时。</p>
+<h4 id="clockstart"><code>clock.start()</code></h4>
+<p>开始计时。</p>
+<h4 id="clockstop"><code>clock.stop()</code></h4>
+<p>停止计时。</p>
+<h4 id="clocktick"><code>clock.tick()</code></h4>
+<p>在每个模拟间隔步骤都会自动调用此方法。在 <code>tick</code> 期间检查所有 <code>Delayed</code> 实例。</p>
+<p>参阅 <code>Room#setSimiulationInterval()</code> 了解更多信息。</p>
+<h3 id="public-properties-1">Public properties</h3>
+<h4 id="clockelapsedtime"><code>clock.elapsedTime</code></h4>
+<p>调用 <a href="#clockstart"><code>clock.start()</code></a> 方法后经过的时间(以毫秒为单位)。只读的。</p>
+<h4 id="clockcurrenttime"><code>clock.currentTime</code></h4>
+<p>当前时间(毫秒)。只读的。</p>
+<h4 id="clockdeltatime"><code>clock.deltaTime</code></h4>
+<p>上一次和当前 <code>clock.tick()</code> 调用之间的毫秒差。只读的。</p>
+<h2 id="delayed">Delayed</h2>
+<p>创建延迟的实例</p>
+<p><code>clock.setInterval()</code> or <code>clock.setTimeout()</code></p>
+<h3 id="public-methods-2">Public methods</h3>
+<h4 id="delayedpause"><code>delayed.pause()</code></h4>
+<p>暂停特定的 <code>Delayed</code> 实例的时间。(<code>elapsedTime</code> 在 <code>.resume()</code> 被调用之前不会增加。)</p>
+<h4 id="delayedresume"><code>delayed.resume()</code></h4>
+<p>恢复特定 <code>Delayed</code> 实例的时间。(<code>elapsedTime</code> 将继续正常增长)</p>
+<h4 id="delayedclear"><code>delayed.clear()</code></h4>
+<p>清除超时时间或间隔。</p>
+<h4 id="delayedreset"><code>delayed.reset()</code></h4>
+<p>重置经过的时间(<code>elapsed time</code>)。</p>
+<h3 id="public-properties-2">Public properties</h3>
+<h4 id="delayedelapsedtime-number"><code>delayed.elapsedTime: number</code></h4>
+<p><code>Delayed</code> 实例的运行时间，以毫秒为单位。</p>
+<h4 id="delayedactive-boolean"><code>delayed.active: boolean</code></h4>
+<p>如果 <code>timer</code> 仍在运行，返回 <code>true</code>。</p>
+<h4 id="delayedpaused-boolean"><code>delayed.paused: boolean</code></h4>
+<p>如果计时器通过 <code>.pause()</code> 暂停，则返回 <code>true</code>。</p>
+<h1 id="match-maker-api">Match-maker API</h1>
+<p>"您可能不需要这个！"<br>
+本节用于高级用途。通常使用 <code>client-side methods</code> 比较好。如果您认为您不能通过客户端方法实现您的目标，您应该考虑使用本页面中描述的方法。</p>
+<p>下面描述的方法由 <code>matchMaker</code> 单例提供，可以从 <code>"colyseus"</code> 包中导入：</p>
+<pre><code class="language-typescript">import { matchMaker } from "colyseus";
+</code></pre>
+<pre><code class="language-javascript">const matchMaker = require("colyseus").matchMaker;
+</code></pre>
+<h3 id="createroomroomname-options"><code>.createRoom(roomName, options)</code></h3>
+<p>创建一个新房间</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><strong><code>roomName</code></strong>: 您在 <code>gameServer.define()</code> 上定义的标识符。</li>
+<li><strong><code>options</code></strong>: <code>onCreate</code> 的选项。</li>
+</ul>
+<pre><code class="language-typescript">const room = await matchMaker.createRoom("battle", { mode: "duo" });
+console.log(room);
+/*
+  { "roomId": "xxxxxxxxx", "processId": "yyyyyyyyy", "name": "battle", "locked": false }
+*/
+</code></pre>
+<h3 id="joinorcreateroomname-options"><code>.joinOrCreate(roomName, options)</code></h3>
+<p>加入或创建房间并返回客户端位置预订。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><strong><code>roomName</code></strong>: 您在 <code>gameServer.define()</code> 上定义的标识符。</li>
+<li><strong><code>options</code></strong>: 客户端位置预订的选项(如 <code>onJoin</code>/<code>onAuth</code>)。</li>
+</ul>
+<pre><code class="language-typescript">const reservation = await matchMaker.joinOrCreate("battle", { mode: "duo" });
+console.log(reservation);
+/*
+  {
+    "sessionId": "zzzzzzzzz",
+    "room": { "roomId": "xxxxxxxxx", "processId": "yyyyyyyyy", "name": "battle", "locked": false }
+  }
+*/
+</code></pre>
+<p>"消费位置预订":您可以使用 <code>consumeSeatReservation()</code> 从客户端开始通过预订位置加入房间。</p>
+<h3 id="reserveseatforroom-options"><code>.reserveSeatFor(room, options)</code></h3>
+<p>在房间(<code>room</code>)里为客户端(<code>client</code>)预订位置。</p>
+<p>"消费位置预订":您可以使用 <code>consumeSeatReservation()</code> 从客户端开始通过预订位置加入房间。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><strong><code>room</code></strong>: 房间数据 (结果来自 <code>createRoom()</code> 等)</li>
+<li><strong><code>options</code></strong>: <code>onCreate</code> 选项</li>
+</ul>
+<pre><code class="language-typescript">const reservation = await matchMaker.reserveSeatFor("battle", { mode: "duo" });
+console.log(reservation);
+/*
+  {
+    "sessionId": "zzzzzzzzz",
+    "room": { "roomId": "xxxxxxxxx", "processId": "yyyyyyyyy", "name": "battle", "locked": false }
+  }
+*/
+</code></pre>
+<h3 id="joinroomname-options"><code>.join(roomName, options)</code></h3>
+<p>加入房间并返回位置预订。如果没有可用于 <code>roomName</code> 的房间，则抛出异常。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><strong><code>roomName</code></strong>: 您在 <code>gameServer.define()</code> 上定义的标识符。</li>
+<li><strong><code>options</code></strong>: 客户端位置预订的选项（用于 <code>onJoin</code>/<code>onAuth</code>）</li>
+</ul>
+<pre><code class="language-typescript">const reservation = await matchMaker.join("battle", { mode: "duo" });
+console.log(reservation);
+/*
+  {
+    "sessionId": "zzzzzzzzz",
+    "room": { "roomId": "xxxxxxxxx", "processId": "yyyyyyyyy", "name": "battle", "locked": false }
+  }
+*/
+</code></pre>
+<p>"消费位置预订":您可以使用 <code>consumeSeatReservation()</code> 从客户端开始通过预订位置加入房间。</p>
+<h3 id="joinbyidroomid-options"><code>.joinById(roomId, options)</code></h3>
+<p>按 <code>id</code> 加入房间并返回客户端位置预订。如果没有为 <code>roomId</code> 找到 <code>room</code>，则会引发异常。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><strong><code>roomId</code></strong>: 特定 <code>room</code> 实例的 <code>ID</code>。</li>
+<li><strong><code>options</code></strong>: 客户端位置预订的选项（用于 <code>onJoin</code>/<code>onAuth</code>）</li>
+</ul>
+<pre><code class="language-typescript">const reservation = await matchMaker.joinById("xxxxxxxxx", {});
+console.log(reservation);
+/*
+  {
+    "sessionId": "zzzzzzzzz",
+    "room": { "roomId": "xxxxxxxxx", "processId": "yyyyyyyyy", "name": "battle", "locked": false }
+  }
+*/
+</code></pre>
+<p>"消费位置预订":您可以使用 <code>consumeSeatReservation()</code>从客户端开始通过预订位置加入房间。</p>
+<h3 id="createroomname-options"><code>.create(roomName, options)</code></h3>
+<p>创建一个新的房间并返回客户端位置预订。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><strong><code>roomName</code></strong>: 你在 <code>gameServer.define()</code> 上定义的标识符。</li>
+<li><strong><code>options</code></strong>: 客户端位置预订的选项（用于 <code>onJoin</code>/<code>onAuth</code>）</li>
+</ul>
+<pre><code class="language-typescript">const reservation = await matchMaker.create("battle", { mode: "duo" });
+console.log(reservation);
+/*
+  {
+    "sessionId": "zzzzzzzzz",
+    "room": { "roomId": "xxxxxxxxx", "processId": "yyyyyyyyy", "name": "battle", "locked": false }
+  }
+*/
+</code></pre>
+<p>"消费位置预订":您可以使用 <code>consumeSeatReservation()</code>从客户端开始通过预订位置加入房间。</p>
+<h3 id="queryconditions"><code>.query(conditions)</code></h3>
+<p>对缓存的房间执行查询。</p>
+<pre><code class="language-typescript">const rooms = await matchMaker.query({ name: "battle", mode: "duo" });
+console.log(rooms);
+/*
+  [
+    { "roomId": "xxxxxxxxx", "processId": "yyyyyyyyy", "name": "battle", "locked": false },
+    { "roomId": "xxxxxxxxx", "processId": "yyyyyyyyy", "name": "battle", "locked": false },
+    { "roomId": "xxxxxxxxx", "processId": "yyyyyyyyy", "name": "battle", "locked": false }
+  ]
+*/
+</code></pre>
+<h3 id="findoneroomavailableroomname-options"><code>.findOneRoomAvailable(roomName, options)</code></h3>
+<p>寻找一个可用公开的和没上锁的房间</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><strong><code>roomId</code></strong>: 特定 <code>room</code> 实例的 <code>ID</code>。</li>
+<li><strong><code>options</code></strong>: 客户端位置预订的选项（用于 <code>onJoin</code>/<code>onAuth</code>）</li>
+</ul>
+<pre><code class="language-typescript">const room = await matchMaker.findOneRoomAvailable("battle", { mode: "duo" });
+console.log(room);
+/*
+  { "roomId": "xxxxxxxxx", "processId": "yyyyyyyyy", "name": "battle", "locked": false }
+*/
+</code></pre>
+<h3 id="remoteroomcallroomid-method-args"><code>.remoteRoomCall(roomId, method, args)</code></h3>
+<p>在远程 <code>room</code> 中调用一个方法或返回一个属性。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><strong><code>roomId</code></strong>: 特定 <code>room</code> 实例的 <code>ID</code>。</li>
+<li><strong><code>method</code></strong>: 要调用或检索的方法或属性。</li>
+<li><strong><code>args</code></strong>: 参数数组。</li>
+</ul>
+<pre><code class="language-typescript">// call lock() on a remote room by id
+await matchMaker.remoteRoomCall("xxxxxxxxx", "lock");
+</code></pre>
+<h1 id="presence">Presence</h1>
+<p>当需要在多个进程和/或机器上扩展服务器时，需要向 <code>Server</code> 提供 <code>Presence</code> 选项。<code>Presence</code> 的目的是允许不同进程之间通信和共享数据，特别是在配对(<code>match-making</code>)过程中。</p>
+<ul>
+<li><code>LocalPresence</code> (default)</li>
+<li><code>RedisPresence</code></li>
+</ul>
+<p>每个 <code>Room</code> 处理程序上也可以使用 <code>presence</code> 实例。您可以使用它的 <code>API</code> 来持久化数据，并通过 <code>PUB/SUB</code> 在房间之间通信。</p>
+<h3 id="localpresence"><code>LocalPresence</code></h3>
+<p>这是默认选项。它用于在单个进程中运行 <code>Colyseus</code> 时使用。</p>
+<h3 id="redispresence-clientopts"><code>RedisPresence (clientOpts?)</code></h3>
+<p>当您在多个进程和/或机器上运行 <code>Colyseus</code> 时，请使用此选项。</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>clientOpts</code>: Redis 客户端选项（host/credentials）。<a href="https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/redis/index.d.ts#L28-L52" target="_blank">查看选项的完整列表</a>。</li>
+</ul>
+<pre><code class="language-typescript">import { Server, RedisPresence } from "colyseus";
+
+// This happens on the slave processes.
+const gameServer = new Server({
+    // ...
+    presence: new RedisPresence()
+});
+
+gameServer.listen(2567);
+</code></pre>
+<pre><code class="language-typescript">const colyseus = require('colyseus');
+
+// This happens on the slave processes.
+const gameServer = new colyseus.Server({
+    // ...
+    presence: new colyseus.RedisPresence()
+});
+
+gameServer.listen(2567);
+</code></pre>
+<h2 id="api">API</h2>
+<p><code>Presence</code> API 高度基于 Redis 的 API，这是一个键值数据库。</p>
+<p>每个 <code>Room</code> 实例都有一个 <code>presence</code> 属性，该属性实现以下方法：</p>
+<h3 id="subscribetopic-string-callback-function"><code>subscribe(topic: string, callback: Function)</code></h3>
+<p>订阅给定的 <code>topic</code>。每当在 <code>topic</code> 上消息被发布时，都会触发 <code>callback</code>。</p>
+<h3 id="unsubscribetopic-string"><code>unsubscribe(topic: string)</code></h3>
+<p>退订给定的<code>topic</code>。</p>
+<h3 id="publishtopic-string-data-any"><code>publish(topic: string, data: any)</code></h3>
+<p>将消息发布到给定的 <code>topic</code>。</p>
+<h3 id="existskey-string-promiseboolean"><code>exists(key: string): Promise&lt;boolean&gt;</code></h3>
+<p>返回 <code>key</code> 是否存在的布尔值。</p>
+<h3 id="setexkey-string-value-string-seconds-number"><code>setex(key: string, value: string, seconds: number)</code></h3>
+<p>设置 <code>key</code> 以保留 <code>string</code> 值，并将 <code>key</code> 设置为在给定的秒数后超时。</p>
+<h3 id="getkey-string"><code>get(key: string)</code></h3>
+<p>获取 <code>key</code> 的值。</p>
+<h3 id="delkey-string-void"><code>del(key: string): void</code></h3>
+<p>删除指定的 <code>key</code>。</p>
+<h3 id="saddkey-string-value-any"><code>sadd(key: string, value: any)</code></h3>
+<p>将指定的成员添加到存储在 <code>key</code> 的 <code>set</code> 中。已经是该 <code>set</code> 成员的指定成员将被忽略。如果 <code>key</code> 不存在，则在添加指定成员之前创建一个新 <code>set</code>。</p>
+<h3 id="smemberskey-string"><code>smembers(key: string)</code></h3>
+<p>返回存储在 <code>key</code> 中的 <code>set</code> 值的所有成员。</p>
+<h3 id="sismembermember-string"><code>sismember(member: string)</code></h3>
+<p>如果 <code>member</code> 是存储在 <code>key</code> 处的 <code>set</code> 的成员，则返回</p>
+<p><strong>Return value</strong></p>
+<ul>
+<li><code>1</code> 如果元素是 <code>set</code> 中的元素。</li>
+<li><code>0</code> 如果元素不是 <code>set</code> 的成员，或者 <code>key</code> 不存在。</li>
+</ul>
+<h3 id="sremkey-string-value-any"><code>srem(key: string, value: any)</code></h3>
+<p>从 <code>key</code> 处存储的 <code>set</code> 中删除指定的成员。不是该 <code>set</code> 成员的指定成员将被忽略。如果 <code>key</code> 不存在，则将其视为空<code>set</code>，并且此命令返回 <code>0</code>。</p>
+<h3 id="scardkey-string"><code>scard(key: string)</code></h3>
+<p>返回 <code>key</code> 处存储的 <code>set</code> 的 <code>set</code> 基数（元素数）。</p>
+<h3 id="sinterkeys-string"><code>sinter(...keys: string[])</code></h3>
+<p>返回所有给定 <code>set</code> 的交集所得的 <code>set</code> 成员。</p>
+<h3 id="hsetkey-string-field-string-value-string"><code>hset(key: string, field: string, value: string)</code></h3>
+<p>将 <code>key</code> 存储在 <code>hash</code> 中的字段设置为 <code>value</code>。如果 <code>key</code> 不存在，则创建一个包含 <code>hash</code> 的新 <code>key</code>。如果字段已经存在于 <code>hash</code> 中，则将覆盖该字段。</p>
+<h3 id="hincrbykey-string-field-string-value-number"><code>hincrby(key: string, field: string, value: number)</code></h3>
+<p>以增量的方式递增存储在 <code>key</code> 存储的 <code>hash</code> 中的字段中存储的数字。如果 <code>key</code> 不存在，则创建一个包含 <code>hash</code> 的新 <code>key</code>。如果字段不存在，则在执行操作前将该值设置为 <code>0</code>。</p>
+<h3 id="hgetkey-string-field-string-promisestring"><code>hget(key: string, field: string): Promise&lt;string&gt;</code></h3>
+<p>返回与存储在 <code>key</code> 处的 <code>hash</code> 中的 <code>field</code> 关联的值。</p>
+<h3 id="hgetallkey-string-promisefield-string-string"><code>hgetall(key: string): Promise&lt;{[field: string]: string}&gt;</code></h3>
+<p>返回存储在 <code>key</code> 处的 <code>hash</code> 的所有字段和值。</p>
+<h3 id="hdelkey-string-field-string"><code>hdel(key: string, field: string)</code></h3>
+<p>从存储在 <code>key</code> 处的 <code>hash</code> 中删除指定的字段。该 <code>hash</code> 中不存在的指定字段将被忽略。如果 <code>key</code> 不存在，则将其视为空 <code>hash</code>，并且此命令返回 <code>0</code>。</p>
+<h3 id="hlenkey-string-promisenumber"><code>hlen(key: string): Promise&lt;number&gt;</code></h3>
+<p>返回 <code>key</code> 处存储的 <code>hash</code> 中包含的字段数</p>
+<h3 id="incrkey-string"><code>incr(key: string)</code></h3>
+<p>将存储在 <code>key</code> 值上的数字加 <code>1</code>。如果 <code>key</code> 不存在，则将其设置为 <code>0</code>，然后再执行操作。如果 <code>key</code> 包含错误类型的值或包含不能表示为整数的字符串，则返回错误。该操作仅限于 <code>64</code> 位有符号整数。</p>
+<h3 id="decrkey-string"><code>decr(key: string)</code></h3>
+<p>将存储在 <code>key</code> 中的数字减 <code>1</code>。如果 <code>key</code> 不存在，则将其设置为 <code>0</code>，然后再执行操作。如果 <code>key</code> 包含错误类型的值或包含不能表示为整数的字符串，则返回错误。该操作仅限于 <code>64</code> 位有符号整数。</p>
+<h1 id="graceful-shutdown">Graceful Shutdown</h1>
+<p>Colyseus 默认提供优雅的关闭机制。这些操作将在进程杀死自己之前执行：</p>
+<ul>
+<li>异步断开所有已连接的客户端 (<code>Room#onLeave</code>)</li>
+<li>异步销毁所有生成的房间 (<code>Room#onDispose</code>)</li>
+<li>在关闭进程 <code>Server#onShutdown</code> 之前执行可选的异步回调</li>
+</ul>
+<p>如果您要在 <code>onLeave</code> / <code>onDispose</code> 上执行异步任务，则应返回 <code>Promise</code>，并在任务准备就绪时 <code>resolve</code> 它。 <code>onShutdown(callback)</code> 也是如此。</p>
+<h2 id="returning-a-promise">Returning a <code>Promise</code></h2>
+<p>通过返回一个 <code>Promise</code>，服务器将在杀死 <code>worker</code> 进程之前等待它们完成。</p>
+<pre><code class="language-typescript">import { Room } from "colyseus";
+
+class MyRoom extends Room {
+    onLeave (client) {
+        return new Promise((resolve, reject) =&gt; {
+            doDatabaseOperation((err, data) =&gt; {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(data);
+                }
+            });
+        });
+    }
+
+    onDispose () {
+        return new Promise((resolve, reject) =&gt; {
+            doDatabaseOperation((err, data) =&gt; {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(data);
+                }
+            });
+        });
+    }
+}
+</code></pre>
+<h2 id="使用-async">使用 <code>async</code></h2>
+<p><code>async</code> 关键字将使函数在底层返回一个 <code>Promise</code>。<a href="https://basarat.gitbooks.io/typescript/content/docs/async-await.html" target="_blank">阅读更多关于Async / Await的内容</a>。</p>
+<pre><code class="language-typescript">import { Room } from "colyseus";
+
+class MyRoom extends Room {
+    async onLeave (client) {
+        await doDatabaseOperation(client);
+    }
+
+    async onDispose () {
+        await removeRoomFromDatabase();
+    }
+}
+</code></pre>
+<h2 id="进程关闭回调">进程关闭回调</h2>
+<p>你也可以通过设置 <code>onShutdown</code> 回调来监听进程关闭。</p>
+<pre><code class="language-typescript">import { Server } from "colyseus";
+
+let server = new Server();
+
+server.onShutdown(function () {
+    console.log("master process is being shut down!");
+});
+</code></pre>
+<h2 id="refs">Refs</h2>
+<p>中文手册同步更新在：</p>
+<ul>
+<li>https:/colyseus.hacker-linner.com</li>
+</ul>
+<pre><code class="language-sh">我是为少
+微信：uuhells123
+公众号：黑客下午茶
+加我微信（互相学习交流），关注公众号（获取更多学习资料~）
+</code></pre>
+
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2021-05-09 09:00</span>&nbsp;
+<a href="https://www.cnblogs.com/hacker-linner/">为少</a>&nbsp;
+阅读(<span id="post_view_count">1</span>)&nbsp;
+评论(<span id="post_comment_count">0</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14747175" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(14747175);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/10.3.1/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 623498, cb_blogApp = 'hacker-linner', cb_blogUserGuid = 'f10c501f-ebe2-e111-aa3f-842b2b196315';
+    var cb_entryId = 14747175, cb_entryCreatedDate = '2021-05-09 09:00', cb_postType = 1;
+    updatePostStats(
+        [cb_entryId],
+        function(id, count) { $("#post_view_count").text(count) },
+        function(id, count) { $("#post_comment_count").text(count) })
+    zoomManager.apply("#cnblogs_post_body img:not(.code_img_closed):not(.code_img_opened)");
+</script>
+<a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <div id="cnblogs_c1" class="under-post-card">
+        <div id='div-gpt-ad-1592365906576-0' style='width: 300px; height: 250px;'></div>
+    </div>
+    <div id="under_post_card1"></div>
+    <div id="cnblogs_c2" class="under-post-card">
+        <div id='div-gpt-ad-1592366332455-0' style='width: 468px; height: 60px;'></div>
+    </div>
+    <div id="under_post_card2"></div>
+    <div id="HistoryToday" class="under-post-card"></div>
+    <script type="text/javascript">
+       var commentManager = new blogCommentManager();
+       commentManager.renderComments(0);
+       fixPostBody();
+       deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);       deliverT2();
+       deliverC1C2();
+       loadNewsAndKb();
+       loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);       LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+       GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+       loadOptUnderPost();
+       GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+	<div id="sideBar">
+		<div id="sideBarMain">
+			<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+<div id="sidebar_c3"></div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2021 为少
+<br /><span id="poweredby">Powered by .NET 5.0 on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8L-rpLgFVEJMgssCVvNUAjsqwFNkOawBUWqRGWz0ApIljoNJwgOQ98elutbCyfxGn0vEURQLlUh9z8DnhbuFHcbyIkjzXanAghBVpdFFyL-IgqbQMICT5UqxQ3Q6uxjxBTJmVNgQ-B26lHxualrJovQ" />
+</body>
+</html>

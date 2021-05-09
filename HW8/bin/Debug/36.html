@@ -1,0 +1,493 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="never" />
+    <meta name="description" content="作者：汤圆 个人博客：javalover.cc 前言 断断续续一个多月，也写了十几篇原创文章，感觉真的很不一样； 不能说技术有很大的进步，但是想法确实跟以前有所不同； 还没开始的时候，想着要学的东西太" />
+    <meta property="og:description" content="作者：汤圆 个人博客：javalover.cc 前言 断断续续一个多月，也写了十几篇原创文章，感觉真的很不一样； 不能说技术有很大的进步，但是想法确实跟以前有所不同； 还没开始的时候，想着要学的东西太" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Java并发容器篇 - 汤圆学Java - 博客园</title>
+    <link id="favicon" rel="shortcut icon" href="//common.cnblogs.com/favicon.svg" type="image/svg+xml" />
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=zS6-e1bxywlu3kpHvpr1J6MySwya3ztFtEnS7RYQ0Fk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/codinglife/bundle-codinglife.min.css?v=2uJkpdACLVfstRQ7zeCFK19brTwKuDEaNBLgKz9nm3A" />
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/codinglife/bundle-codinglife-mobile.min.css?v=DwDRKMd1bmjnJZ4iQqrTCO9QLlYb6OZaUAzHoHIIihg" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/jalon/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/jalon/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/jalon/wlwmanifest.xml" />
+    <script>
+        var currentBlogId = 668496;
+        var currentBlogApp = 'jalon';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var isBlogOwner = false;
+        var skinName = 'CodingLife';
+        var visitorUserId = '';
+    </script>
+        <script>
+            var currentPostDateAdded = '2021-05-08 11:54';
+        </script>
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=2Mic1VLeHXarpdzASbXqFMIMVLEBiWXNO5yiTHUcmhw"></script>
+    
+    
+    
+</head>
+<body class="has-navbar has-bannerbar">
+    <a name="top"></a>
+        <a target="_blank" href="https://www.aliyun.com/activity/daily/bestoffer?userCode=swh7dvlt" onclick="ga('send', 'event', 'Link', 'click', 'aliyun-cps-blog-bannerbar-pc')">
+            <div class="bannerbar aliyun forpc" style="background-size: contain;background-image: url(https://img2020.cnblogs.com/blog/35695/202104/35695-20210428221933214-737067094.jpg)">
+            </div>
+        </a>
+        <div id="bannerbar" class="bannerbar-mobile formobile">
+            <a href="https://www.aliyun.com/activity/daily/bestoffer?userCode=swh7dvlt" target="_blank" onclick="ga('send', 'event', 'Link', 'click', 'aliyun-cps-blog-bannerbar-mobile')">
+                <img src="https://img2020.cnblogs.com/blog/35695/202104/35695-20210428213541700-642740375.jpg" alt="" />
+            </a>
+        </div>
+    <div id="top_nav" class="navbar forpc">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding"><a href="https://www.cnblogs.com/" title="开发者的网上家园"><img src="/images/logo.svg?v=R9M0WmLAIPVydmdzE2keuvnjl-bPR7_35oHqtiBzGsM" alt="博客园Logo" /></a></li>
+                <li><a href="/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-sitehome')">首页</a></li>
+                <li><a href="https://news.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-news')">新闻</a></li>
+                <li><a href="https://q.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-q')">博问</a></li>
+                <li><a id="nav_brandzone" href="https://brands.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-brands')">专区</a></li>
+                <li><a href="https://ing.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-ing')">闪存</a></li>
+                <li><a href="https://edu.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-edu')">班级</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search" action="https://zzk.cnblogs.com/s" method="get">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="text" tabindex="3" />
+                        <button type="submit" id="zzk_search_button">
+                            <img src="/images/aggsite/search.svg" alt="搜索" />
+                        </button>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔">
+                        <img id="new_post_icon" class="navbar-icon" src="/images/aggsite/newpost.svg" alt="写随笔" />
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx" alt="我的博客" title="我的博客">
+                        <img id="myblog_icon" class="navbar-icon" src="/images/aggsite/myblog.svg" alt="我的博客" />
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息">
+                        <img id="msg_icon" class="navbar-icon" src="/images/aggsite/message.svg?v=J0WS2P2iPgaIVgXxcAhliw4AFZIpaTWxtdoNAv9eiCA" alt="短消息" />
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/">
+                            <img id="user_icon" class="navbar-avatar" src="/images/aggsite/avatar-default.svg" alt="用户头像" />
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <img id="navbar_lite_mode_on" src="/images/lite-mode-check.svg" class="hide" /><span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup/">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    
+    <!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/jalon/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/jalon/">汤圆学Java</a>
+</h1>
+<h2>微信搜【汤圆学Java】，回复【Java】免费领取 Java核心书籍-电子版</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/jalon/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/%E6%B1%A4%E5%9C%86%E5%AD%A6Java">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/jalon/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			<div id="blog_stats_place_holder"><script>loadBlogStats();</script></div>
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/jalon/p/14746973.html">
+    <span>Java并发容器篇</span>
+    
+
+
+
+</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                <div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+<p>作者：汤圆</p>
+<p>个人博客：<a href="http://www.javalover.cc" target="_blank">javalover.cc</a></p>
+<h2 id="前言">前言</h2>
+<p>断断续续一个多月，也写了十几篇原创文章，感觉真的很不一样；</p>
+<p>不能说技术有很大的进步，但是想法确实跟以前有所不同；</p>
+<p>还没开始的时候，想着要学的东西太多，总觉得无从下手；</p>
+<p>但是当你真正下定决心去做了几天后，就会发现 原来路真的是一步步走出来的;</p>
+<p>如果总是原地踏步东张西望，对自己不会有帮助；</p>
+<p>好了，下面开始今天的话题，并发容器篇</p>
+<h2 id="简介">简介</h2>
+<p>前面我们介绍了同步容器，它的很大一个缺点就是在高并发下的环境下，性能差；</p>
+<p>针对这个，于是就有了专门为高并发设计的并发容器类；</p>
+<p>因为并发容器类都位于<code>java.util.concurrent</code>下，所以我们也习惯把并发容器简称为JUC容器;</p>
+<p>相对应的还有JUC原子类、JUC锁、JUC工具类等等（这些后面再介绍）</p>
+<p>今天就让我们简单来了解下JUC中并发容器的相关知识点</p>
+<blockquote>
+<p>文章如果有问题，欢迎大家批评指正，在此谢过啦</p>
+</blockquote>
+<h2 id="目录">目录</h2>
+<ol>
+<li>什么是并发容器</li>
+<li>为什么会有并发容器</li>
+<li>并发容器、同步容器、普通容器的区别</li>
+</ol>
+<h2 id="正文">正文</h2>
+<h3 id="1-什么是并发容器">1. 什么是并发容器</h3>
+<p>并发容器是针对高并发专门设计的一些类，用来替代性能较低的同步容器</p>
+<p>常见的并发容器类如下所示：</p>
+<p><img src="https://i.loli.net/2021/05/07/1nV28m6UiG4PteL.png" alt="常见的并发容器" loading="lazy"></p>
+<p>这节我们主要以第一个<code>ConcurrentHashMap</code>为例子来介绍并发容器</p>
+<p>其他的以后有空会单独开篇分析</p>
+<h3 id="2-为什么会有并发容器">2. 为什么会有并发容器</h3>
+<p>其实跟同步容器的出现的道理是一样的：</p>
+<p>同步容器是为了让我们在编写多线程代码时，不用自己手动去同步加锁，为我们解放了双手，去做更多有意义的事情（有意义？双手？）；</p>
+<p><strong>而并发容器则又是为了提高同步容器的性能，相当于同步容器的升级版；</strong></p>
+<p>这也是为什么Java一直在被人唱衰，却又一直没有衰退的原因（大佬们也很焦虑啊！！！）;</p>
+<p>不过话说回来，大佬们焦虑地有点过头了；不敢想Java现在都升到16级了，而我们始终还在8级徘徊。</p>
+<h3 id="3-并发容器、同步容器、普通容器的区别">3. 并发容器、同步容器、普通容器的区别</h3>
+<p>这里的普通容器，指的是没有同步和并发的容器类，比如HashMap</p>
+<p>三个对比着来介绍，这样会更加清晰一点</p>
+<p>下面我们分别以<code>HashMap</code>, <code>HashTable</code>, <code>ConcurrentHashMap</code>为例来介绍</p>
+<h4 id="性能分析">性能分析</h4>
+<p>下面我们来分析下他们三个之间的性能区别：</p>
+<blockquote>
+<p>注：这里普通容器用的是单线程来测试的，因为多线程不安全，所以我们就不考虑了</p>
+</blockquote>
+<p>有的朋友可能会说，你这不公平啊，可是没办法呀，谁让她多线程不安全呢。</p>
+<p>如果非要让我在安全和性能之间选一个的话，那我选 ConcurrentHashMap（我都要）</p>
+<p>他们三个之间的关系,如下图</p>
+<p><img src="https://img2020.cnblogs.com/blog/2315950/202105/2315950-20210508235909971-390420886.png" alt="image" loading="lazy"><br>
+（红色表示堵的厉害，橙色表示堵的一般，绿色表示畅通）</p>
+<p>可以看到：</p>
+<ul>
+<li>
+<p>在<strong>单线程</strong>中操作<strong>普通容器</strong>时，代码都是串行执行的，同一时刻只能<strong>put或get一个数据</strong>到容器中</p>
+</li>
+<li>
+<p>在<strong>多线程</strong>中操作<strong>同步容器</strong>时，可以多个线程排队去执行，同一时刻也是只能<strong>put或get一个数据</strong>到同步容器中</p>
+</li>
+<li>
+<p>在<strong>多线程</strong>中操作<strong>并发容器</strong>时，可以多个线程同时去执行，也就是说同一时刻可以有多个线程去<strong>put或get多个数据</strong>到并发容器中(可同时读读，可同时读写，可同时写写-有可能会阻塞，这里是以ConcurrentHashMap为参考)</p>
+</li>
+</ul>
+<p>下面我们用代码来复现下上面图中所示的效果（慢-中-快）</p>
+<ol>
+<li>HashMap 测试方法</li>
+</ol>
+<pre><code class="language-java">public static void hashMapTest(){
+  Map&lt;String, String&gt; map = new HashMap&lt;&gt;();
+  long start = System.nanoTime();
+	// 创建10万条数据 单线程
+  for (int i = 0; i &lt; 100_000; i++) {
+		// 用UUID作为key,保证key的唯一
+    map.put(UUID.randomUUID().toString(), String.valueOf(i));
+    map.get(UUID.randomUUID().toString());
+  }
+  long end = System.nanoTime();
+  System.out.println("hashMap耗时：");
+  System.out.println(end - start);
+}
+</code></pre>
+<ol start="2">
+<li>HashTable 测试方法</li>
+</ol>
+<pre><code class="language-java">public static void hashTableTest(){
+  Map&lt;String, String&gt; map = new Hashtable&lt;&gt;();
+  long start = System.nanoTime();
+	// 创建10个线程 - 多线程
+  for (int i = 0; i &lt; 10; i++) {
+    new Thread(()-&gt;{
+      // 每个线程创建1万条数据
+      for (int j = 0; j &lt; 10000; j++) {
+        // UUID保证key的唯一性
+        map.put(UUID.randomUUID().toString(), String.valueOf(j));
+        map.get(UUID.randomUUID().toString());
+      }
+    }).start();
+  }
+	// 这里是为了等待上面的线程执行结束，之所以判断&gt;2，是因为在IDEA中除了main thread，还有一个monitor thread
+  while (Thread.activeCount()&gt;2){
+    Thread.yield();
+  }
+  long end = System.nanoTime();
+  System.out.println("hashTable耗时：");
+  System.out.println(end - start);
+}
+</code></pre>
+<ol start="3">
+<li>concurrentHashMap 测试方法</li>
+</ol>
+<pre><code class="language-java">public static void concurrentHashMapTest(){
+  Map&lt;String, String&gt; map = new ConcurrentHashMap&lt;&gt;();
+  long start = System.nanoTime();
+  // 创建10个线程 - 多线程
+  for (int i = 0; i &lt; 10; i++) {
+    new Thread(()-&gt;{
+      // 每个线程创建1万条数据
+      for (int j = 0; j &lt; 10000; j++) {
+        // UUID作为key，保证唯一性
+        map.put(UUID.randomUUID().toString(), String.valueOf(j));
+        map.get(UUID.randomUUID().toString());
+      }
+    }).start();
+  }
+	// 这里是为了等待上面的线程执行结束，之所以判断&gt;2，是因为在IDEA中除了main thread，还有一个monitor thread
+  while (Thread.activeCount()&gt;2){
+    Thread.yield();
+  }
+  long end = System.nanoTime();
+  System.out.println("concurrentHashMap耗时：");
+  System.out.println(end - start);
+}
+</code></pre>
+<ol start="4">
+<li>main 方法分别执行上面的三个测试</li>
+</ol>
+<pre><code class="language-java">public static void main(String[] args) {
+  hashMapTest();
+  hashTableTest();
+  while (Thread.activeCount()&gt;2){
+    Thread.yield();
+  }
+  concurrentHashMapTest();
+}
+</code></pre>
+<p>运行可以看到，如下结果（运行多次，数值可能会变好，但是规律基本一致）</p>
+<pre><code class="language-java">hashMap耗时：
+754699874 (慢)
+hashTable耗时：
+609160132（中）
+concurrentHashMap耗时：
+261617133(快)
+</code></pre>
+<blockquote>
+<p>结论就是，正常情况下的速度：普通容器 &lt; 同步容器 &lt; 并发容器</p>
+</blockquote>
+<p>但是也不那么绝对，因为这里插入的key都是唯一的，所以看起来正常一点</p>
+<p>那如果我们不正常一点呢？比如极端到BT的那种</p>
+<p>下面我们就不停地插入同一条数据，上面的所有put/get都改为下面的代码：</p>
+<pre><code class="language-java">map.put("a", "a");
+map.get("a");
+</code></pre>
+<p>运行后，你会发现，又是另外一个结论（大家感兴趣的可以敲出来试试）</p>
+<p>不过结论不结论的，意义不是很大；</p>
+<h4 id="锁分析">锁分析</h4>
+<p>普通容器没锁</p>
+<p>同步容器中锁的都是方法级别，也就是说锁的是整个容器，我们先来看下HashTable的锁</p>
+<pre><code class="language-java">public synchronized V put(K key, V value) {}
+public synchronized V remove(Object key) {}
+</code></pre>
+<p>可以看到：因为锁是内置锁，<strong>锁</strong>住的是<strong>整个容器</strong></p>
+<p>所以我们在<strong>put的时候，其他线程都不能put/get</strong></p>
+<p>而我们在<strong>get的时候，其他线程也都不能put/get</strong></p>
+<p>所以<strong>同步容器</strong>的<strong>效率</strong>会比较<strong>低</strong></p>
+<p>并发容器，我们以1.7的ConcurrentHashMap为例来说下（之所以选1.7，是因为它里面涉及的内容都是前面章节介绍过的）</p>
+<p>它的锁粒度很小，它不会给整个容器上锁，而是<strong>分段上锁</strong>；</p>
+<p>分段的依据就是key.hash，根据不同的hash值映射到不同的段（默认16个段），然后插入数据时，根据这个hash值去给对应的段上锁，此时其他段还是可以被其他线程读写的；</p>
+<p>所以这就是文章开头所说的，为啥ConcurrentHashMap会支持多个线程同时写（因为只要插入的key的hashCode不会映射到同一个段里，那就不会冲突，此时就可以同时写）</p>
+<p>读因为没有上锁，所以当然也支持同时读</p>
+<blockquote>
+<p>如果读操作没有锁，那么它怎么保证数据的一致性呢？</p>
+</blockquote>
+<p>答案就是以前介绍过的volatile（保证可见性、禁止重排序），它修饰在节点Node和值val上，保证了你get的值永远是最新的</p>
+<p>下面是ConcurrentHashMap部分源码，可以看到val和net节点都是volatile类型</p>
+<pre><code class="language-java">static class Node&lt;K,V&gt; implements Map.Entry&lt;K,V&gt; {
+  final int hash;
+  final K key;
+  volatile V val;
+  volatile Node&lt;K,V&gt; next;
+}
+</code></pre>
+<p>总结下来就是：并发容器ConcurrentHashMap中，多个线程可同时读，多个线程可同时写，多个线程同时读和写</p>
+<h2 id="总结">总结</h2>
+<ol>
+<li>什么是并发容器：并发容器是针对高并发专门设计的一些类，用来替代性能较低的同步容器</li>
+<li>为什么会有并发容器：为了提高同步容器的性能</li>
+<li>并发容器、同步容器、普通容器的区别：
+<ul>
+<li>性能：高 - 中 - 低</li>
+<li>锁：粒度小 - 粒度大 - 无</li>
+<li>场景：高并发 - 中并发 - 单线程</li>
+</ul>
+</li>
+</ol>
+<p>参考内容：</p>
+<ul>
+<li>《Java并发编程实战》</li>
+<li>《实战Java高并发》</li>
+<li>《深入理解Java虚拟机》</li>
+</ul>
+<h2 id="后记">后记</h2>
+<p>我这里介绍的都是比较浅的东西，其实并发容器的知识深入起来有很多；</p>
+<p>但是因为这节是并发系列的比较靠前的，还有很多东西没涉及到，所以就分析地比较浅；</p>
+<p>等到并发系列的内容都涉及地差不多了，再回过头来深入分析。</p>
+<p>写在最后：</p>
+<p><strong>愿你的意中人亦是中意你之人。</strong></p>
+
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2021-05-08 23:54</span>&nbsp;
+<a href="https://www.cnblogs.com/jalon/">汤圆学Java</a>&nbsp;
+阅读(<span id="post_view_count">46</span>)&nbsp;
+评论(<span id="post_comment_count">0</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14746973" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(14746973);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/10.3.1/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 668496, cb_blogApp = 'jalon', cb_blogUserGuid = 'e9911e03-23e5-4276-6713-08d8d71b3f30';
+    var cb_entryId = 14746973, cb_entryCreatedDate = '2021-05-08 23:54', cb_postType = 1;
+    updatePostStats(
+        [cb_entryId],
+        function(id, count) { $("#post_view_count").text(count) },
+        function(id, count) { $("#post_comment_count").text(count) })
+    zoomManager.apply("#cnblogs_post_body img:not(.code_img_closed):not(.code_img_opened)");
+</script>
+<a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <div id="cnblogs_c1" class="under-post-card">
+        <div id='div-gpt-ad-1592365906576-0' style='width: 300px; height: 250px;'></div>
+    </div>
+    <div id="under_post_card1"></div>
+    <div id="cnblogs_c2" class="under-post-card">
+        <div id='div-gpt-ad-1592366332455-0' style='width: 468px; height: 60px;'></div>
+    </div>
+    <div id="under_post_card2"></div>
+    <div id="HistoryToday" class="under-post-card"></div>
+    <script type="text/javascript">
+       var commentManager = new blogCommentManager();
+       commentManager.renderComments(0);
+       fixPostBody();
+       deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);       deliverT2();
+       deliverC1C2();
+       loadNewsAndKb();
+       loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);       LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+       GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+       loadOptUnderPost();
+       GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+	<div id="sideBar">
+		<div id="sideBarMain">
+			<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+<div id="sidebar_c3"></div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2021 汤圆学Java
+<br /><span id="poweredby">Powered by .NET 5.0 on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8L-rpLgFVEJMgssCVvNUAjvZIBV7_MPdEoMnoAG0V1EmQMkkfps7XRUykdlH7ii4S2AT12E4PVFSqHmxIm8AOYdAFvfqyDVdg532pHTNZAF9RglEhFPzBrMWN-sr-r4cFnxhgyVbKQdZY4tq-sd_CNs" />
+</body>
+</html>

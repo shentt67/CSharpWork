@@ -1,0 +1,975 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin-when-crossorigin" />
+    
+    
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>chasedeath - 博客园</title>
+    <link id="favicon" rel="shortcut icon" href="//common.cnblogs.com/favicon.svg" type="image/svg+xml" />
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=zS6-e1bxywlu3kpHvpr1J6MySwya3ztFtEnS7RYQ0Fk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/simplememory/bundle-simplememory.min.css?v=uknaX_hejnSu-njQgx4Hj1R0JiPLwUhFPUlwWNmWyB4" />
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/SimpleMemory/bundle-SimpleMemory-mobile.min.css" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/chasedeath/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/chasedeath/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/chasedeath/wlwmanifest.xml" />
+    <script>
+        var currentBlogId = 530356;
+        var currentBlogApp = 'chasedeath';
+        var cb_enable_mathjax = true;
+        var isLogined = false;
+        var isBlogOwner = false;
+        var skinName = 'SimpleMemory';
+        var visitorUserId = '';
+    </script>
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=2Mic1VLeHXarpdzASbXqFMIMVLEBiWXNO5yiTHUcmhw"></script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']], processClass: 'math', processEscapes: true },
+        TeX: {
+        equationNumbers: { autoNumber: ['AMS'], useLabelIds: true },
+        extensions: ['extpfeil.js', 'mediawiki-texvc.js'],
+        Macros: {bm: "\\boldsymbol"}
+        },
+        'HTML-CSS': { linebreaks: { automatic: true } },
+        SVG: { linebreaks: { automatic: true } }
+        });
+    </script>
+    <script src="https://mathjax.cnblogs.com/2_7_5/MathJax.js?config=TeX-AMS-MML_HTMLorMML&amp;v=20200504"></script>
+    
+</head>
+<body class="has-navbar has-bannerbar">
+    <a name="top"></a>
+        <a target="_blank" href="https://www.aliyun.com/activity/daily/bestoffer?userCode=swh7dvlt" onclick="ga('send', 'event', 'Link', 'click', 'aliyun-cps-blog-bannerbar-pc')">
+            <div class="bannerbar aliyun forpc" style="background-size: contain;background-image: url(https://img2020.cnblogs.com/blog/35695/202104/35695-20210428221933214-737067094.jpg)">
+            </div>
+        </a>
+        <div id="bannerbar" class="bannerbar-mobile formobile">
+            <a href="https://www.aliyun.com/activity/daily/bestoffer?userCode=swh7dvlt" target="_blank" onclick="ga('send', 'event', 'Link', 'click', 'aliyun-cps-blog-bannerbar-mobile')">
+                <img src="https://img2020.cnblogs.com/blog/35695/202104/35695-20210428213541700-642740375.jpg" alt="" />
+            </a>
+        </div>
+    <div id="top_nav" class="navbar forpc">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding"><a href="https://www.cnblogs.com/" title="开发者的网上家园"><img src="/images/logo.svg?v=R9M0WmLAIPVydmdzE2keuvnjl-bPR7_35oHqtiBzGsM" alt="博客园Logo" /></a></li>
+                <li><a href="/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-sitehome')">首页</a></li>
+                <li><a href="https://news.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-news')">新闻</a></li>
+                <li><a href="https://q.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-q')">博问</a></li>
+                <li><a id="nav_brandzone" href="https://brands.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-brands')">专区</a></li>
+                <li><a href="https://ing.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-ing')">闪存</a></li>
+                <li><a href="https://edu.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-edu')">班级</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search" action="https://zzk.cnblogs.com/s" method="get">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="text" tabindex="3" />
+                        <button type="submit" id="zzk_search_button">
+                            <img src="/images/aggsite/search.svg" alt="搜索" />
+                        </button>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔">
+                        <img id="new_post_icon" class="navbar-icon" src="/images/aggsite/newpost.svg" alt="写随笔" />
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx" alt="我的博客" title="我的博客">
+                        <img id="myblog_icon" class="navbar-icon" src="/images/aggsite/myblog.svg" alt="我的博客" />
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息">
+                        <img id="msg_icon" class="navbar-icon" src="/images/aggsite/message.svg?v=J0WS2P2iPgaIVgXxcAhliw4AFZIpaTWxtdoNAv9eiCA" alt="短消息" />
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/">
+                            <img id="user_icon" class="navbar-avatar" src="/images/aggsite/avatar-default.svg" alt="用户头像" />
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <img id="navbar_lite_mode_on" src="/images/lite-mode-check.svg" class="hide" /><span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup/">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    
+    <!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/chasedeath/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/chasedeath/">chasedeath</a>
+</h1>
+<h2></h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/chasedeath/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+</li>
+<li>
+
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			<div id="blog_stats_place_holder"><script>loadBlogStats();</script></div>
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		
+
+
+
+
+
+		
+
+
+<div class="day">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/chasedeath/archive/2020/08/13.html">2020年8月13日</a>
+    </div>
+
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/chasedeath/p/13499073.html">
+    <span>
+            <span>[置顶]</span>
+        博客阅览帮助
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：博客阅览帮助 这是一个悲惨的蒟蒻ZJOIer的博客 目前正在打Cu的边缘努力挣扎 不善口胡，擅长套简单的模板题 很少打CodeForces，CodeChef，Topcoder，AtCoder 文章书写的时间跨度非常长，所以前面的可能不像是一个人写的 如果有出现很sb的错误，请@评论区 or qq 2        <a href="https://www.cnblogs.com/chasedeath/p/13499073.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2020-08-13 21:47
+chasedeath
+<span data-post-id="13499073" class="post-view-count">阅读(163)</span> 
+<span data-post-id="13499073" class="post-comment-count">评论(0)</span> 
+<span data-post-id="13499073" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=13499073" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+</div>
+
+
+		
+
+
+<div class="day">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/chasedeath/archive/2020/08/12.html">2020年8月12日</a>
+    </div>
+
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/chasedeath/p/12070229.html">
+    <span>
+            <span>[置顶]</span>
+        NTT&amp;FFT(快速？变换,以及扩展)
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：FFT&amp;NTT(以及扩展) 预备知识：用于NTT NTT/FFT其实本质相同，用途是快速求解 多项式乘积 前言 FT: 傅里叶变换: 这是一个工程上的概念，可以简述为：一个周期性的信号波段可以用 若干个正弦曲线 的带权和表示 DFT: 离散傅里叶变换，这是傅里叶变换在离散情况下的变种 FFT: 快速        <a href="https://www.cnblogs.com/chasedeath/p/12070229.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2020-08-12 22:21
+chasedeath
+<span data-post-id="12070229" class="post-view-count">阅读(439)</span> 
+<span data-post-id="12070229" class="post-comment-count">评论(0)</span> 
+<span data-post-id="12070229" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=12070229" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+            <div class="postSeparator"></div>
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/chasedeath/p/13092822.html">
+    <span>
+            <span>[置顶]</span>
+        数论知识小结 [基础篇]
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：数论知识小结 [基础篇] (latest updated on 2020.08.12) 符号$(a,b)=\gcd(a,b)$ 乘除$a|b\rightarrow b=ka (k\in \N^+)$ $\sum$求和,$\prod$求积 任意$\forall$，存在$\exists$ $\lfloo        <a href="https://www.cnblogs.com/chasedeath/p/13092822.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2020-08-12 19:32
+chasedeath
+<span data-post-id="13092822" class="post-view-count">阅读(216)</span> 
+<span data-post-id="13092822" class="post-comment-count">评论(0)</span> 
+<span data-post-id="13092822" class="post-digg-count">推荐(1)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=13092822" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+            <div class="postSeparator"></div>
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/chasedeath/p/13492548.html">
+    <span>
+            <span>[置顶]</span>
+        数论知识小结 [微提高篇]
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：数论知识小结 [微提高篇] (lastest updated on 2020.08.12) 二次剩余和高次剩余 $y^c\equiv x\pmod P$则$y$为$x$模$P$的$c$次剩余 关于二次剩余 \(\ \) $\text $x$是质数的必要条件是 \(\forall a,a^{x-1}\        <a href="https://www.cnblogs.com/chasedeath/p/13492548.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2020-08-12 19:31
+chasedeath
+<span data-post-id="13492548" class="post-view-count">阅读(206)</span> 
+<span data-post-id="13492548" class="post-comment-count">评论(0)</span> 
+<span data-post-id="13492548" class="post-digg-count">推荐(1)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=13492548" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+</div>
+
+
+		
+
+
+<div class="day">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/chasedeath/archive/2020/05/24.html">2020年5月24日</a>
+    </div>
+
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/chasedeath/p/12949896.html">
+    <span>
+            <span>[置顶]</span>
+        零化多项式/特征多项式/最小多项式/常系数线性齐次递推
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：零化多项式/特征多项式/最小多项式/常系数线性齐次递推 约定: $I_n$是$n$阶单位矩阵，即主对角线是$1$的$n$阶矩阵 一个矩阵$A$的$|A|$是$A$的行列式 默认$A$是一个$n\times n$的矩阵 定义 零化多项式: 对于一个矩阵$A$，它的一个零化多项式$f(\lambda)$        <a href="https://www.cnblogs.com/chasedeath/p/12949896.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2020-05-24 11:06
+chasedeath
+<span data-post-id="12949896" class="post-view-count">阅读(1474)</span> 
+<span data-post-id="12949896" class="post-comment-count">评论(0)</span> 
+<span data-post-id="12949896" class="post-digg-count">推荐(2)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=12949896" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+</div>
+
+
+		
+
+
+<div class="day">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/chasedeath/archive/2020/05/09.html">2020年5月9日</a>
+    </div>
+
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/chasedeath/p/12859142.html">
+    <span>
+            <span>[置顶]</span>
+        牛顿迭代快速求解定义域为多项式的函数零点
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：牛顿迭代求解定义域为多项式的函数零点 (笔者习惯:$f(x)$表示函数,$F(x),G(x)$表示多项式) 前言 原来的牛顿迭代是通过在函数上不断作切线来快速求出一个多项式函数近似的零点 在编程竞赛中，计数类问题我们经常遇到一个(可能是无穷的)数列$a_n$,$a_n$可以由他自己通过一定的转移得到        <a href="https://www.cnblogs.com/chasedeath/p/12859142.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2020-05-09 17:48
+chasedeath
+<span data-post-id="12859142" class="post-view-count">阅读(401)</span> 
+<span data-post-id="12859142" class="post-comment-count">评论(0)</span> 
+<span data-post-id="12859142" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=12859142" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+</div>
+
+
+		
+
+
+<div class="day">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/chasedeath/archive/2020/04/29.html">2020年4月29日</a>
+    </div>
+
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/chasedeath/p/12803537.html">
+    <span>
+            <span>[置顶]</span>
+        求导/泰勒展开
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：求导/泰勒展开 前言:求导是为泰勒展开铺路的。。 求导 $f&#39;(x)$为$f(x)$的导数，即$f(x)$在$x$上的变化率 \(\begin{aligned} f&#39;(x)=\lim_{\Delta x\rightarrow 0} \frac{f(x+\Delta x)-f(x)}{\Delta x        <a href="https://www.cnblogs.com/chasedeath/p/12803537.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2020-04-29 17:33
+chasedeath
+<span data-post-id="12803537" class="post-view-count">阅读(380)</span> 
+<span data-post-id="12803537" class="post-comment-count">评论(0)</span> 
+<span data-post-id="12803537" class="post-digg-count">推荐(1)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=12803537" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+            <div class="postSeparator"></div>
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/chasedeath/p/12801809.html">
+    <span>
+            <span>[置顶]</span>
+        多项式运算 (求逆/ln/exp等)
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：多项式运算 (求逆/ln/exp等) (latest updated on 2021.02.23) 前置知识NTT 所有操作均在对$P=\text{998244353}$取模下进行 代码在最下面，由于板子实在有一点长，所以。。。 下文中$\pmod {x^n}$表示求出了多项式的前$n$项 $[x^        <a href="https://www.cnblogs.com/chasedeath/p/12801809.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2020-04-29 14:01
+chasedeath
+<span data-post-id="12801809" class="post-view-count">阅读(307)</span> 
+<span data-post-id="12801809" class="post-comment-count">评论(0)</span> 
+<span data-post-id="12801809" class="post-digg-count">推荐(1)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=12801809" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+</div>
+
+
+		
+
+
+<div class="day">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/chasedeath/archive/2020/04/27.html">2020年4月27日</a>
+    </div>
+
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/chasedeath/p/12785842.html">
+    <span>
+            <span>[置顶]</span>
+        FWT (快速沃尔什变换)详解 以及 K进制FWT
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：FWT (快速沃尔什变换)详解 以及 K进制FWT 约定：\(F&#39;=FWT(F)\) 卷积的问题，事实上就是要构造$F&#39;G&#39;=(FG)&#39;$ 我们常见的卷积，是二进制位上的or ,and ,xor 但正式来说，是集合幂指数 上的 并 ， 交 ， 对称差 为了说人话，这里就不带入集合幂指数的概念了 一个        <a href="https://www.cnblogs.com/chasedeath/p/12785842.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2020-04-27 12:13
+chasedeath
+<span data-post-id="12785842" class="post-view-count">阅读(571)</span> 
+<span data-post-id="12785842" class="post-comment-count">评论(0)</span> 
+<span data-post-id="12785842" class="post-digg-count">推荐(3)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=12785842" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+</div>
+
+
+		
+
+
+<div class="day">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/chasedeath/archive/2019/10/16.html">2019年10月16日</a>
+    </div>
+
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/chasedeath/p/11684722.html">
+    <span>
+            <span>[置顶]</span>
+        组合数公式
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：组合数公式 组合数$\displaystyle C(n,m)=C_n^m=\binom$ 递推式 $$ C(n,m)=C(n-1,m-1)+C(n-1,m)$$ 组合数完全累和 \(\displaystyle \sum_{i=0}^n C(n,i) =2^n\) 奇偶累和 \(\displaysty        <a href="https://www.cnblogs.com/chasedeath/p/11684722.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2019-10-16 12:06
+chasedeath
+<span data-post-id="11684722" class="post-view-count">阅读(448)</span> 
+<span data-post-id="11684722" class="post-comment-count">评论(0)</span> 
+<span data-post-id="11684722" class="post-digg-count">推荐(1)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=11684722" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+</div>
+
+
+		
+
+
+<div class="day">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/chasedeath/archive/2021/05/09.html">2021年5月9日</a>
+    </div>
+
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/chasedeath/p/14747172.html">
+    <span>
+        CF1305G - Kuroni and Antihype
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：CF1305G - Kuroni and Antihype 题目大意 有$n$个人，每个人有一个权值$a_i$ 每个人可以自己选择放入集合，不获得分数 或者一个已经在集合中的人$i$可以把一个$a_i \ \text\ a_j=0$的$j$放入集合，并且获得$a_i$的分数 求最大得分总和 模型分析        <a href="https://www.cnblogs.com/chasedeath/p/14747172.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2021-05-09 08:58
+chasedeath
+<span data-post-id="14747172" class="post-view-count">阅读(6)</span> 
+<span data-post-id="14747172" class="post-comment-count">评论(0)</span> 
+<span data-post-id="14747172" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14747172" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+            <div class="postSeparator"></div>
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/chasedeath/p/14747136.html">
+    <span>
+        CF1276F - Asterisk Substrings
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：CF1276F - Asterisk Substrings 题目大意 给定串$S,|S|=n$，设一个串的子串集合为$Sub(S)$ 求$|Sub(S) \cup Sub(+S[2:n])\cup Sub(S[1:1]++S[3:n])\cup \cdots|$ 其中*表示特殊字符而不是通配符 分析        <a href="https://www.cnblogs.com/chasedeath/p/14747136.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2021-05-09 08:12
+chasedeath
+<span data-post-id="14747136" class="post-view-count">阅读(4)</span> 
+<span data-post-id="14747136" class="post-comment-count">评论(0)</span> 
+<span data-post-id="14747136" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14747136" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+</div>
+
+
+		
+
+
+<div class="day">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/chasedeath/archive/2021/05/08.html">2021年5月8日</a>
+    </div>
+
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/chasedeath/p/14746184.html">
+    <span>
+        CF1082F - Speed Dial
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：CF1082F - Speed Dial 题目大意 给定$n$个电话号码，你可以随意生成$k$个快捷键，每个快捷键是一个数字串 最终拨号方式： 选择 至多一个 快捷键按下，对于剩余部分手动补全，且不允许退格 每个电话号码有拨打次数，最小化手动补全部分的长度总和 分析 如果每次选定一个集合使其公用一个        <a href="https://www.cnblogs.com/chasedeath/p/14746184.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2021-05-08 18:59
+chasedeath
+<span data-post-id="14746184" class="post-view-count">阅读(5)</span> 
+<span data-post-id="14746184" class="post-comment-count">评论(0)</span> 
+<span data-post-id="14746184" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14746184" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+            <div class="postSeparator"></div>
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/chasedeath/p/14746162.html">
+    <span>
+        CF1366G - Construct the String
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：CF1366G - Construct the String 题目大意 给定一个初始串$S$和目标串$T$ 其中$S$除了包含字母外还包含删除标记&#39;.&#39; 具体的$S$表示的字符串$f(S)$，就是依次加入每个字母，或者在删除标记处删除上一个字符（不存在这个字符则非法） 求删除$S$中最少的字符，使得        <a href="https://www.cnblogs.com/chasedeath/p/14746162.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2021-05-08 18:49
+chasedeath
+<span data-post-id="14746162" class="post-view-count">阅读(2)</span> 
+<span data-post-id="14746162" class="post-comment-count">评论(0)</span> 
+<span data-post-id="14746162" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14746162" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+            <div class="postSeparator"></div>
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/chasedeath/p/14745807.html">
+    <span>
+        CF1221G - Graph And Numbers
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：CF1221G - Graph And Numbers 题目大意 给定一个$n$点$m$边的无向图，\(n\leq 40\) 求给所有点01染色，满足 至少存在一条边两边的点均为0 至少存在一条边两边的点一个为0，一个为1 至少存在一条边两边的点均为1 的方案数 分析 至少存在 问题并不好处理，由于        <a href="https://www.cnblogs.com/chasedeath/p/14745807.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2021-05-08 17:19
+chasedeath
+<span data-post-id="14745807" class="post-view-count">阅读(5)</span> 
+<span data-post-id="14745807" class="post-comment-count">评论(0)</span> 
+<span data-post-id="14745807" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14745807" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+            <div class="postSeparator"></div>
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/chasedeath/p/14744488.html">
+    <span>
+        CF1201E2 - Knightmare (hard)
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：CF1201E2 - Knightmare (hard) 题目大意 $n\times m(2|n,2|m)$的棋盘上有两个 马 (Knight是国际象棋) 分别位于$S_1=(x_1,y_1),S_2=(x_2,y_2)$ 他们分别要到达$T_1=(\frac{2},\frac{2}),T_2=(\        <a href="https://www.cnblogs.com/chasedeath/p/14744488.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2021-05-08 12:51
+chasedeath
+<span data-post-id="14744488" class="post-view-count">阅读(6)</span> 
+<span data-post-id="14744488" class="post-comment-count">评论(0)</span> 
+<span data-post-id="14744488" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14744488" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+            <div class="postSeparator"></div>
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/chasedeath/p/14744458.html">
+    <span>
+        CF1408 - Clusterization Counting
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：CF1408 - Clusterization Counting 题目大意 给定$n$个点无向带权完全图，求将这些点分组，使得 组内的边边权 都小于 组内点连到组外点的边权 保证边权不同 分析 考虑如何确定合法的分组 从小到大依次加入每一条边，则一个合法的分组一定在某一个时刻满足 1.这个分组是一个        <a href="https://www.cnblogs.com/chasedeath/p/14744458.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2021-05-08 12:32
+chasedeath
+<span data-post-id="14744458" class="post-view-count">阅读(3)</span> 
+<span data-post-id="14744458" class="post-comment-count">评论(0)</span> 
+<span data-post-id="14744458" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14744458" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+</div>
+
+
+		
+
+
+<div class="day">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/chasedeath/archive/2021/05/07.html">2021年5月7日</a>
+    </div>
+
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/chasedeath/p/14742449.html">
+    <span>
+        CF1450H2 - Multithreading (Hard Version)
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：CF1450H2 - Multithreading (Hard Version) 题目大意 给定一个均分成$n$份($n$为偶数)的圆，每份上有一个元素为0/1，其中一些元素的值未知，且随机 当存在一个方案，0和0连线，1和1连线，使得每个元素都被恰好连一条线时，称环$c$合法 定义$f(c)$为上        <a href="https://www.cnblogs.com/chasedeath/p/14742449.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2021-05-07 20:06
+chasedeath
+<span data-post-id="14742449" class="post-view-count">阅读(1)</span> 
+<span data-post-id="14742449" class="post-comment-count">评论(0)</span> 
+<span data-post-id="14742449" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14742449" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+            <div class="postSeparator"></div>
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/chasedeath/p/14741517.html">
+    <span>
+        CF1379F2 - Chess Strikes Back (hard version)
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：CF1379F2 - Chess Strikes Back (hard version) 题目大意 给定一个$2n\times 2m$的交错棋盘，一个位置$(i,j)$可以放当且仅当$2|i+j$ 给定$q$次操作，每次操作在一个位置加入或删除一个障碍 求是否存在一种方案能在棋盘上放入$nm$个互不        <a href="https://www.cnblogs.com/chasedeath/p/14741517.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2021-05-07 16:10
+chasedeath
+<span data-post-id="14741517" class="post-view-count">阅读(5)</span> 
+<span data-post-id="14741517" class="post-comment-count">评论(0)</span> 
+<span data-post-id="14741517" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14741517" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+            <div class="postSeparator"></div>
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/chasedeath/p/14738659.html">
+    <span>
+        CF1217F - Forced Online Queries Problem
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：CF1217F - Forced Online Queries Problem 题目大意 $n$个点无向图，$m$次操作，每次加入/删除一条边，或者查询两个点连通性 $lst$为上次查询的连通性情况，即$lst={0,1}$ 加密方式为$x=(x&#39;+lst-1)\mod n+1$ 吐槽 如果你管这叫        <a href="https://www.cnblogs.com/chasedeath/p/14738659.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2021-05-07 12:08
+chasedeath
+<span data-post-id="14738659" class="post-view-count">阅读(9)</span> 
+<span data-post-id="14738659" class="post-comment-count">评论(0)</span> 
+<span data-post-id="14738659" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14738659" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+</div>
+
+
+
+<div class="topicListFooter">
+    <div id="nav_next_page">
+        
+    <a href="https://www.cnblogs.com/chasedeath/default.html?page=2">
+        下一页
+    </a>
+
+    </div>    
+</div>
+
+
+
+
+
+
+<script>
+    updatePostStats(
+        $(".post-view-count").map(function () { return this.dataset.postId }).get(),
+        function(id, count) { $(".post-view-count[data-post-id=" + id + "]").text("阅读(" + count + ")") },
+        function(id, count) { $(".post-comment-count[data-post-id=" + id + "]").text("评论(" + count + ")") },
+        function(id, count) { $(".post-digg-count[data-post-id=" + id + "]").text("推荐(" + count + ")") });
+</script>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+	<div id="sideBar">
+		<div id="sideBarMain">
+			<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+<div id="sidebar_c3"></div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2021 chasedeath
+<br /><span id="poweredby">Powered by .NET 5.0 on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8L-rpLgFVEJMgssCVvNUAjtWBWOvtV1rKpratPvppHPGem-XoskZwOHFxHqDHjqPH63PzUBJDBa2t3ocytBZRtk6CzBU9RTdXRmKJQznON9GXHXY1boFRwRBc_Ax71eeqCBUd0esVkezdY4gaPSC-3Y" />
+</body>
+</html>

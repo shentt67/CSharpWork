@@ -1,0 +1,623 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin-when-crossorigin" />
+    
+    
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>就是为了好玩 - 博客园</title>
+    <link id="favicon" rel="shortcut icon" href="//common.cnblogs.com/favicon.svg" type="image/svg+xml" />
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=zS6-e1bxywlu3kpHvpr1J6MySwya3ztFtEnS7RYQ0Fk" />
+    <link id="MainCss" rel="stylesheet" href="/skins/mountainink/bundle-mountainink.min.css?v=J87U-ocWJ9KtApKHMmdL5wCun-udAA8_AEHqkLSEzBQ" />
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/alwaysbefunLinux/custom.css?v=21F7Q&#x2B;3ZNuuVkcO6DPnmVbmxMho=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/mountainink/bundle-mountainink-mobile.min.css?v=iPf_XHQsJ-ofZZ2RiaeMCHG0JEaMNLa9yhkUGK3xTSQ" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/alwaysbefunLinux/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/alwaysbefunLinux/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/alwaysbefunLinux/wlwmanifest.xml" />
+    <script>
+        var currentBlogId = 648772;
+        var currentBlogApp = 'alwaysbefunLinux';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var isBlogOwner = false;
+        var skinName = 'MountainInk';
+        var visitorUserId = '';
+    </script>
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=2Mic1VLeHXarpdzASbXqFMIMVLEBiWXNO5yiTHUcmhw"></script>
+    
+    
+    
+</head>
+<body class="no-navbar">
+    <a name="top"></a>
+        <div id="bannerbar" class="bannerbar-mobile formobile">
+            <a href="https://www.aliyun.com/activity/daily/bestoffer?userCode=swh7dvlt" target="_blank" onclick="ga('send', 'event', 'Link', 'click', 'aliyun-cps-blog-bannerbar-mobile')">
+                <img src="https://img2020.cnblogs.com/blog/35695/202104/35695-20210428213541700-642740375.jpg" alt="" />
+            </a>
+        </div>
+    <div id="top_nav" class="navbar forpc navbar-custom">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding"><a href="https://www.cnblogs.com/" title="开发者的网上家园"><img src="/images/logo.svg?v=R9M0WmLAIPVydmdzE2keuvnjl-bPR7_35oHqtiBzGsM" alt="博客园Logo" /></a></li>
+                <li><a href="/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-sitehome')">首页</a></li>
+                <li><a href="https://news.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-news')">新闻</a></li>
+                <li><a href="https://q.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-q')">博问</a></li>
+                <li><a id="nav_brandzone" href="https://brands.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-brands')">专区</a></li>
+                <li><a href="https://ing.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-ing')">闪存</a></li>
+                <li><a href="https://edu.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-edu')">班级</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search" action="https://zzk.cnblogs.com/s" method="get">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="text" tabindex="3" />
+                        <button type="submit" id="zzk_search_button">
+                            <img src="/images/aggsite/search.svg" alt="搜索" />
+                        </button>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔">
+                        <img id="new_post_icon" class="navbar-icon" src="/images/aggsite/newpost.svg" alt="写随笔" />
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx" alt="我的博客" title="我的博客">
+                        <img id="myblog_icon" class="navbar-icon" src="/images/aggsite/myblog.svg" alt="我的博客" />
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息">
+                        <img id="msg_icon" class="navbar-icon" src="/images/aggsite/message.svg?v=J0WS2P2iPgaIVgXxcAhliw4AFZIpaTWxtdoNAv9eiCA" alt="短消息" />
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/">
+                            <img id="user_icon" class="navbar-avatar" src="/images/aggsite/avatar-default.svg" alt="用户头像" />
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <img id="navbar_lite_mode_on" src="/images/lite-mode-check.svg" class="hide" /><span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup/">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    
+    <!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/alwaysbefunLinux/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/alwaysbefunLinux/">就是为了好玩</a>
+</h1>
+<h2></h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/alwaysbefunLinux/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/%E5%B0%B1%E6%98%AF%E4%B8%BA%E4%BA%86%E5%A5%BD%E7%8E%A9">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/alwaysbefunLinux/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			<div id="blog_stats_place_holder"><script>loadBlogStats();</script></div>
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		
+
+
+
+
+
+		
+
+
+<div class="day">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/alwaysbefunLinux/archive/2021/05/09.html">2021年5月9日</a>
+    </div>
+
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/alwaysbefunLinux/p/14747499.html">
+    <span>
+        从互联网远程访问树莓派
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：之前已经介绍过远程登录树莓派，主要讲的是局域网环境下通过SSH访问树莓派。通过互联网环境下远程访问局域网内的树莓派的方法，从实现角度上主要分为NAT端口映射、反向代理、内网穿透。本期我将介绍端口映射和SSH反向代理。 1.NAT端口映射 该种方法是通过拿到局域网上的公网IP，通过设置局域网网关NAT        <a href="https://www.cnblogs.com/alwaysbefunLinux/p/14747499.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2021-05-09 11:30
+就是为了好玩
+<span data-post-id="14747499" class="post-view-count">阅读(8)</span> 
+<span data-post-id="14747499" class="post-comment-count">评论(0)</span> 
+<span data-post-id="14747499" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14747499" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+</div>
+
+
+		
+
+
+<div class="day">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/alwaysbefunLinux/archive/2021/03/27.html">2021年3月27日</a>
+    </div>
+
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/alwaysbefunLinux/p/14584536.html">
+    <span>
+        树莓派桌面体验
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：本期的树莓派原创系列，我将来介绍我将树莓派作为桌面来使用的体验。虽然隔了挺长时间，但毕竟得好好体验才能有所体会不是。 我目前使用树莓派当作桌面完成一些日常的娱乐学习的基本用途。至于办公的话，如果只是简单的还是可以应付的，对于严重依赖IE门户、office套件的任务建议还是不要“霸王硬上弓”，毕竟办公        <a href="https://www.cnblogs.com/alwaysbefunLinux/p/14584536.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2021-03-27 20:45
+就是为了好玩
+<span data-post-id="14584536" class="post-view-count">阅读(422)</span> 
+<span data-post-id="14584536" class="post-comment-count">评论(0)</span> 
+<span data-post-id="14584536" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14584536" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+</div>
+
+
+		
+
+
+<div class="day">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/alwaysbefunLinux/archive/2021/01/25.html">2021年1月25日</a>
+    </div>
+
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/alwaysbefunLinux/p/14327553.html">
+    <span>
+        树莓派来做电视盒子
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：本期的树莓派专题，我们来将树莓派设置为电视盒子来使用。目前市面上的盒子非常多，办个宽带也送个电视盒子。 电视盒子是一个小型的计算终端设备，只要简单的通过HDMI或色差线等技术将其与传统电视连接，就能在传统电视上实现网页浏览、网络视频播放、应用程序安装，甚至能将你手机、平板中的照片和视频投射到家中的大        <a href="https://www.cnblogs.com/alwaysbefunLinux/p/14327553.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2021-01-25 21:31
+就是为了好玩
+<span data-post-id="14327553" class="post-view-count">阅读(928)</span> 
+<span data-post-id="14327553" class="post-comment-count">评论(0)</span> 
+<span data-post-id="14327553" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14327553" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+</div>
+
+
+		
+
+
+<div class="day">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/alwaysbefunLinux/archive/2021/01/07.html">2021年1月7日</a>
+    </div>
+
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/alwaysbefunLinux/p/14249260.html">
+    <span>
+        在树莓派上架设博客
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：博客在互联网兴起的初期还是非常流行的，比如新浪博客，尤其是在互联网兴起的初期，这样一种公开表达自我的方式很有受众，大家可能一直期待着表达吧，毕竟以前也没有这样的方式。那个时候类似Facebook、校内网、微博还没有出现，大家在互联网上的表达欲第一次被博客所释放。 博客（英语：Blog）是一种在线日记        <a href="https://www.cnblogs.com/alwaysbefunLinux/p/14249260.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2021-01-07 23:11
+就是为了好玩
+<span data-post-id="14249260" class="post-view-count">阅读(206)</span> 
+<span data-post-id="14249260" class="post-comment-count">评论(0)</span> 
+<span data-post-id="14249260" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14249260" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+</div>
+
+
+		
+
+
+<div class="day">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/alwaysbefunLinux/archive/2020/12/16.html">2020年12月16日</a>
+    </div>
+
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/alwaysbefunLinux/p/14146730.html">
+    <span>
+        试试来申请一个云主机
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：什么是云主机 什么是云主机？我在之前介绍体验Ubuntu的时候已经给各位介绍过阿里云、腾讯云如何申请试用Ubuntu云主机，不知道各位试用之后感觉如何呢？毕竟试用的时间还是非常有限，如果尝试倒腾下Linux，可以从申请一台云主机开始。拥有一台属于自己的云服务器！ 如果是在校学生，可以到阿里云、腾讯云        <a href="https://www.cnblogs.com/alwaysbefunLinux/p/14146730.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2020-12-16 22:43
+就是为了好玩
+<span data-post-id="14146730" class="post-view-count">阅读(111)</span> 
+<span data-post-id="14146730" class="post-comment-count">评论(0)</span> 
+<span data-post-id="14146730" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14146730" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+</div>
+
+
+		
+
+
+<div class="day">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/alwaysbefunLinux/archive/2020/12/04.html">2020年12月4日</a>
+    </div>
+
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/alwaysbefunLinux/p/14088150.html">
+    <span>
+         树莓派的软件安装与系统更新
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：本期我们来介绍树莓派的软件安装与系统更新。与我们常见windows不同，Linux的发行版本众多，经常提到的Linux实质上指的是运行Linux内核的系统，内核本质上也是一个软件。所以平时用的Linux系统都是采用了Linux的内核，并将一系列的软件程序打包成一个发行版系统，同时由于Linux的开源        <a href="https://www.cnblogs.com/alwaysbefunLinux/p/14088150.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2020-12-04 22:54
+就是为了好玩
+<span data-post-id="14088150" class="post-view-count">阅读(362)</span> 
+<span data-post-id="14088150" class="post-comment-count">评论(0)</span> 
+<span data-post-id="14088150" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14088150" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+</div>
+
+
+		
+
+
+<div class="day">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/alwaysbefunLinux/archive/2020/12/01.html">2020年12月1日</a>
+    </div>
+
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/alwaysbefunLinux/p/14071508.html">
+    <span>
+        远程登录树莓派
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：之前介绍的树莓派我们都是通过在有显示器的情况下，通过连接外部设备对树莓派进行直接操作。对于Linux系统，由于经常作为服务器出现，而服务器多部署在数据中心机房，远程登录是更为常见的登录方式。本期我们主要介绍通过SSH远程登录到树莓派。 1.SSH服务开启 Secure Shell（安全外壳协议，简称        <a href="https://www.cnblogs.com/alwaysbefunLinux/p/14071508.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2020-12-01 23:27
+就是为了好玩
+<span data-post-id="14071508" class="post-view-count">阅读(56)</span> 
+<span data-post-id="14071508" class="post-comment-count">评论(0)</span> 
+<span data-post-id="14071508" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14071508" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+</div>
+
+
+		
+
+
+<div class="day">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/alwaysbefunLinux/archive/2020/11/27.html">2020年11月27日</a>
+    </div>
+
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/alwaysbefunLinux/p/14044893.html">
+    <span>
+        来体验下Linux吧
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：在前面的几期中我们从树莓派开始了解Linux，大家可能已经想来试一下手了。趁热打铁，本期我将介绍两种方便体验学习Linux的方法，在线体验或者安装虚拟机。 1 在线体验Linux 如果想快速的体验下Linux系统，我们可以选择云计算服务商提供的在线体验课程，比较推荐的就是阿里云和腾讯云，操作都大同小        <a href="https://www.cnblogs.com/alwaysbefunLinux/p/14044893.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2020-11-27 22:36
+就是为了好玩
+<span data-post-id="14044893" class="post-view-count">阅读(77)</span> 
+<span data-post-id="14044893" class="post-comment-count">评论(0)</span> 
+<span data-post-id="14044893" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14044893" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+            <div class="postSeparator"></div>
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/alwaysbefunLinux/p/14039167.html">
+    <span>
+        树莓派了解Linux基本命令
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：本节我们来了解一些基本的Linux命令（在树莓派上操作），看完之后，当你再面对Linux黑黑的命令框时至少不会不知所措，你可以用这些基本的命令完成一些需要的操作，比如查找、编辑、查看文件，查看基本的系统信息，上传、下载文件。因为树莓派Raspberry PI OS的图形化界面已经比较人性化了，跟Wi        <a href="https://www.cnblogs.com/alwaysbefunLinux/p/14039167.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2020-11-27 20:54
+就是为了好玩
+<span data-post-id="14039167" class="post-view-count">阅读(49)</span> 
+<span data-post-id="14039167" class="post-comment-count">评论(0)</span> 
+<span data-post-id="14039167" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14039167" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+</div>
+
+
+		
+
+
+<div class="day">
+    <div class="dayTitle">
+        <a href="https://www.cnblogs.com/alwaysbefunLinux/archive/2020/11/26.html">2020年11月26日</a>
+    </div>
+
+        <div class="postTitle">
+            
+
+<a class="postTitle2 vertical-middle" href="https://www.cnblogs.com/alwaysbefunLinux/p/14039041.html">
+    <span>
+        来感受Linux命令行的“真香定律”
+    </span>
+    
+
+
+
+</a>
+
+        </div>
+        <div class="postCon">
+
+    <div class="c_b_p_desc">
+摘要：Shell看起来只是一个黑黑的命令框，刚开始接触会觉得很丑，毕竟与Win/Mac的华丽界面比起来，命令行终端直接可以丑拒了。但是，实际上它的功能要强大得多，毕竟Linux一开始就是广泛应用于服务器，通过命令行终端进行交互，命令行程序非常丰富，且功能强大，以后你会慢慢爱上终端的，毕竟先通过程序菜单找到        <a href="https://www.cnblogs.com/alwaysbefunLinux/p/14039041.html" class="c_b_p_desc_readmore">阅读全文</a>
+    </div>
+</div>
+        <div class="clear"></div>
+        <div class="postDesc">posted @ 2020-11-26 20:25
+就是为了好玩
+<span data-post-id="14039041" class="post-view-count">阅读(47)</span> 
+<span data-post-id="14039041" class="post-comment-count">评论(0)</span> 
+<span data-post-id="14039041" class="post-digg-count">推荐(0)</span> 
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14039041" rel="nofollow">
+    编辑
+</a>
+</div>
+        <div class="clear"></div>
+</div>
+
+
+
+<div class="topicListFooter">
+    <div id="nav_next_page">
+        
+    <a href="https://www.cnblogs.com/alwaysbefunLinux/default.html?page=2">
+        下一页
+    </a>
+
+    </div>    
+</div>
+
+
+
+
+
+
+<script>
+    updatePostStats(
+        $(".post-view-count").map(function () { return this.dataset.postId }).get(),
+        function(id, count) { $(".post-view-count[data-post-id=" + id + "]").text("阅读(" + count + ")") },
+        function(id, count) { $(".post-comment-count[data-post-id=" + id + "]").text("评论(" + count + ")") },
+        function(id, count) { $(".post-digg-count[data-post-id=" + id + "]").text("推荐(" + count + ")") });
+</script>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+	<div id="sideBar">
+		<div id="sideBarMain">
+			<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+<div id="sidebar_c3"></div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2021 就是为了好玩
+<br /><span id="poweredby">Powered by .NET 5.0 on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8L-rpLgFVEJMgssCVvNUAjuQMLcWzYo91mc2C2qakdaehfHk6qS0nf1-hULzqeNnRSIAfjMFMOve6Acqvk7tAQJA8c89o_BWsnT2nrTPnq3IS0B45vDiRpI3tLjkX6RsH8PUox2o3zYyokZwDLhW3Rs" />
+</body>
+</html>

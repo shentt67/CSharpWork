@@ -1,0 +1,595 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="never" />
+    <meta name="description" content="前期准备 为了开发这套课程，我专门购买了一台二手戴尔服务器 Dell R720，同时把废弃多年的笔记本电脑也利用了起来。当然如果自己没有多余的电脑，也可以在自己电脑上安装 Vmware Worksta" />
+    <meta property="og:description" content="前期准备 为了开发这套课程，我专门购买了一台二手戴尔服务器 Dell R720，同时把废弃多年的笔记本电脑也利用了起来。当然如果自己没有多余的电脑，也可以在自己电脑上安装 Vmware Worksta" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Jenkins 基础篇 - 环境准备 - 心如光 - 博客园</title>
+    <link id="favicon" rel="shortcut icon" href="//common.cnblogs.com/favicon.svg" type="image/svg+xml" />
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=zS6-e1bxywlu3kpHvpr1J6MySwya3ztFtEnS7RYQ0Fk" />
+    
+    <link type="text/css" rel="stylesheet" href="https://www.cnblogs.com/liudecai/custom.css?v=Lq7PzL9cG4Gsvg66YsLidZ5eKhE=" />
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/SimpleMemory/bundle-SimpleMemory-mobile.min.css" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/liudecai/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/liudecai/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/liudecai/wlwmanifest.xml" />
+    <script>
+        var currentBlogId = 265830;
+        var currentBlogApp = 'liudecai';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var isBlogOwner = false;
+        var skinName = 'SimpleMemory';
+        var visitorUserId = '';
+    </script>
+        <script>
+            var currentPostDateAdded = '2021-05-08 07:16';
+        </script>
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=2Mic1VLeHXarpdzASbXqFMIMVLEBiWXNO5yiTHUcmhw"></script>
+    
+    
+    
+</head>
+<body class="no-navbar">
+    <a name="top"></a>
+        <div id="bannerbar" class="bannerbar-mobile formobile">
+            <a href="https://www.aliyun.com/activity/daily/bestoffer?userCode=swh7dvlt" target="_blank" onclick="ga('send', 'event', 'Link', 'click', 'aliyun-cps-blog-bannerbar-mobile')">
+                <img src="https://img2020.cnblogs.com/blog/35695/202104/35695-20210428213541700-642740375.jpg" alt="" />
+            </a>
+        </div>
+    <div id="top_nav" class="navbar forpc navbar-custom">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding"><a href="https://www.cnblogs.com/" title="开发者的网上家园"><img src="/images/logo.svg?v=R9M0WmLAIPVydmdzE2keuvnjl-bPR7_35oHqtiBzGsM" alt="博客园Logo" /></a></li>
+                <li><a href="/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-sitehome')">首页</a></li>
+                <li><a href="https://news.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-news')">新闻</a></li>
+                <li><a href="https://q.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-q')">博问</a></li>
+                <li><a id="nav_brandzone" href="https://brands.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-brands')">专区</a></li>
+                <li><a href="https://ing.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-ing')">闪存</a></li>
+                <li><a href="https://edu.cnblogs.com/" onclick="ga('send', 'event', 'Link', 'click', 'skin-navbar-edu')">班级</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search" action="https://zzk.cnblogs.com/s" method="get">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="text" tabindex="3" />
+                        <button type="submit" id="zzk_search_button">
+                            <img src="/images/aggsite/search.svg" alt="搜索" />
+                        </button>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔">
+                        <img id="new_post_icon" class="navbar-icon" src="/images/aggsite/newpost.svg" alt="写随笔" />
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx" alt="我的博客" title="我的博客">
+                        <img id="myblog_icon" class="navbar-icon" src="/images/aggsite/myblog.svg" alt="我的博客" />
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息">
+                        <img id="msg_icon" class="navbar-icon" src="/images/aggsite/message.svg?v=J0WS2P2iPgaIVgXxcAhliw4AFZIpaTWxtdoNAv9eiCA" alt="短消息" />
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/">
+                            <img id="user_icon" class="navbar-avatar" src="/images/aggsite/avatar-default.svg" alt="用户头像" />
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <img id="navbar_lite_mode_on" src="/images/lite-mode-check.svg" class="hide" /><span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup/">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    
+    <!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/liudecai/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/liudecai/">编程札记</a>
+</h1>
+<h2></h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/liudecai/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/%E5%BF%83%E5%A6%82%E5%85%89">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/liudecai/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			<div id="blog_stats_place_holder"><script>loadBlogStats();</script></div>
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/liudecai/p/14746207.html">
+    <span>Jenkins 基础篇 - 环境准备</span>
+    
+
+
+
+</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                <div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+<h1 id="前期准备">前期准备</h1>
+<p>为了开发这套课程，我专门购买了一台二手戴尔服务器 Dell R720，同时把废弃多年的笔记本电脑也利用了起来。当然如果自己没有多余的电脑，也可以在自己电脑上安装 Vmware Workstation，然后再安装虚拟的方式来实现有几台虚拟服务器。如果自己有多余的旧电脑，并且是2个核心8G以上内存，可以尝试安装 VMware vSphere Hypervisor (ESXi) 的方式来管理虚拟机。<br>
+Vmware Workstation 或者 VMware vSphere Hypervisor (ESXi) 软件的下载参考如下连接，需要注意的是目前在 Vmware 站点下载软件需要注册一个账号。注册账号后在产品下载里面可以找到所有产品的下载，也就是这个连接 <a href="https://my.vmware.com/cn/group/vmware/downloads/#all_products" target="_blank">https://my.vmware.com/cn/group/vmware/downloads/#all_products</a> ，自行选择下载 Vmware Workstation 或者 VMware vSphere Hypervisor (ESXi) 。<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610350498793-6d0ac8a8-c4fd-493e-b75c-604adfd6dc63.png#align=left&amp;display=inline&amp;height=2022&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=4044&amp;originWidth=1897&amp;size=617178&amp;status=done&amp;style=none&amp;width=948.5" alt="image.png" loading="lazy"><br>
+另外像戴尔或者联想服务器会针对 VMware vSphere Hypervisor (ESXi) &nbsp;做一些定制化，可以从戴尔或者联想官网下载 VMware vSphere Hypervisor (ESXi) ，例如这里是戴尔的定制 VMware vSphere Hypervisor (ESXi) &nbsp;下载页面 <a href="https://www.dell.com/support/home/zh-cn/product-support/product/poweredge-r720/drivers" target="_blank">https://www.dell.com/support/home/zh-cn/product-support/product/poweredge-r720/drivers</a> ，操作系统选择 VMware ESXi 6.5，格式选择 CD-ROM的ISO映像。<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610353373418-87dea1c9-4989-4637-8320-06338d43d4a5.png#align=left&amp;display=inline&amp;height=1233&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=2465&amp;originWidth=1774&amp;size=863573&amp;status=done&amp;style=none&amp;width=887" alt="image.png" loading="lazy"></p>
+<h2 id="安装-vmware-esxi">安装 Vmware ESXi</h2>
+<p>如果自己有多余的旧电脑，并且是2个核心8G以上内存，可以尝试安装 Vmware ESXi 的方式来管理虚拟机。接下来我这里将演示如何安装部署 Vmware ESXi，以及如何通过 Vmware ESXi 创建虚拟机。<br>
+首先需要制作一个U盘启动器，需要一个4G及以上的U盘，还需要&nbsp;UltraISO 软碟通以及前面下载的 Vmware ESXi 软件。将U盘插到电脑上，确保自己U盘上的东西有备份，因为制作启动器会格式化U盘。然后打开&nbsp;UltraISO 软碟通。<br>
+点击左上角【文件】选项里面的【打开】，打开我们下载的 VMware-VMvisor-Installer-7.0U1-16850804.x86_64.iso，打开后如下图所示：<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610351582607-b2c3946c-c58e-4705-b7e3-38c282a23113.png#align=left&amp;display=inline&amp;height=521&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1042&amp;originWidth=1920&amp;size=280685&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+然后再点击【启动】选项里的【写入硬盘映像…】</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610351858437-1ad7a71f-acb2-4f6c-b6a8-3a90feac847a.png#align=left&amp;display=inline&amp;height=521&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1042&amp;originWidth=1920&amp;size=307380&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+在新的弹窗里面一定要注意【硬盘驱动器】要选择自己的U盘，其他设置默认即可。然后点击【写入】，等待进度条完成即可，一个U盘启动器就制作好了。<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610352006599-7461f64e-e5f5-47a5-babc-e2b14054bf2d.png#align=left&amp;display=inline&amp;height=521&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1042&amp;originWidth=1920&amp;size=288874&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+接下来就开始安装 Vmware ESXi，和U盘启动器安装操作系统的方式一样，我这里为了方便演示和截图就通过虚拟机的方式来演示  Vmware ESXi 的安装。<br>
+将U盘启动器插在要安装 Vmware ESXi 的电脑上，然后开机进入 BIOS 系统设置第一启动项，不同电脑略有差异，请自行度娘解决。需要注意的是安装  Vmware ESXi，就相当于安装了新的系统，自己电脑上重要的东西记得备份。我这里演示安装  Vmware ESXi 用的是 6.5.0 版本，与 Vmware ESXi 7.0 的使用没什么差异。<br>
+启动电脑后是在加载我们U盘启动器的内容：<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610361421129-8955e4a4-97a2-4599-b52c-00e4ee9e4734.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=77867&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+开始安装 Vmware ESXi，敲【Enter】键继续：<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610361565258-93438e00-6dc0-442f-9994-16beb3c1775e.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=66630&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+同意用户许可协议，【F11】接受并继续：<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610361577494-c75adf04-a524-46f7-a253-79d2fe878aee.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=133468&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+选择将 Vmware ESXi 安装在哪个磁盘，如果有多块磁盘，按上下键选择磁盘，我这里就只有一块磁盘，敲【Enter】键继续：<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610361585963-04306dec-1c2f-4bd7-af7f-59e96e9b0dba.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=90467&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+设置键盘布局，选择默认的【US Default】即可，敲【Enter】键继续：<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610361600274-a928150c-cba0-4006-a954-6d6c69bf2fcf.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=66316&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+设置超级管理员 root 账号的密码，确保两次输入的密码一致，敲【Enter】键继续：<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610415283535-a4b8a058-2073-4e51-b3e6-ee0f0ae15491.png#align=left&amp;display=inline&amp;height=521&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1042&amp;originWidth=1920&amp;size=63998&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+因为我是在虚拟机里面安装的，这里提示硬件虚拟化没有启用，需要在 BIOS 里面启用硬件虚拟化特性，这里只是出于演示目的，先不用管它，敲【Enter】键继续：<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610415327062-71aef144-a5c6-4fbc-b40f-0e025ca6d0e9.png#align=left&amp;display=inline&amp;height=521&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1042&amp;originWidth=1920&amp;size=86918&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+警告提醒磁盘将被重新分区，敲【F11】开始真正的安装进程：<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610361607145-f615e1d2-fb4e-439d-959a-19be4a8311db.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=62491&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+接下来就是安装的进度条，等待进度达到100%，Vmware ESXi 安装就完成了：<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610361615625-a9072d57-6326-4cea-88a7-6a816c6bfa55.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=50666&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+安装完成，重启电脑，拔出U盘启动器。<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610361623013-a8c786a0-71ab-4c18-a63c-c2987ff06ab6.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=80637&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+提示服务器将会重启：<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610361636435-f1179ecb-358d-4b06-90ef-4c10d6a44502.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=57250&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+重启完成后就是如下界面，这台服务器的 IP 就是 192.168.21.227。需要特别提醒的是 Vmware ESXi 不是像操作系统那样的桌面管理界面，它的管理界面是 Web 平台的，需要在浏览器里面访问。<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610361646758-6517479b-1c5d-4bdb-9408-4c3dd99c2736.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=81381&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+好了，现在我们在其他桌面环境的电脑端，打开浏览器，输入Vmware ESXi 服务器的 IP 地址进行访问。初次访问浏览器会警告这个站点的SSL证书是不可信的，不用管它，继续访问即可，在登录界面输入 root 账号和密码。<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610361653618-6742730b-bf1c-41cf-9f2d-4a274ec17c78.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=173380&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+首次进入管理界面，提示加入 Vmware 客户体验改进计划，【确定】即可。初次安装官方版的 Vmware ESXi 会有60天的试用期，如果有正版的激活序列号，在【管理】菜单里面的【许可】中输入密钥激活即可。<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610361658551-12cfe76c-4e03-4f92-9c11-d94fc01f75e2.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=254615&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+界面大概就是这样，有进行实操的同学可以熟悉下 Vmware ESXi 的其他功能选项。<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610361667925-528ce310-c935-4b2c-9d5e-6441b5903a66.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=173806&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"></p>
+<h2 id="安装-vmware-workstation">安装 Vmware Workstation</h2>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610459502919-86604905-07d9-4ced-8440-ab8c452759e7.png#align=left&amp;display=inline&amp;height=540&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1080&amp;originWidth=1920&amp;size=1295858&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610459522727-4bb2004e-3489-4992-9c5d-476bd757ff4d.png#align=left&amp;display=inline&amp;height=540&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1080&amp;originWidth=1920&amp;size=1262518&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610459554621-b97a05d2-381e-4dd5-ad2d-2440dbc982d6.png#align=left&amp;display=inline&amp;height=540&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1080&amp;originWidth=1920&amp;size=1257981&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610459581471-648ef3f0-ff9e-446c-8ecc-a5f0dab93934.png#align=left&amp;display=inline&amp;height=540&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1080&amp;originWidth=1920&amp;size=1334436&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610459593857-526c7c4f-a4cb-4d40-b07a-94eca08856b6.png#align=left&amp;display=inline&amp;height=540&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1080&amp;originWidth=1920&amp;size=1239204&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610459602663-f92267e6-92cf-4de2-ab9d-bb062d28a40b.png#align=left&amp;display=inline&amp;height=540&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1080&amp;originWidth=1920&amp;size=1236317&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610459611776-c85568de-2307-4378-b404-5cefd4ebdfeb.png#align=left&amp;display=inline&amp;height=540&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1080&amp;originWidth=1920&amp;size=1240640&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610459622299-2b89ec15-c26b-4994-bf3c-3831e8644bf9.png#align=left&amp;display=inline&amp;height=540&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1080&amp;originWidth=1920&amp;size=1271695&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610459639391-70420168-2194-470f-8c53-07c9e3ed2b41.png#align=left&amp;display=inline&amp;height=540&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1080&amp;originWidth=1920&amp;size=1266881&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610459662458-89921751-3cae-4658-8587-68a28689e72a.png#align=left&amp;display=inline&amp;height=540&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1080&amp;originWidth=1920&amp;size=809245&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"></p>
+<p>相关资源下载：</p>
+<ol>
+<li>Vmware 相关软件：<a href="https://my.vmware.com/cn/group/vmware/downloads/#all_products" target="_blank">https://my.vmware.com/cn/group/vmware/downloads/#all_products</a></li>
+</ol>
+<h1 id="服务器规划">服务器规划</h1>
+<p>准备4个虚拟机服务器</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center"><strong>名称</strong></th>
+<th style="text-align: center"><strong>IP</strong></th>
+<th style="text-align: center"><strong>用途</strong></th>
+<th style="text-align: center"><strong>账号</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center">centos7-200</td>
+<td style="text-align: center">192.168.31.200</td>
+<td style="text-align: center">安装部署Jenkins服务</td>
+<td style="text-align: center">root、jenkins、maintainer</td>
+</tr>
+<tr>
+<td style="text-align: center">centos7-110</td>
+<td style="text-align: center">192.168.31.110</td>
+<td style="text-align: center">1、作为jenkins的节点；2、部署开发环境服务</td>
+<td style="text-align: center">root、jenkins、maintainer</td>
+</tr>
+<tr>
+<td style="text-align: center">centos7-111</td>
+<td style="text-align: center">192.168.31.111</td>
+<td style="text-align: center">1、作为jenkins的节点；2、部署测试环境服务</td>
+<td style="text-align: center">root、jenkins、maintainer</td>
+</tr>
+<tr>
+<td style="text-align: center">centos7-112</td>
+<td style="text-align: center">192.168.31.112</td>
+<td style="text-align: center">1、作为jenkins的节点；2、部署正式环境服务</td>
+<td style="text-align: center">root、jenkins、maintainer</td>
+</tr>
+</tbody>
+</table>
+<h1 id="服务器安装">服务器安装</h1>
+<p>接下来还是分别演示采用 Vmware ESXi  和 Vmware Workstation 安装虚拟机。</p>
+<h2 id="vmware-esxi-安装虚拟机">Vmware ESXi 安装虚拟机</h2>
+<p>进入 Vmware ESXi 的 Web 关键界面，开始创建我们的 CentOS7 虚拟机：<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610767172809-fd5c44c0-c65a-4f33-9945-4a9448d32dee.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=196303&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+创建类型选择【创建新虚拟机】：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610767271500-956e1488-188e-4938-b837-32ea5299457f.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=225450&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+在该界面设置虚拟机名称、兼容性、操作系统类型和操作系统的版本，这里需要注意一点，因为我安装的 Vmware ESXi 是新版的 7.0 版本，以防万一新版的 Vmware ESXi 在使用过程中有什么问题，所以在兼容性这里我们可以做个调整，你可以选择其他版本的 Vmware ESXi，也可以选择 Vmware Workstation 兼容的类型，这样以便我们创建的虚拟机可以在其他版本的 Vmware ESXi 或者在 Vmware Workstation 中注册运行。<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610767439677-ee52946d-2b30-41c3-9af0-bcb9c4c21539.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=227892&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610772944372-45f19fa5-4495-43a0-9da4-5b1e9ad3f733.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=243662&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+这里的【选择存储】是设置我们虚拟机的存储位置，因为我这里只有一个 datastore1 存储空间，所有默认就行，如果你自己挂载了多个存储空间，选择自己想要存储的位置即可。<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610767913671-67ad2865-88ad-4eb2-9a6f-a4038cbaed80.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=218646&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+这个界面是设置虚拟机的 CPU、内存、硬盘、网络适配器、驱动器等，CPU、内存、硬盘大小可以根据自己需要做适当调整，但是不能超过物理机的最大值。这里需要注意的有两个地方，一是【网络适配器】，因为目前大多数服务器是多网口的，我的 Dell R720 后面就有4个网口，如果这些网口都利用起来可以有效地避免网络不可用的问题，例如我一个网口用电信的网络，一个网口用移动的网络，当我移动网络不可用时可以继续使用电信网络。我这里只用了一个网口，采用默认设置就行了，如果你的多个网口都利用起来了的话，可以也给这个虚拟机设置多个网络。另一个注意点就是【CD/DVD驱动器】，一定要选择【数据存储 ISO 文件】来挂载我们的系统镜像文件，同时记得把【连接】勾选上。<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610768134801-5a2c4f6d-7823-446c-bb87-7a25a45ef73a.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=256182&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+这里是选择我们的系统镜像文件，你想安装什么系统并且你也有对应的系统镜像文件的话，都可以尝试下，体验下不同的操作系统。Vmware ESXi 具体支持虚拟化哪些系统，可以到 Vmware 官网看看，这里有个 Vmware ESXi 的兼容系统矩阵可以参考下 <a href="https://www.vmware.com/resources/compatibility/search.php?deviceCategory=software&amp;testConfig=16" target="_blank">https://www.vmware.com/resources/compatibility/search.php?deviceCategory=software&amp;testConfig=16</a><br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610768979967-472f154e-ad20-48a9-b95d-5203b2c7e459.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=233358&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+这个界面是虚拟机配置的一个概览，需要调整就进入【上一页】重新设置，不需要调整直接【完成】。<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610769454607-40bbe7d4-ac51-44a8-8a28-83ce623f5930.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=232801&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+然后就可以点击我们刚才创建好的虚拟机，【打开电源】启动虚拟机了，虚拟机启动后初次进入就是进行操作系统的安装。<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610769702696-ca5a90fa-6fc6-428e-bd17-de7f21899ad1.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=266440&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+后面就是在小窗口进行操作系统安装阶段的系统设置，演示过一遍。<br>
+设置系统语言：<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610769772669-41bafed2-1ad4-4cc6-9abf-079f29732b60.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=435481&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+这个界面有以下几个地方需要设置：【软件选择】、【安装位置】、【网络和主机名】<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610769817038-731228e4-9ecc-4dc2-987e-076d4dd8899e.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=397893&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+我们这里是作为服务器使用，选择【最小安装】即可，如果是当作桌面系统使用需要选择【GNOME 桌面】。<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610773227005-345a6b4f-0162-400f-b607-811d6d151721.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=403733&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+系统安装位置，可以自己分区，也可以自动配置，如果不知道怎样分区好就默认自动分区就行了。<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610773178286-0a3d9f89-6450-45d4-b074-33b32d628457.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=445360&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+网络和主机名设置，填好主机名后要点击下【应用】才会生效，然后还要开启以太网，开启后路由器会自动分配 IP 地址，如果需要设置特定 IP 地址，可以在【配置】中进行设置，设置的时候需要填写网关 IP、和子网掩码之类东西，为了一切简单，不做特殊设置，只是开启以太网就行了。<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610773875019-c89ccf86-fdcc-4ed3-9191-954bfa955a6e.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=366634&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610774031236-959a2063-dc63-4622-9f80-d547f5a29414.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=351820&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+后面就开始真正的安装过程了，安装过程中还需要进行用户设置，必须要做的是要为 root 账号设置密码，也可以创建一个新用户。<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610774167639-7228d8ef-fc6a-4d5e-b122-6313c5fdf77c.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=468115&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610774270803-494215e4-042d-4909-b8c3-e3dd2cb04776.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=357754&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+等待安装完成后需要重启虚拟机，等待虚拟机启动好后既可以登录了。<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610774308247-3a147a20-f2c5-49d3-8fda-be17c522e923.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=396920&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610774356840-6286ee34-c7bf-40b1-ab3b-9d516137b5cc.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=265519&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610774641937-de3cb38a-ee08-477a-8e11-9a3a347ca523.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=219145&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"></p>
+<h2 id="vmware-workstation-安装虚拟机">Vmware Workstation 安装虚拟机</h2>
+<p>在 Vmware Workstation 中创建虚拟机就笔记简单些，对大家来讲也应该比较熟悉，也还是简单过一下。另外 Vmware Workstation 还可以连接远程服务器，例如可以连接我的 Dell R720 服务器，然后管理服务器上的现有虚拟机或者在服务器上创建新的虚拟机。<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610775436085-5952429d-cf98-4bd9-ba02-a90190174c5d.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=136516&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610775473273-a8aefc29-0299-4f74-91a1-f2d0a9a667c0.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=95694&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+关于 Vmware Workstation 管理 Vmware ESXi 服务器，有条件的同学可以自行下去试试各个功能按钮。我这里演示的是利用 Vmware Workstation 在自己电脑上创建虚拟机，不是在远程服务器上创建虚拟机。<br>
+开始创建新的虚拟机：<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610774928973-247b8dc7-f7ea-45ee-8523-98f86091388e.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=120996&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+选择【典型】，这个方式要设置的内容少些。<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610774992838-d9c238a0-7c95-4a5b-bca0-75a2a1bd9e30.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=136415&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+这里是设置系统镜像文件。<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610775039450-ac4f22ca-cca5-4af4-8a4e-fc55cccf672d.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=111926&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+设置虚拟机的名称和存储位置。<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610775084769-0b2f5f71-9201-4d03-ad6f-c26890a6173b.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=102353&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+设置虚拟机硬盘大小。<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610775105432-19a287d1-7ede-4e48-bf20-dd91c06c60d4.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=111534&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+还可以【自定义硬件】，调整虚拟机的 CPU、内存等。点击完成就开始安装虚拟机操作系统了，和前面安装 CentOS7 系统一样。<br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610775173681-9429e8bf-6f23-4f82-b000-3871e0e5541c.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=108912&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"><br>
+<img src="https://cdn.nlark.com/yuque/0/2021/png/660912/1610775187661-a682b91a-2502-4581-bffb-026c8287c013.png#align=left&amp;display=inline&amp;height=515&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1030&amp;originWidth=1920&amp;size=109147&amp;status=done&amp;style=none&amp;width=960" alt="image.png" loading="lazy"></p>
+<p>不管是采用 Vmware ESXi 还是 Vmware Workstation 安装虚拟机，整个过程都做了一个演示，后面可以自行按照相应的方式将规划的其他几台虚拟机也安装好。<br>
+我这里规划的几台虚拟机都计划安装在 Dell R720 服务器上，目前都已经安装好了，如果是安装在自己使用的电脑上，如果电脑内存没有8G以上，并且 CPU 也比较差的话，在使用过程中感觉自己电脑会有很卡。如果自己有旧电脑、或者公司有服务器资源的可以尝试利用其他的计算机资源。</p>
+<p>由于我是购买的二手服务器，外观上七八成的成色，内部就懒得拆机进行查看了。测试下磁盘读写速度，感觉还不错，至少读写性能还是杠杠的。</p>
+<pre><code class="language-shell"># 测试文件写入速度
+# if=/dev/zero不产生IO,因此可以用来测试纯写速度
+# 写入文件大小 = 8k * 500000 = 4G
+$ time dd if=/dev/zero of=/home/$USER/out bs=8k oflag=direct count=500000
+
+# 测试文件读取速度
+# of=/dev/null不产生IO,可以用来测试纯读速度
+$ time dd if=/home/$USER/out of=/dev/null bs=8k
+</code></pre>
+<p>我这里的执行出来的结果如下：</p>
+<pre><code class="language-shell">$ time dd if=/dev/zero of=/home/$USER/out bs=8k oflag=direct count=500000
+记录了500000+0 的读入
+记录了500000+0 的写出
+4096000000字节(4.1 GB)已复制，49.9355 秒，82.0 MB/秒
+
+real	0m49.969s
+user	0m0.751s
+sys	0m17.562s
+
+
+$ time dd if=/home/$USER/out of=/dev/null bs=8k
+记录了500000+0 的读入
+记录了500000+0 的写出
+4096000000字节(4.1 GB)已复制，17.9543 秒，228 MB/秒
+
+real	0m17.956s
+user	0m0.354s
+sys	0m7.236s
+</code></pre>
+<h1 id="docker-安装">Docker&nbsp;安装</h1>
+<pre><code class="language-shell"># 卸载旧版docker或者docker-engine
+$ sudo yum remove docker \
+    docker-client \
+    docker-client-latest \
+    docker-common \
+    docker-latest \
+    docker-latest-logrotate \
+    docker-logrotate \
+    docker-engine
+
+# 有必要删除docker目录, 包括images, containers, volumes, and networks
+$ sudo rm -rf /var/lib/docker/
+
+# 先安装一些需要的工具
+$ sudo yum install -y wget curl net-tools lsof yum-utils bash-completion telnet
+
+# 采用官方docker源安装
+$ sudo yum-config-manager \
+    --add-repo \
+    https://download.docker.com/linux/centos/docker-ce.repo
+
+# 安装最新docker和docker-engine, 注意检查指纹密钥：060A 61C5 1B55 8A7F 742B 77AA C52F EB6B 621E 9F35
+$ sudo yum install docker-ce docker-ce-cli containerd.io
+
+# 如果想安装其他版本的Docker，替换&lt;VERSION_STRING&gt;为指定的版本即可。
+$ sudo yum install docker-ce-&lt;VERSION_STRING&gt; docker-ce-cli-&lt;VERSION_STRING&gt; containerd.io
+
+# 查看目前有哪些版本的Docker
+$ yum list docker-ce --showduplicates | sort -r
+已加载插件：fastestmirror
+可安装的软件包
+ * updates: mirrors.ustc.edu.cn
+ * extras: mirrors.aliyun.com
+docker-ce.x86_64            3:20.10.1-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:20.10.0-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:19.03.9-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:19.03.8-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:19.03.7-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:19.03.6-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:19.03.5-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:19.03.4-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:19.03.3-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:19.03.2-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:19.03.14-3.el7                    docker-ce-stable
+docker-ce.x86_64            3:19.03.1-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:19.03.13-3.el7                    docker-ce-stable
+docker-ce.x86_64            3:19.03.12-3.el7                    docker-ce-stable
+docker-ce.x86_64            3:19.03.11-3.el7                    docker-ce-stable
+docker-ce.x86_64            3:19.03.10-3.el7                    docker-ce-stable
+docker-ce.x86_64            3:19.03.0-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:18.09.9-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:18.09.8-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:18.09.7-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:18.09.6-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:18.09.5-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:18.09.4-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:18.09.3-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:18.09.2-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:18.09.1-3.el7                     docker-ce-stable
+docker-ce.x86_64            3:18.09.0-3.el7                     docker-ce-stable
+docker-ce.x86_64            18.06.3.ce-3.el7                    docker-ce-stable
+docker-ce.x86_64            18.06.2.ce-3.el7                    docker-ce-stable
+docker-ce.x86_64            18.06.1.ce-3.el7                    docker-ce-stable
+docker-ce.x86_64            18.06.0.ce-3.el7                    docker-ce-stable
+docker-ce.x86_64            18.03.1.ce-1.el7.centos             docker-ce-stable
+docker-ce.x86_64            18.03.0.ce-1.el7.centos             docker-ce-stable
+docker-ce.x86_64            17.12.1.ce-1.el7.centos             docker-ce-stable
+docker-ce.x86_64            17.12.0.ce-1.el7.centos             docker-ce-stable
+docker-ce.x86_64            17.09.1.ce-1.el7.centos             docker-ce-stable
+docker-ce.x86_64            17.09.0.ce-1.el7.centos             docker-ce-stable
+docker-ce.x86_64            17.06.2.ce-1.el7.centos             docker-ce-stable
+docker-ce.x86_64            17.06.1.ce-1.el7.centos             docker-ce-stable
+docker-ce.x86_64            17.06.0.ce-1.el7.centos             docker-ce-stable
+docker-ce.x86_64            17.03.3.ce-1.el7                    docker-ce-stable
+docker-ce.x86_64            17.03.2.ce-1.el7.centos             docker-ce-stable
+docker-ce.x86_64            17.03.1.ce-1.el7.centos             docker-ce-stable
+docker-ce.x86_64            17.03.0.ce-1.el7.centos             docker-ce-stable
+Determining fastest mirrors
+ * base: mirrors.aliyun.com
+
+# 例如我这里安装18的最后一个版本
+$ sudo yum install docker-ce-18.09.9-3.el7 docker-ce-cli-18.09.9-3.el7 containerd.io
+# 实际应用最好安装最新的版本
+$ sudo yum install docker-ce-20.10.1-3.el7 docker-ce-cli-20.10.1-3.el7 containerd.io
+
+# 启动docker
+$ sudo systemctl start docker
+$ sudo systemctl enable docker
+
+# 添加用户到docker组
+$ sudo usermod -aG docker your-user
+$ sudo usermod -aG docker $USER
+
+# 卸载docker和docker-engine
+$ sudo yum remove docker-ce docker-ce-cli containerd.io
+$ sudo rm -rf /var/lib/docker
+
+# 安装docker-compose
+$ sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+# 如果你从 Github 下载文件较慢，可以换成下面的命令
+$ sudo curl -L "https://alittler.oss-cn-hangzhou.aliyuncs.com/software/docker/compose/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+# 设置可执行权限
+$ sudo chmod +x /usr/local/bin/docker-compose
+# 安装后如果提示没有 docker-compose 命令，执行如下命令添加 软连接到 /usr/bin
+$ sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+# 查看 docker-compose 版本
+$ docker-compose --version
+
+
+# 设置Docker镜像加速
+# 通过修改daemon配置文件/etc/docker/daemon.json来使用加速器
+$ sudo mkdir -p /etc/docker
+$ sudo tee /etc/docker/daemon.json &lt;&lt;-'EOF'
+{
+  "registry-mirrors": ["https://my0hjxag.mirror.aliyuncs.com"]
+}
+EOF
+$ sudo systemctl daemon-reload
+$ sudo systemctl restart docker
+</code></pre>
+
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2021-05-08 19:16</span>&nbsp;
+<a href="https://www.cnblogs.com/liudecai/">心如光</a>&nbsp;
+阅读(<span id="post_view_count">144</span>)&nbsp;
+评论(<span id="post_comment_count">1</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=14746207" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(14746207);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="https://common.cnblogs.com/highlight/10.3.1/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 265830, cb_blogApp = 'liudecai', cb_blogUserGuid = 'e4aab8ff-26c7-e511-9fc1-ac853d9f53cc';
+    var cb_entryId = 14746207, cb_entryCreatedDate = '2021-05-08 19:16', cb_postType = 1;
+    updatePostStats(
+        [cb_entryId],
+        function(id, count) { $("#post_view_count").text(count) },
+        function(id, count) { $("#post_comment_count").text(count) })
+    zoomManager.apply("#cnblogs_post_body img:not(.code_img_closed):not(.code_img_opened)");
+</script>
+<a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"></div>
+    <div id="opt_under_post"></div>
+    <div id="cnblogs_c1" class="under-post-card">
+        <div id='div-gpt-ad-1592365906576-0' style='width: 300px; height: 250px;'></div>
+    </div>
+    <div id="under_post_card1"></div>
+    <div id="cnblogs_c2" class="under-post-card">
+        <div id='div-gpt-ad-1592366332455-0' style='width: 468px; height: 60px;'></div>
+    </div>
+    <div id="under_post_card2"></div>
+    <div id="HistoryToday" class="under-post-card"></div>
+    <script type="text/javascript">
+       var commentManager = new blogCommentManager();
+       commentManager.renderComments(0);
+       fixPostBody();
+       deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);       deliverT2();
+       deliverC1C2();
+       loadNewsAndKb();
+       loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);       LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+       GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+       loadOptUnderPost();
+       GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+	<div id="sideBar">
+		<div id="sideBarMain">
+			<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+<div id="sidebar_c3"></div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2021 心如光
+<br /><span id="poweredby">Powered by .NET 5.0 on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    <div id="page_end_html">
+        <!-- require APlayer -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<!-- require MetingJS -->
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<meting-js
+        id="594243151"
+        lrc-type="0"
+        server="netease"
+        order="random"
+        type="playlist"
+        fixed="true"
+        list-olded="true">
+</meting-js>
+    </div>
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8L-rpLgFVEJMgssCVvNUAjtRt735PAknnnsQNxysMVcEFGqq0LSMAGeHIUO3G5kEHofxozTCX8r7TMNpKA3lOggNnyj7f5mb1J69C-T97ZTue5r_xHE9ZlxxnOwY6FTRWVyoo2khN_NW9CPWNpneRX4" />
+</body>
+</html>
